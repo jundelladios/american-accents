@@ -1,0 +1,6 @@
+product_categories
+- template_section 1 default nullable
+
+
+product_subcategories
+- sub_name_alt nullable longtext

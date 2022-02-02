@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "image": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^(https?|http?)://"
+            },
+            "text": {
+                "type": "string"
+            },
+            "downloadLink": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "format": "uri",
+                        "pattern": "^(https?|http?|null)://"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
+            },
+            "usecurfile": {
+                "type": "integer"
+            }
+        },
+        "required": ["image", "text", "downloadLink", "usecurfile"]
+    }
+}

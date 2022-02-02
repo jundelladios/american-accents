@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "image": {
+            "anyOf": [
+                {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^(https?|http?|null)://"
+                }
+            ]
+        }
+    },
+    "required": ["title", "image"]
+}

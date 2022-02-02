@@ -1,0 +1,45 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string"
+            },
+            "hex": {
+                "type": "string"
+            },
+            "pantone": {
+                "type": "string"
+            },
+            "isImage": {
+                "anyOf": [
+                    {
+                        "type": "boolean"
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
+            },
+            "image": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "format": "uri",
+                        "pattern": "^(https?|http?|null)://"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
+            }
+        },
+        "required": ["name", "hex", "pantone"]
+    }
+}

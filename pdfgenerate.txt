@@ -1,0 +1,59 @@
+
+$im = new \Imagick();
+
+$im->setResolution(300,300);
+
+$im->readimage($firstPDFPage); 
+
+$im->setImageBackgroundColor('#ffffff');
+
+$im = $im->flattenImages();
+
+$im->setImageFormat('jpeg');
+
+$im->setCompression(\Imagick::COMPRESSION_JPEG);
+
+$im->setImageCompressionQuality(100);
+
+$im->cropImage(
+    $im->getImageWidth(),
+    2600, 
+    0,
+    $im->getImageHeight() - 2600
+);
+
+$im->setCompressionQuality(100);
+
+$im->writeImage($output); 
+
+
+
+
+
+
+
+
+
+
+
+
+// ======================== IMAGE OPTIMIZATION ==================
+
+<img src="http://localhost:8080/20x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png" 
+    data-sizes="auto"
+    data-aspectratio="679/1716"
+    data-src="http://localhost:8080/300x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png"
+    data-srcset="
+        http://localhost:8080/300x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 300w,
+        http://localhost:8080/400x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 400w,
+        http://localhost:8080/600x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 600w,
+        http://localhost:8080/800x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 800w,
+        http://localhost:8080/1000x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 1000w,
+        http://localhost:8080/1200x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 1200w,
+        http://localhost:8080/1400x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 1400w,
+        http://localhost:8080/1600x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 1600w,
+        http://localhost:8080/1800x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 1800w,
+        http://localhost:8080/1920x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 1920w,
+        http://localhost:8080/3000x/http://aa.dev.local/wp-content/uploads/2021/03/T-C12P.png 3000w
+    "  width="679" height="1716" class="lz-blur img-fit-center lazyload"
+    >

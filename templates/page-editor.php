@@ -1,0 +1,1 @@
+<a class="module-editor-admin print-hide" target="_blank" href="<?php echo $link; ?>"><?php echo $text; ?></a>

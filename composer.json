@@ -1,0 +1,23 @@
+{
+    "require": {
+        "htmlburger/carbon-fields": "^3.1",
+        "illuminate/database": "^7.22",
+        "illuminate/pagination": "^7.22",
+        "hashids/hashids": "^4.0",
+        "vlucas/valitron": "^1.4",
+        "rah/danpu": "^2.7",
+        "brick/money": "^0.5.0",
+        "swaggest/json-schema": "^0.12.31",
+        "devaly/wordpress-routes": "^0.0.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Api\\": "application/app/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}
