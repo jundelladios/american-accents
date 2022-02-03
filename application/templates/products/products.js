@@ -142,10 +142,11 @@ var productsInstanceVue = new Vue({
             return {...backupInputs};
         },
         getMovableCategories() {
-            if( this.filter.category ) {
-                return this.categories.data.filter( row => row.hid != this.filter.category );
-            }
-            return [];
+            // if( this.filter.category ) {
+            //     return this.categories.data.filter( row => row.hid != this.filter.category );
+            // }
+            // return [];
+            return this.categories.data
         },
         getPendingRemoveProduct() {
             if( this.moveProductIndex != null ) {

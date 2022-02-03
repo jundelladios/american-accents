@@ -74,7 +74,7 @@ class SubcategoryPage extends Page {
         // 301 redirect if 1 product line
         if( count($this->apiRequest) <= 1 ) {
 
-            wp_redirect( home_url( 'product/' . $this->subcategory['cat_slug'] ), 301 ); 
+            wp_redirect( home_url( 'product/' . $this->subcategory['cat_slug'] . '/?subcategory=' . $this->subcategory['sub_slug'] ), 301 ); 
             
             exit();
 

@@ -77,9 +77,25 @@ $responsive: 992px;
                 border: 2px solid #ebebeb;
             }
 
+            .color-pantone {
+                font-size: 10px;
+                display: none;
+                position: absolute;
+                bottom: -25px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
             &.active {
                 .color-text,
                 &:before {
+                    display: block;
+                }
+            }
+
+            &.active,
+            &:hover {
+                .color-pantone {
                     display: block;
                 }
             }

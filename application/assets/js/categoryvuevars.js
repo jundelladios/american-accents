@@ -149,7 +149,19 @@ var htmlTemplate = /*html*/`
                             <div class="skeleton grey" style="height: 20px;"></div>
                         </div>
                         <!-- end of price range filter -->
-
+                        
+                        <div v-if="optionalParams.subcategory" class="aa-cat-filter mb-5">
+                            <span class="text-uppercase font-weight-bold f-cat-filter-color">subcategory:</span>
+                            <ul class="list-unstyled mt-3 ml-2">
+                                <li v-for="(sub, index) in filters.data.subcategories" :key="'subcategory-filters-' + index">
+                                    <label class="checkbox-wrap">
+                                        <span class="font-small f-cat-filter-color">{{ sub.sub_name }}</span>
+                                        <input type="checkbox" checked disabled>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
 
                         <!-- subcategories filter -->
                         <template v-if="!subcategoriesLoading">

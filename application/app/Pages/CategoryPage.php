@@ -29,6 +29,8 @@ class CategoryPage extends Page {
 
     public function render() {
 
+        add_filter( 'query_vars', array( $this, 'queryVars' ) );
+
         add_filter('template_redirect', array( $this, 'template' ));
 
     }
@@ -108,6 +110,11 @@ class CategoryPage extends Page {
 
         });
 
+    }
+
+    public function queryVars($vars) {
+        $vars[] = 'subcategory';
+        return $vars;
     }
 
 }

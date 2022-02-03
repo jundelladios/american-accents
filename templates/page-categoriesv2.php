@@ -16,6 +16,7 @@ get_header();
 
 <script>
     var apiRequest = <?php echo json_encode($apiRequest); ?>;
+    var subcategoryParam = '<?php echo get_query_var('subcategory'); ?>';
 </script>
 
 <div id="main" class="site-main">

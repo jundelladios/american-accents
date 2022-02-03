@@ -102,6 +102,7 @@ var productcolorstemplate = /*html */`
                 :data-bgset="getImageFallback.normal"
                 ></span>
             </template>
+            <span class="color-pantone">{{acolor.pantone}}</span>
         </div>
     </div>
 

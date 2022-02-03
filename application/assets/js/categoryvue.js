@@ -102,7 +102,7 @@ new Vue({
         apiParams() {
             return {
                 category: inventoryJSVars.category,
-                subcategory: this.filters.data && this.filters.data.subcategories.filter( row => row.checked ).map( row => row.sub_slug ).join(','),
+                subcategory: subcategoryParam ? subcategoryParam : this.filters.data && this.filters.data.subcategories.filter( row => row.checked ).map( row => row.sub_slug ).join(','),
                 material: this.filters.data && this.filters.data.material.filter( row => row.checked ).map( row => row.material_type ).join(','),
                 size: this.filters.data && this.filters.data.sizes.filter( row => row.checked ).map( row => row.product_size_details ).join(','),
                 thickness: this.filters.data && this.filters.data.thickness.filter( row => row.checked ).map( row => row.product_tickness_details ).join(','),
@@ -133,6 +133,11 @@ new Vue({
         },
         jsvars() {
             return inventoryJSVars;
+        },
+        optionalParams() {
+            return {
+                subcategory: subcategoryParam
+            }
         }
     },
     methods: {
@@ -142,7 +147,8 @@ new Vue({
                 e.filters.loading = true;
                 const res = await api.get(`/public/getFilter`, {
                     params: {
-                        category: inventoryJSVars.category
+                        category: inventoryJSVars.category,
+                        ...this.optionalParams
                     }
                 });
 
@@ -192,7 +198,8 @@ new Vue({
                 e.colorsLoading = true;
                 const res = await api.get(`/public/filter/getColors`, {
                     params: {
-                        category: inventoryJSVars.category
+                        category: inventoryJSVars.category,
+                        ...this.optionalParams
                     }
                 });
                 e.filters.data = {
@@ -214,7 +221,8 @@ new Vue({
                 e.subcategoriesLoading = true;
                 const res = await api.get(`/public/filter/getSubcategories`, {
                     params: {
-                        category: inventoryJSVars.category
+                        category: inventoryJSVars.category,
+                        ...this.optionalParams
                     }
                 });
                 e.filters.data = {
@@ -234,7 +242,10 @@ new Vue({
             try {
                 this.products.loading = true;
                 const res = await api.get(`/public/getProducts`, {
-                    params: {...this.apiParams, ...$args}
+                    params: {
+                        ...this.apiParams, 
+                        ...$args
+                    }
                 });
                 this.products.data = res.data.data;
                 this.products.metas = { ...res.data, data: null };

@@ -12,11 +12,19 @@ use Api\Hasher;
 
 use Api\Models\ProductsModel;
 
+use Api\Models\ProductLinesModel;
+
+use Api\Models\ProductPrintMethodModel;
+
+use Api\Models\ProductSubcategoriesModel;
+
 use Api\Traits\ControllerTraits;
 
 use Api\Constants;
 
 use Valitron\Validator;
+
+use Illuminate\Database\Capsule\Manager as DB;
 
 class Update {
 
@@ -158,6 +166,7 @@ class Update {
 
             }
 
+
             $product = ProductsModel::where('id', Hasher::decode( $data['id'] ))->first();
 
             if( !$product ) {
@@ -166,11 +175,47 @@ class Update {
 
             }
 
-            if( $product['hascombo'] ) {
+            $productLines = ProductLinesModel::where('product_subcategory_id', Hasher::decode($data['product_subcategory_id']))
+            ->select('product_lines.id as plineid', 'print_methods.id as pmethodid', 'print_methods.method_name', 'print_methods.method_name2')
+            ->leftJoin('print_methods', 'print_methods.id', 'product_lines.print_method_id')
+            ->groupBy('product_lines.id')
+            ->get()
+            ->toArray();
+
+            $productPrintMethods = ProductPrintMethodModel::where('product_id', Hasher::decode($data['id']))
+            ->select('product_print_method.id as productprintmid', 'product_lines.id as plineid', 'print_methods.id as pmethodid', 'print_methods.method_name', 'print_methods.method_name2')
+            ->leftJoin('product_lines', 'product_lines.id', 'product_print_method.product_line_id')
+            ->leftJoin('print_methods', 'print_methods.id', 'product_lines.print_method_id')
+            ->groupBy('product_print_method.id')
+            ->get()
+            ->toArray();
+
+            
+            $missingMethods = [];
+            $comboUpdateSetters = [];
+            foreach($productPrintMethods as $pmethod) {
+                $plineIndex = array_search($pmethod['pmethodid'], array_column($productLines, 'pmethodid'));
+                if(is_bool($plineIndex)) {
+                    $missingMethods[] = $pmethod['method_name'] . ' ' . $pmethod['method_name2'];
+                }
+
+                if(is_int($plineIndex)) {
+                    $comboUpdateSetters[] = [
+                        'id' => $pmethod['productprintmid'],
+                        'product_line_id' => $productLines[$plineIndex]['plineid']
+                    ];
+                }
+            }
+
+            $newSubcategory = ProductSubcategoriesModel::where('id', Hasher::decode($data['product_subcategory_id']))->first();
+
+            if(count($missingMethods)) {
                 
-                return rest_response( 'You cannot move this product, please remove combination this product first.', 422 );
+                return rest_response( $newSubcategory['sub_name'] . " - missing productlines (please add them before moving product)". ': ' . join(", ", $missingMethods) , 422 );
 
             }
+
+            DB::unprepared($this->massUpdate(new ProductPrintMethodModel, $comboUpdateSetters, 'id'));
 
             $product->product_category_id = Hasher::decode( $data['product_category_id'] );
 

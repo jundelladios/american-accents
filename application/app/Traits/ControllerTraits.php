@@ -153,6 +153,30 @@ trait ControllerTraits {
         return $str;
     }
 
+
+
+    public function massUpdate($instance, $columns = [], $keyColumn) {
+
+        $str = '';
+
+        foreach($columns as $key => $value) {
+
+            foreach($value as $colkey => $colvalue) {
+
+                if($keyColumn!=$colkey) {
+
+                    $str .= "update " . $instance->getTable() . " set " . $colkey . '=' . $colvalue . ' where ' . $keyColumn . '=' . $value[$keyColumn] . ';';
+
+                }
+
+            }
+
+        }
+
+        return $str;
+
+    }
+
     public function jsonArrayPaginate($array, $page, $limit) {
 
         if( !$limit ) {
