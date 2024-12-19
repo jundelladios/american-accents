@@ -1,0 +1,45 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "title": {
+                "type": "string"
+            },
+            "preview": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "format": "uri",
+                        "pattern": "^(https?|http?|null)://"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
+            },
+            "link": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "format": "uri",
+                        "pattern": "^(https?|http?|null)://"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    },
+                    {
+                        "type": "null"
+                    }
+                ]
+            }
+        },
+        "required": ["title", "preview", "link"]
+    }
+}

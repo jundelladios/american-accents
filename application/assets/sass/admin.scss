@@ -1,0 +1,364 @@
+.aa {
+    &.color-module {
+        padding: 4px;
+        color: #ffffff;
+    }
+}
+
+.color-module-v2 {
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    border-radius: 100%;
+    border: 2px solid #929292;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.aa-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.5);
+    overflow-y: scroll;
+    .aa-content-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        .aa-content {
+            background: #ffffff;
+            padding: 40px 20px 20px 20px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            &.lg {
+                max-width: 60%;
+            }
+            &.md {
+                max-width: 50%;
+            }
+            .aa-close {
+                font-size: 30px;
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.full-width { width: 100%; }
+.vc-chrome {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif!important;
+    position: absolute;
+    z-index: 99;
+}
+
+.link-img {
+    border: 1px solid #d8d8d8
+}
+
+.aa-accordion {
+    .accordion_buttons {
+        background: #9c9c9c;
+        display: block;
+        padding: 10px;
+        color: #fff;
+        margin-bottom: 10px;
+        text-decoration: none;
+        
+        &.required {
+            background: #505050;
+        }
+    }
+    .accordion_contents {
+        display: none;
+        padding: 5px;
+        &.active {
+            display: block;
+        }
+    }
+}
+
+#migrationController {
+    .message_popup {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        .content_wrap {
+            background: #fff;
+            padding: 50px;
+        }
+    }
+}
+
+.v-error {
+    color: red;
+    display: block;
+    font-size: 12px;
+}
+
+.fcharges-data-lists {
+    li {
+        border-bottom: 1px solid #dedede;
+        padding-bottom: 30px;
+    }
+}
+
+.icon-dark {
+    &:before {
+        color: #222222!important;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.trumbowyg-editor {
+    ul {
+        list-style: inherit;
+        margin-left: 20px;
+    }
+}
+
+.asterisk {
+    color: #F7B51B;
+  }
+
+ul {
+    &.pagination {
+        display: flex;
+        li {
+            margin-right: 5px;
+            a {
+                padding: 5px;
+                font-size: 16px;
+            }
+            &.active {
+                a {
+                    background: #bdbdbd;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
+
+
+.slick-admin {
+    
+}
+
+.bg-cover {
+    background-size: cover!important;
+}
+
+.swal-footer {
+    text-align: center;
+}
+
+.v-draggable {
+    .flip-list-move {
+        transition: transform 0.5s;
+      }
+      .no-move {
+        transition: transform 0s;
+      }
+      .ghost {
+        opacity: 0.5;
+        background: #c8ebfb;
+        cursor: move;
+      }
+      .list-group {
+        min-height: 20px;
+      }
+      .v-drag-item {
+        &.sortable-chosen {
+            cursor: move;
+        }
+      }
+}
+
+.wp-core-ui .button-secondary {
+    background: #00796b!important;
+    border-color: #00796b!important;
+    color: #fff!important;
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.wp-core-ui .button-danger {
+    background: #d32f2f!important;
+    border-color: #d32f2f!important;
+    color: #fff!important;
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.img-form-wrap:not(.nr) {
+    height: 300px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex!important;
+    justify-content: center;
+    align-items: center;
+    img:not(.nr) {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto!important;
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.img-r {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto!important;
+    height: auto!important;
+}
+
+.bg-grey {
+    background: #E6E6E6;
+}
+
+.media-types.media-types-required-info { display: none; }
+
+
+.ajax-loader {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    &.append-loader {
+      position: relative;
+      width: 100%;
+      .loaderWrap {
+        height: 100px;
+      }
+    }
+    .background {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      background: #fff;
+      opacity: 0.8;
+    }
+    .loaderWrap {
+      position: relative;
+      z-index: 2;
+      height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .loader {
+        border: 5px solid #f3f3f3; /* Light grey */
+        border-top: 5px solid #1f4385; /* Blue */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spinAjaxLoader .5s linear infinite;
+        -webkit-animation: spinAjaxLoader .5s linear infinite;
+      }
+      .text {
+        display: block;
+        margin-top: 10px;
+        font-size: 12px;
+      }
+    }
+    @keyframes spinAjaxLoader {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  
+    @-webkit-keyframes spinAjaxLoader {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  }
+
+  .spec {
+
+    .group {
+        background: #3b6588;
+        h3 {
+            color: #fff;
+        }
+    }
+
+    .specfield {
+        background: rgb(34, 113, 177);
+        color: #fff;
+        a {
+            color: #fff;
+        }
+    }
+
+    .field {
+        background: rgb(249, 249, 249);
+    }
+
+    .btn-move {
+        cursor: pointer;
+        span {
+            &:before {
+                color: #222;
+            }
+        }
+        &.up {
+            transform: rotate(-90deg);
+        }
+        &.down {
+            transform: rotate(90deg);
+        }
+
+        &.left {
+            transform: rotate(180deg);
+        }
+
+        &[disabled] {
+            opacity: 0.5;
+        }
+    }
+  }
+
+  #wpfooter {
+      position: relative!important;
+  }
+
+
+  .floating-button-save {
+    position: fixed;
+    padding: 5px;
+    z-index: 999;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0!important;
+    background: #fff;
+    text-align: center;
+  }

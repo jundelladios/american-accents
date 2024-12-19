@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "type": {
+                "type": "string"
+            },
+            "colors": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "hex": {
+                            "type": "string"
+                        },
+                        "pantone": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["name", "pantone", "hex"]
+                }
+            }
+        },
+        "required": ["type", "colors"]
+    }
+}

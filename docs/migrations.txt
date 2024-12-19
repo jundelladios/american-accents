@@ -1,0 +1,62 @@
+pricing_data_value
+ - show_currency - int default 0
+
+imprint_type_product_line
+- decimal_value - int default 0
+- show_currency - int default 1
+
+product_lines
+- show_currency - int default 1
+
+
+
+
+
+
+
+for cabin
+pricing_data_value
+ - show_currency - int default 0
+ - decimal_value - int default 0
+
+imprint_type_product_line
+- decimal_value - int default 0
+- show_currency - int default 1
+
+product_lines
+- show_currency - int default 1
+- setup_charge - int default 0
+
+
+migration query
+
+# for additional charges currency
+update pricing_data_value 
+join pricing_data 
+ON pricing_data_value.pricing_data_id=pricing_data.id 
+join charge_types
+on pricing_data.charge_type_id = charge_types.id
+set pricing_data_value.show_currency=1 
+where charge_types.charge_name='Additional Spot Color Charge'
+OR
+charge_types.charge_name='2nd Side Imprint Charge'
+OR
+charge_types.charge_name='White Ink Imprint Charge'
+OR
+charge_types.charge_name='Hotstamp Imprint Charge'
+OR
+charge_types.charge_name='4-Color Process Charge'
+OR
+charge_types.charge_name='Inside Imprint Charge'
+
+
+# for product combo pricing
+update pricing_data_value set pricing_data_value.show_currency=1 where pricing_data_value.product_print_method_id IS NOT NULL;
+
+
+# for removing setup charge and discount codes
+update product_lines set setup_charge=0, coupon_code_id=NULL;
+
+
+# removing v values for pricing data
+update pricing_data set spot_color_value=NULL, per_color_value=NULL, per_piece_value=NULL, per_side_value=NULL, per_thousand_value=NULL;
