@@ -114,6 +114,7 @@ class CategoryPage extends Page {
 
     public function queryVars($vars) {
         $vars[] = 'subcategory';
+        $vars[] = 'subcategory_tags';
         return $vars;
     }
 

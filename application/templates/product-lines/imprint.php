@@ -53,6 +53,18 @@
                             </div>
 
                             <div class="mb-3">
+                                <label for="imprint_id" class="d-block mb-2">Decimal Point</label>
+                                <input type="number" v-model="imprint.decimal_value" />
+                            </div>
+
+                            <div class="mb-2">
+                                <label>
+                                    <input type="checkbox" v-model="imprint.show_currency" :true-value="1" :false-value="0">
+                                    Show currency?
+                                </label>
+                            </div>
+
+                            <div class="mb-3">
                                 <button id="btn" type="submit" v-if="imprint.index!=null" class="button button-primary">Save Changes</button>
                                 <button id="btn" type="submit" v-else class="button button-primary">Add Imprint</button>
                                 <button id="btn" @click.stop="cancelImprintInputs" type="button" class="button">Cancel</button>

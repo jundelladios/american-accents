@@ -41,44 +41,36 @@ class Media {
 
     public static function imageURLCDN($url) {
 
-        if( defined( '_APP_IMG_CDN' ) && _APP_IMG_CDN ) { 
-
-            $cdn = _APP_IMG_CDN;
-
-            return "$cdn/q_lossless+to_webp+ret_img/$url";
-
+        $cdnproxy = carbon_get_theme_option('aa_admin_settings_cdnproxy');
+        if($cdnproxy) {
+            return str_replace(home_url(), $cdnproxy, $url);
         }
-
+    
         return $url;
-
     }
 
     public static function imageproxy($url) {
-
-        if( defined( '_APP_IMG_CDN' ) && _APP_IMG_CDN ) {
-
-            $cdn = _APP_IMG_CDN;
-
+        $cdnproxy = carbon_get_theme_option('aa_admin_settings_cdnproxy');
+        if($cdnproxy) {
+            $imgurl = str_replace(home_url(), $cdnproxy, $url);
             return "
-            $cdn/q_lossless+w_400+to_webp+ret_img/$url 400w,
-            $cdn/q_lossless+w_600+to_webp+ret_img/$url 600w,
-            $cdn/q_lossless+w_800+to_webp+ret_img/$url 800w,
-            $cdn/q_lossless+w_1600+to_webp+ret_img/$url 1600w,
-            $cdn/q_lossless+w_1920+to_webp+ret_img/$url 1920w,
-            $cdn/q_lossless+w_2050+to_webp+ret_img/$url 2050w
+            $imgurl?width=400 600w,
+            $imgurl?width=600 800w,
+            $imgurl?width=800 1600w,
+            $imgurl?width=1600 1900w,
+            $imgurl 2050w
             ";
-
         }
-
         return $url;
-
     }
 
     public static function getImage($id) {
 
-        $imageproxy = carbon_get_theme_option( 'aa_admin_settings_imgproxy' );
+        $cdnproxy = carbon_get_theme_option('aa_admin_settings_cdnproxy');
 
-        if( $id && $imageproxy ) {
+        if( $id && $cdnproxy ) {
+
+            $imgurl = str_replace(home_url(), $cdnproxy, $url[0]);
 
             $alt = get_post_meta($id, '_wp_attachment_image_alt', TRUE);
 
@@ -92,9 +84,9 @@ class Media {
 
             if( !in_array( $ext, $allowedResizeCdn ) ) { return null; }
 
-            $finalsrc = "$imageproxy/to_webp,ret_wait/".$url[0];
+            $finalsrc = $imgurl;
 
-            $preloader = "$imageproxy/to_webp,w_200,ret_wait/".$url[0];
+            $preloader = "$imgurl?width=400";
 
             return array(
                 'src' => $url[0],

@@ -8,7 +8,9 @@ var imprintProductLine = {
                 imprint_charge: null,
                 index: null,
                 priority: 1,
-                image: null
+                image: null,
+                decimal_value: 0,
+                show_currency: 1
             },
             imprintTypesData: {
                 data: [],

@@ -1,5 +1,5 @@
 var productPricing = /*html */`
-    <div data-accordion-module-item class="product-accordion open mb-4">
+    <div data-accordion-module-item class="product-accordion open mb-4" attr-module="pricing">
         <button class="product-accordion-header" data-accordion-module>
             <div class="accordion-header d-flex align-items-center">
                 <span class="icon icon-dollar"></span>
@@ -52,7 +52,7 @@ var productPricing = /*html */`
                         <tr v-if="product.productline.formatted_setup_charge">
                             <td></td>
                             <td class="text-left" :colspan="product.all_quantities.length+1">
-                                Setup Charge {{ product.productline.formatted_setup_charge }} (v) <template v-for="(scper, scperindex) in productSetupChargeIterate">{{ scper.text }}<template v-if="scperindex+1!=productSetupChargeIterate.length">,&nbsp;</template></template>
+                                Setup Charge {{ product.productline.formatted_setup_charge }} <span v-if="getglobaljsvars.chargesIndicator">{{getglobaljsvars.chargesIndicator}}</span> <template v-for="(scper, scperindex) in productSetupChargeIterate">{{ scper.text }}<template v-if="scperindex+1!=productSetupChargeIterate.length">,&nbsp;</template></template>
                             </td>
                         </tr>
                         <!-- end of setup charge -->
@@ -62,7 +62,7 @@ var productPricing = /*html */`
                         <tr v-for="(imprint, imprintindex) in productImprintsIterate" :key="\`the-imprint-pricing-index-\${imprintindex}\`">
                             <td></td>
                             <td class="text-left" :colspan="product.all_quantities.length+1">
-                                {{ imprint.textlabel }} Die Charge {{ imprint.formatted_value }} (v) (<small style="white-space: nowrap;" v-if="imprint.min_prod_days"><i>Minimum {{imprint.min_prod_days}} production days</i></small>)
+                                {{ imprint.textlabel }} <span v-if="getglobaljsvars.diechargeLabel">{{getglobaljsvars.diechargeLabel}}</span> {{ imprint.labeled_value }} <span v-if="getglobaljsvars.chargesIndicator">{{getglobaljsvars.chargesIndicator}}</span> <small style="white-space: nowrap;" v-if="imprint.min_prod_days">(<i>Minimum {{imprint.min_prod_days}} production days</i>)</small>
                             </td>
                         </tr>
                         <!-- end of imprint types -->
@@ -104,7 +104,7 @@ var productPricing = /*html */`
                         <!-- setup charge -->
                         <tr v-if="product.productline.formatted_setup_charge">
                             <td class="text-left" :colspan="product.all_quantities.length+1">
-                                Setup Charge {{ product.productline.formatted_setup_charge }} (v) <template v-for="(scper, scperindex) in productSetupChargeIterate">{{ scper.text }}<template v-if="scperindex+1!=productSetupChargeIterate.length">,&nbsp;</template></template>
+                                Setup Charge {{ product.productline.formatted_setup_charge }} <span v-if="getglobaljsvars.chargesIndicator">{{getglobaljsvars.chargesIndicator}}</span> <template v-for="(scper, scperindex) in productSetupChargeIterate">{{ scper.text }}<template v-if="scperindex+1!=productSetupChargeIterate.length">,&nbsp;</template></template>
                             </td>
                         </tr>
                         <!-- end of setup charge -->
@@ -112,7 +112,7 @@ var productPricing = /*html */`
                         <!-- imrpint types -->
                         <tr v-for="(imprint, imprintindex) in productImprintsIterate" :key="\`the-imprint-pricing-index-\${imprintindex}\`">
                             <td class="text-left" :colspan="interatePricing.length+1">
-                                {{ imprint.textlabel }} Die Charge {{ imprint.formatted_value }} (v) (<small style="white-space: nowrap;" v-if="imprint.min_prod_days"><i>Minimum {{imprint.min_prod_days}} production days</i></small>)
+                                {{ imprint.textlabel }} <span v-if="getglobaljsvars.diechargeLabel">{{getglobaljsvars.diechargeLabel}}</span> {{ imprint.labeled_value }} <span v-if="getglobaljsvars.chargesIndicator">{{getglobaljsvars.chargesIndicator}}</span> <small style="white-space: nowrap;" v-if="imprint.min_prod_days">(<i>Minimum {{imprint.min_prod_days}} production days</i>)</small>
                             </td>
                         </tr>
                         <!-- end of imprint types -->

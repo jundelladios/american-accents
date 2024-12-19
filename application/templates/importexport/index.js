@@ -30,6 +30,23 @@ var importexportInstanceVue = new Vue({
                 limit: 50,
                 next: 1,
                 imports: []
+            },
+            vdsproductexport: {
+                entries: [],
+                limit: 50,
+                imports: [],
+                colorstockshape: {
+                    page: 1,
+                    next: 1
+                },
+                colors: {
+                    page: 1,
+                    next: 1
+                },
+                stockshape: {
+                    page: 1,
+                    next: 1
+                }
             }
         }
     },
@@ -123,6 +140,9 @@ var importexportInstanceVue = new Vue({
         },
         importProductLinePricingData() {
             jQuery('#importfileplinepricingdata').click();
+        },
+        importVDSProductFile() {
+            jQuery('#importfilevdsprods').click();
         },
         async executeImport() {
             this.export.imports = [];
@@ -261,6 +281,14 @@ var importexportInstanceVue = new Vue({
                             ...imported,
                             combination_name: imported.product_method_combination_name
                         });
+
+                        // batch update product pricing to SAGE
+                        if(imported.product_combo_id && this.pcomboexport.imports.length>1 && imported.product_combo_id!=this.pcomboexport.imports[1].product_combo_id) {
+                            this.showLoading(`Updating SAGE PRODUCT PRICINGS for ${imported.product_method_combination_name}...\nPlease do not close/refresh the browser.`);
+                            await api.post(`/vdsitems/sync`, {
+                                id: imported.product_combo_id
+                            });
+                        }
                     }
                     
                     this.pcomboexport.imports.splice(0, 1);
@@ -300,6 +328,218 @@ var importexportInstanceVue = new Vue({
                 return;
             }
         },
+
+
+
+        executeImportVDSProduct() {
+            this.vdsproductexport.imports = [];
+            let file = document.getElementById("importfilevdsprods").files[0]
+            const e = this;
+            Papa.parse(file, {
+                download: true,
+                dynamicTyping: true,
+                header: true,
+                complete: async function(result) {
+                    e.vdsproductexport.imports = result.data;
+                    await e.executeImportVDSProductApi();
+                }
+            });
+        },
+        async executeImportVDSProductApi() {
+            try {
+                var confirm = await swal(`Are you sure you want to import these vds products?`, {
+                    buttons: true,
+                    dangerMode: false
+                });
+
+                if( !confirm ) { 
+                    document.getElementById("importfilevdsprods").value = "";
+                    return; 
+                }
+
+                this.showLoading(`Preparing to import`);
+                while( this.vdsproductexport.imports.length ) {
+                    const imported = this.vdsproductexport.imports[0];
+                    if( imported.productname ) { 
+                        this.showLoading(`Importing ${imported.productname}...\nPlease do not close/refresh the browser.`);
+
+                        if(imported.variation=="color-stockshape") {
+                            await api.put(`/product_colors_stockshape`, {
+                                ...imported
+                            });
+                        }
+                        else if(imported.variation=="stockshape") {
+                            await api.put(`/product-stockshapes`, {
+                                ...imported
+                            });
+                        }
+                        else if(imported.variation=="color" || imported.variation=="na-color") {
+                            await api.put(`/product-colors`, {
+                                ...imported
+                            });
+                        }
+                    }
+                    
+                    this.vdsproductexport.imports.splice(0, 1);
+
+                    if( !this.vdsproductexport.imports.length ) {
+                        await swal(`VDS Product has been imported.`);
+                        window.location.reload();
+                        return;
+                    }
+                }
+            } catch($e) {
+                await swal(this.csvErrorMessage);
+                window.location.reload();
+                return;
+            }
+        },
+
+        async exportVdsProducts() {
+
+            this.showLoading('Exporting...\nplease do not close/refresh the page.')
+
+            this.vdsproductexport.colorstockshape.next = 1;
+
+            this.vdsproductexport.colorstockshape.page = 1;
+
+            this.vdsproductexport.colors.next = 1;
+
+            this.vdsproductexport.colors.page = 1;
+
+            this.vdsproductexport.stockshape.next = 1;
+
+            this.vdsproductexport.stockshape.page = 1;
+
+            this.vdsproductexport.entries = [];
+
+            while( this.vdsproductexport.colorstockshape.next ) {
+                await this.getExportedVdsProductsColorStockShape();
+            }
+
+            while( this.vdsproductexport.colors.next ) {
+                await this.getExportedVdsProductsColors();
+            }
+
+            while( this.vdsproductexport.stockshape.next ) {
+                await this.getExportedVdsProductsStockshape();
+            }
+
+            const csvExport = Papa.unparse(this.vdsproductexport.entries);
+
+            await swal('VDS Products has been exported.');
+
+            this.exportedAutoDownload(csvExport, `vds-products`);
+        },
+
+        async getExportedVdsProductsColorStockShape() {
+            try {
+                const variants = [];
+                const res = await api.get(`/public/getProductsVariations`, {
+                    params: {
+                        variation: 'color-stockshape',
+                        page: this.vdsproductexport.colorstockshape.page,
+                        limit: this.vdsproductexport.limit,
+                        active_only: 1
+                    }
+                });
+                this.vdsproductexport.colorstockshape.page++;
+                res.data.data.map(row => {
+                    variants.push({
+                        id: row.id,
+                        productname: row.product_combination_name, 
+                        variation: 'color-stockshape',
+                        vdsid: row.vdsid,
+                        vdsproductid: row.vdsproductid,
+                        colorname: row.thecolor ? row.thecolor.colorname : '',
+                        colorhex: row.thecolor ? row.thecolor.colorhex : '',
+                        stockname: row.theshape ? row.theshape.stockname : '',
+                        stockcode: row.theshape ? row.theshape.code : '',
+                        product_color_id: row.thecolor ? row.thecolor.id : '',
+                        product_stockshape_id: row.theshape ? row.theshape.id : '',
+                        in_stock: ''
+                    });
+                });
+                this.vdsproductexport.entries = [...this.vdsproductexport.entries, ...variants];
+                this.vdsproductexport.colorstockshape.next = res.data.next_page_url;
+            } catch($e) {
+                return;
+            }
+        },
+
+
+        async getExportedVdsProductsColors() {
+            try {
+                const variants = [];
+                const res = await api.get(`/public/getProductsVariations`, {
+                    params: {
+                        variation: 'color',
+                        page: this.vdsproductexport.colors.page,
+                        limit: this.vdsproductexport.limit,
+                        active_only: 1
+                    }
+                });
+                this.vdsproductexport.colors.page++;
+                res.data.data.map(row => {
+                    variants.push({
+                        id: row.id,
+                        productname: row.product_combination_name, 
+                        variation: 'color',
+                        vdsid: row.vdsid,
+                        vdsproductid: row.vdsproductid,
+                        colorname: row.colorname,
+                        colorhex: row.colorhex,
+                        stockname: null,
+                        stockcode: null,
+                        product_color_id: null,
+                        product_stockshape_id: null,
+                        in_stock: row.in_stock
+                    });
+                });
+                console.log(this.vdsproductexport.colors.page);
+                this.vdsproductexport.entries = [...this.vdsproductexport.entries, ...variants];
+                this.vdsproductexport.colors.next = res.data.next_page_url;
+            } catch($e) {
+                return;
+            }
+        },
+
+        async getExportedVdsProductsStockshape() {
+            try {
+                const variants = [];
+                const res = await api.get(`/public/getProductsVariations`, {
+                    params: {
+                        variation: 'stockshape',
+                        page: this.vdsproductexport.colorstockshape.page,
+                        limit: this.vdsproductexport.limit,
+                        active_only: 1
+                    }
+                });
+                this.vdsproductexport.stockshape.page++;
+                res.data.data.map(row => {
+                    variants.push({
+                        id: row.id,
+                        productname: row.product_combination_name, 
+                        variation: 'stockshape',
+                        vdsid: row.vdsid,
+                        vdsproductid: row.vdsproductid,
+                        colorname: null,
+                        colorhex: null,
+                        stockname: row.stockname,
+                        stockcode: row.code,
+                        product_color_id: null,
+                        product_stockshape_id: null,
+                        in_stock: row.in_stock
+                    });
+                });
+                this.vdsproductexport.entries = [...this.vdsproductexport.entries, ...variants];
+                this.vdsproductexport.stockshape.next = res.data.next_page_url;
+            } catch($e) {
+                return;
+            }
+        },
+
+
         async exportProducts() {
 
             this.showLoading('Exporting...\nplease do not close/refresh the page.')
@@ -358,6 +598,7 @@ var importexportInstanceVue = new Vue({
                         const pricingobj = _.pick(pr, this.exportedPricingFieldsLists);
                         pricings.push({
                             id: pr.id,
+                            product_combo_id: row.id,
                             product_method_combination_name: row.product_method_combination_name,
                             ...pricingobj
                         });

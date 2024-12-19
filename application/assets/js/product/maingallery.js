@@ -1,5 +1,19 @@
 var productCarouselImages = /*html */`
 <div class="product-image-slide position-relative">
+
+    <div v-if="product.product.banner_img" :class="\`product-banner-image-wrap \${product.product.banner_class}\`">
+        <img :src="product.product.banner_img"/>
+        <div class="product-banner-content" v-if="product.product.banner_content" v-html="product.product.banner_content"></div>
+    </div>
+    <template v-else>
+        <div v-if="getVariationEntries.out_of_stock" class="product-banner-image-wrap out-of-stock-banner">
+            <img :src="\`${inventoryJSVars.pluginURL}/application/assets/img/outofstock.png\`"/>
+            <div class="product-banner-content">
+                out of stock
+            </div>
+        </div>
+    </template>
+
     <div class="carousel-main-wrap"
     @mouseover="pauseThumbnailsAutoplay"
     @mouseleave="playThumbnailAutoplay"
@@ -13,22 +27,38 @@ var productCarouselImages = /*html */`
         :draggable="getVariationEntries.imagedata.length > 1 ? true : false"
         @afterChange="zoomElevateRefresh"
         >
-            <div :class="'img-slide-item img-zoom-js main-gallery-images-' + dfimgindex" 
-            v-for="(dfimg, dfimgindex) in getVariationEntries.imagedata" 
-            :key="'dfimg-key-'+dfimgindex" 
-            @click.stop="openMainGalleryPopup(dfimgindex)">
-                <div class="img-fit-wrap"
-                :style="{
-                    paddingTop: dfimg.top + '%'
-                }"
-                >
-                    <v-img 
-                    :data-zoom-image="dfimg.image"
-                    :img="dfimg.image"
-                    width="auto"
-                    height="auto"/>
+            <template v-if="getVariationEntries.imagedata.length">
+                <div :class="'img-slide-item img-zoom-js main-gallery-images-' + dfimgindex" 
+                v-for="(dfimg, dfimgindex) in getVariationEntries.imagedata" 
+                :key="'dfimg-key-'+dfimgindex" 
+                @click.stop="openMainGalleryPopup(dfimgindex)">
+                    <div class="img-fit-wrap"
+                    :style="{
+                        paddingTop: dfimg.top + '%'
+                    }"
+                    >
+                        <v-img 
+                        :data-zoom-image="dfimg.image"
+                        :img="dfimg.image"
+                        />
+                    </div>
                 </div>
-            </div>
+            </template>
+
+            <template v-else>
+                <div :class="'img-slide-item img-zoom-js'" >
+                    <div class="img-fit-wrap"
+                    :style="{
+                        paddingTop: product.productcomboimage.top + '%'
+                    }"
+                    >
+                        <v-img 
+                        :data-zoom-image="product.productcomboimage.image"
+                        :img="product.productcomboimage.image" :alt="\`\${product.product_method_combination_name}\`"
+                        />
+                    </div>
+                </div>
+            </template>
         </vue-slick-carousel>
     </div>
 
@@ -48,12 +78,13 @@ var productCarouselImages = /*html */`
                 >
                     <v-img 
                     :img="dfimg.image" 
-                    width="auto"
-                    height="auto"/>
+                    />
                 </div>
             </div>
         </vue-slick-carousel>
     </div>
+
+    
 </div>
 `;
 
@@ -116,7 +147,7 @@ var maingallerypopup = /*html */`
                                     </div>
 
                                     <div class="button-actions mt-3">
-                                        <a href="#" @click.prevent="popupGalleryEmail(img)" class="btn-action button-light"><span class="icon mr-1 icon-email"></span> email</a>
+                                        <a href="#" :data-url="img.image" data-type="email" class="btn-action button-light aa_social_share"><span class="icon mr-1 icon-email"></span> email</a>
                                         <a href="#" @click.prevent="() => printJS({
                                             printable: img.image,
                                             documentTitle: img.title,
@@ -215,31 +246,26 @@ var maingallerypopup = /*html */`
     ref="sharerefMainGallery"
     :dialogStyle="{ 'max-width': '300px' }"
     >
-        <share-network 
-        network="facebook"
-        :url="img.image"
-        hashtags="american_accents"
-        :quote="\`\${product.product_method_combination_name} (\${product.product.product_description})\`"
-        class="btn d-block full-width text-left mb-2 text-light" style="background: #4267B2;">
+        <button
+        data-type="fb"
+        :data-url="img.image"
+        class="btn d-block full-width text-left mb-2 text-light aa_social_share" style="background: #4267B2;">
             <span class="icon icon-facebook-square mr-1"></span> Facebook
-        </share-network>
+        </button>
 
-        <share-network 
-        network="twitter"
-        :url="img.image"
-        :title="img.title"
-        :description="product.product.product_description"
-        :hashtags="\`idea_gallery,american_accents,\${product.product_method_combination_name.replaceAll('-', '_')}\`"
-        class="btn d-block full-width text-left mb-2 text-light" style="background: #1DA1F2;">
+        <button
+        data-type="twitter"
+        :data-url="img.image"
+        class="btn d-block full-width text-left mb-2 text-light aa_social_share" style="background: #1DA1F2;">
             <span class="icon icon-twitter-square mr-1"></span> Twitter
-        </share-network>
+        </button>
 
-        <share-network 
-        network="linkedin"
-        :url="img.image"
-        class="btn d-block full-width text-left mb-2 text-light" style="background: #0077b5;">
+        <button
+        data-type="linkedin"
+        :data-url="img.image"
+        class="btn d-block full-width text-left mb-2 text-light aa_social_share" style="background: #0077b5;">
             <span class="icon icon-instagram-square mr-1"></span> linkedin
-        </share-network>
+        </button>
     </v-modal>
     <!-- end modal share -->
     

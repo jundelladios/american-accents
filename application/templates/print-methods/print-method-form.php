@@ -106,9 +106,11 @@
                     <a href="javascript:void(0)" @click.stop="input.keyfeatures.push({ image: '', text: '' })" class="button mb-3">Add Key Feature</a>
                 </div>
 
-                <div class="mb-3">
+                <div class="floating-button-save">
                     <button typpe="submit" id="btn" v-if="input.index!=null" class="button button-primary">Save Changes</button>
                     <button typpe="submit" id="btn" v-else class="button button-primary">Save Category</button>
+
+                    <a href="javascript:void(0)" @click.prevent="formInputs(false, defaultValue)" class="button button-default">Cancel</a>
                 </div>
             </form>
 

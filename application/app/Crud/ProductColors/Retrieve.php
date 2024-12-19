@@ -54,6 +54,17 @@ class Retrieve {
 
             }
 
+            if(isset( $request['query'])) {
+                $query = $request['query'];
+                $colors->where(function($qs) use($query) {
+                    $qs->where('colorhex', 'LIKE', "%$query%")
+                    ->orWhere('colorname', 'LIKE', "%$query%")
+                    ->orWhere('pantone', 'LIKE', "%$query%")
+                    ->orWhere('vdsid', 'LIKE', "%$query%")
+                    ->orWhere('vdsproductid', 'LIKE', "%$query%");
+                });
+            }
+
             $colors->orderBy('priority');
 
             return $this->getHelper( $colors, $request, false );

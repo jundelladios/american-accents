@@ -3,6 +3,9 @@ var migrationInstanceVue = new Vue({
     mixins: [mixVue],
     data: function() {
         return {
+            backup: {
+                filename: null
+            },
             inputs: {
                 old: '',
                 new: home_url
@@ -15,7 +18,7 @@ var migrationInstanceVue = new Vue({
     },
     methods: {
         async restoredb($file) {
-            var confirm = await swal('Important! Are you sure you want to import this database? this can`t be undone. make sure you make a backup on this after taking this action.', {
+            var confirm = await swal('Important! Are you sure you want to import this database? this can`t be undone. make sure you make a backup on this before taking this action.', {
                 buttons: true,
                 dangerMode: true,
                 icon: 'warning'
@@ -52,9 +55,11 @@ var migrationInstanceVue = new Vue({
             }
         },
         async exportdb() {
-            try {
+            try { console.log(this.backup.filename);
                 await this.showLoading('Please wait...');
-                await api.post(`/database/backup`);
+                await api.post(`/database/backup`, {
+                    filename: this.backup.filename
+                });
                 await swal('Database has been exported successfully.\nPage will automatically refresh after closing this message', { icon: 'success' });
                 window.location.href = window.location.href;
             } catch($e) {

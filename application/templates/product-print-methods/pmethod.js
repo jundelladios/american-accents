@@ -71,6 +71,7 @@ const priceInputs = {
     index: null,
     unit_value: null,
     decimal_value: 3,
+    show_currency: 0,
     hid: null
 }
 
@@ -402,15 +403,29 @@ var productsInstanceVue = new Vue({
                 this.backEnd($e);
             }
         },
+
+        async synchronizePricingSage() {
+            try {
+                await api.post(`/vdsitems/sync`, {
+                    id: this.inputs.hid
+                });
+            } catch($e) {
+                this.backEnd($e);
+            }
+        },
+
         async saveBreakdown() {
             var valid = await this.$validator.validateAll('breakdown');
             if(!valid) return;
 
             if( this.priceInputs.hid ) {
-                this.updateBreakdown();
+                await this.updateBreakdown();
             } else {
-                this.addBreakdown();
+                await this.addBreakdown();
             }
+            await this.showLoading('Synchronizing SAGE Product Pricings...');
+            await this.synchronizePricingSage();
+            swal('SAGE Products Pricing has been updated.', { icon: 'success' });
         },
         resetBreakdownInputs() {
             this.priceInputs = {...this.defaultpriceInputs};

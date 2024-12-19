@@ -11,7 +11,13 @@ function aa_sc_premiumbg( $atts ) {
         'collg' => 4,
         'colmd' => 3,
         'colsm' => 2, 
-        'colxs' => 1
+        'colxs' => 1,
+        'modalmaintitle' => "Downloads",
+        'modalsubtitle' => "PREMIUM BACKGROUNDS",
+        'is_enabled_email' => 1,
+        'is_enabled_print' => 1,
+        'is_enabled_download' => 0,
+        'is_enabled_share' => 1,
     );
 
     $param = shortcode_atts($default, $atts);
@@ -26,6 +32,10 @@ function aa_sc_premiumbg( $atts ) {
 
     if(!$apiRequest['data']) { return `<div></div>`; }
 
+    $moduleid = wp_unique_id( 'premiumbg_sc_module_' );
+
+    $entryReusableModal = [];
+
     ob_start();
 
     ?>
@@ -37,28 +47,37 @@ function aa_sc_premiumbg( $atts ) {
     aa-grid-<?php echo $param['colmd']; ?>-md
     aa-grid-<?php echo $param['colsm']; ?>-sm
     aa-grid-<?php echo $param['colxs']; ?>-xs
-    ">
+    "
+    data-module-id="<?php echo $moduleid; ?>"
+    >
 
         <?php foreach($apiRequest['data'] as $bgs ): ?>
 
             <?php
+
+            $firstindexer = 0;
 
             foreach( $bgs['collections'] as $bg ):
 
             $code = isset( $bg['code'] ) ? $bg['code'] : '';
 
             $type = isset( $bg['type'] ) ? $bg['type'] : '';
+
+            $entryReusableModal[] = array(
+                '_modal_image' => $bg['image'],
+                '_modal_image_alt' => "$code $type",
+                '_modal_print_title' => "$code $type",
+                '_modal_label' => "$code $type",
+            );
                 
             ?>
 
                 <div class="position-relative bgwrap">
                     <?php if( isset( $bg['image'] ) && $bg['image'] ): ?>
-                        <div class="p-3 bgimg">
+                        <div class="p-3 bgimg cursor-pointer" data-modal-trigger="<?php echo $firstindexer; ?>">
                             <?php aa_lazyimg([
                                 'src' => $bg['image'],
                                 'alt' => "$code $type",
-                                'width' => 'auto',
-                                'height' => 'auto',
                                 'class' => 'pbg'
                             ]); ?>
                         </div>
@@ -72,13 +91,26 @@ function aa_sc_premiumbg( $atts ) {
                     <?php if( $type): ?><span class="bgtype"><?php echo $type; ?></span><?php endif; ?>
                 </div>
 
-            <?php endforeach; ?>
+            <?php $firstindexer++; endforeach; ?>
 
         <?php endforeach; ?>
 
     </div>
+    
 
     <?php
+
+    if( function_exists('americanAccentsReusableModalContent')):
+    echo americanAccentsReusableModalContent( 
+        $moduleid, 
+        $entryReusableModal, 
+        array_merge($param, [
+            'modal_title' => $param['modalmaintitle'],
+            'modal_subtitle' => $param['modalsubtitle'],
+            'download_file_name' => $param['modalmaintitle'] . ' ' . $param['modalsubtitle']
+        ])
+    ); 
+    endif;
 
 
     $html = ob_get_clean();

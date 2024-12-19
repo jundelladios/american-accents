@@ -22,8 +22,11 @@ var printMethodColors = {
                     pantone: null,
                     autoassignimg: 1,
                     autoassignidea: 1,
-                    vdsid: null
+                    vdsid: null,
+                    vdsproductid: null,
+                    in_stock: 1
                 },
+                query: null,
                 pagination: {
                     page: 1,
                     limit: 60,
@@ -385,6 +388,7 @@ var printMethodColors = {
                         pagination: true,
                         limit: this.pcolors.pagination.limit,
                         page: this.pcolors.pagination.page,
+                        query: this.pcolors.query
                     }
                 });
                 this.pcolors.input.product_print_method_id = id;
@@ -409,6 +413,7 @@ var printMethodColors = {
                         pagination: true,
                         limit: this.pcolors.pagination.limit,
                         page: this.pcolors.pagination.page,
+                        query: this.pcolors.query
                     }
                 });
                 this.pcolors.data = [...this.pcolors.data, ...res.data.data];
@@ -448,6 +453,10 @@ var printMethodColors = {
             this.chooseLibrary( `Select combo color image`, (url) => {
                 $e.pcolors.input.colorimageurl = url;
             });
+        },
+        searchEntryColorQueryFilter() {
+            this.pcolors.data = [];
+            this.getColorByProductId(this.pcolors.input.product_print_method_id);
         }
         // end of product colors
     }

@@ -104,10 +104,18 @@
         <input v-model="inputs.setup_charge" type="number">
     </div>
 
+    <div class="mb-2">
+        <label>
+            <input type="checkbox" v-model="inputs.show_currency" :true-value="1" :false-value="0">
+            Show currency?
+        </label>
+    </div>
+
     <div class="mb-3">
         <label class="mb-2 d-block"> Select Coupon Code</label>
         <div v-if="!coupons.loading">
             <select v-if="coupons.data.length" v-model="inputs.coupon_code_id">
+                <option :value="null">No Coupon</option>
                 <option v-for="(coupon, index) in coupons.data" :value="coupon.hid">{{coupon.code}}</option>
             </select>
             <p v-else style="color: #e48e8e;">Please add coupon code.</p>

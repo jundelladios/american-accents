@@ -37,7 +37,7 @@ class Update {
                 $this->required,
                 $this->allowedNulls,
                 $this->statuses,
-                ['id']
+                ['id', 'bannerlist']
             ));
 
             // Validation
@@ -46,6 +46,8 @@ class Update {
             $validate->rule('required', 'id');
 
             $validate->rule('jsonString', ['catalogs'], '/subcategorycatalog.json');
+
+            $validate->rule('jsonString', ['bannerlist'], '/bannerlist.json');
 
             $this->_required( $validate, $data, $this->required);
 

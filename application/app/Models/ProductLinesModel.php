@@ -41,7 +41,7 @@ class ProductLinesModel extends Model {
         'product_subcategory_id', 'print_method_id', 'image', 'features', 'priority',
         'coupon_code_id', 'features_pivot', 'second_side', 'wrap', 'bleed', 'multicolor', 'process',
         'white_ink', 'hotstamp', 'per_thousand', 'setup_charge', 'colors', 'compliances', 'pnotes', 'seo_content', 'banner_img', 'pnotes2', 'premium_backgrounds',
-        'price_tagline', 'per_item'
+        'price_tagline', 'per_item', 'show_currency'
     ];
 
     protected $hidden = ['print_method_id', 'product_subcategory_id', 'coupon_code_id'];
@@ -97,24 +97,26 @@ class ProductLinesModel extends Model {
         ->leftJoin('pricing_data_value', 'product_print_method.id', '=', 'pricing_data_value.product_print_method_id')
         ->select(
             'product_lines.id',
-            'pricing_data_value.value'
+            'pricing_data_value.value',
+            'pricing_data_value.decimal_value',
+            'pricing_data_value.show_currency'
         )
         ->where('product_lines.id', $this->id)
         ->where('product_print_method.active', 1)
         ->where('products.active', 1)
         ->whereNotNull('pricing_data_value.product_print_method_id')
-        ->whereNotNull('pricing_data_value.value');
-            
-        $min = $query->min('pricing_data_value.value');
+        ->whereNotNull('pricing_data_value.value')
+        ->groupBy( 'pricing_data_value.value' );
 
-        $max = $query->max('pricing_data_value.value');
 
-        return [
-            'min' => $min,
-            'max' => $max,
-            'formatted_min' => aa_formatted_money( $min ),
-            'formatted_max' => aa_formatted_money( $max )
-        ];
+        $max = $query->orderBy('pricing_data_value.value', 'DESC')->first();
+
+        $query->getQuery()->orders = null;
+
+        $min = $query->orderBy('pricing_data_value.value', 'ASC')->first();
+
+        return aa_range_formatter($min, $max);
+        
     }
 
     public function plinecolors() {
@@ -143,7 +145,9 @@ class ProductLinesModel extends Model {
 
     public function getFormattedSetupChargeAttribute() {
 
-        return aa_formatted_money( $this->setup_charge, false, true );
+        $withcurrency = (int) $this->attributes['show_currency'];
+
+        return aa_formatted_money(number_format($this->setup_charge), !$withcurrency);
 
     }
 

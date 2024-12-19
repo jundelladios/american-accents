@@ -116,7 +116,7 @@ var ideagalleries = /*html */`
                                     </div>
 
                                     <div class="button-actions mt-3">
-                                        <a href="#" @click.prevent="ideaEmail(idg)" class="btn-action button-light"><span class="icon mr-1 icon-email"></span> email</a>
+                                        <a href="#" :data-url="idg.image" data-type="email" class="btn-action button-light aa_social_share"><span class="icon mr-1 icon-email"></span> email</a>
                                         <a href="#" @click.prevent="() => printJS({
                                             printable: idg.image,
                                             documentTitle: idg.text,
@@ -214,31 +214,26 @@ var ideagalleries = /*html */`
     ref="shareref"
     :dialogStyle="{ 'max-width': '300px' }"
     >
-        <share-network 
-        network="facebook"
-        :url="idg.image"
-        hashtags="american_accents"
-        :quote="\`\${product.product_method_combination_name} (\${product.product.product_description})\`"
-        class="btn d-block full-width text-left mb-2 text-light" style="background: #4267B2;">
+        <button
+        data-type="fb"
+        :data-url="idg.image"
+        class="btn d-block full-width text-left mb-2 text-light aa_social_share" style="background: #4267B2;">
             <span class="icon icon-facebook-square mr-1"></span> Facebook
-        </share-network>
+        </button>
 
-        <share-network 
-        network="twitter"
-        :url="idg.image"
-        :title="idg.text"
-        :description="product.product.product_description"
-        :hashtags="\`idea_gallery,american_accents,\${product.product_method_combination_name.replaceAll('-', '_')}\`"
-        class="btn d-block full-width text-left mb-2 text-light" style="background: #1DA1F2;">
+        <button
+        data-type="twitter"
+        :data-url="idg.image"
+        class="btn d-block full-width text-left mb-2 text-light aa_social_share" style="background: #1DA1F2;">
             <span class="icon icon-twitter-square mr-1"></span> Twitter
-        </share-network>
+        </button>
 
-        <share-network 
-        network="linkedin"
-        :url="idg.image"
-        class="btn d-block full-width text-left mb-2 text-light" style="background: #0077b5;">
+        <button
+        data-type="linkedin"
+        :data-url="idg.image"
+        class="btn d-block full-width text-left mb-2 text-light aa_social_share" style="background: #0077b5;">
             <span class="icon icon-instagram-square mr-1"></span> linkedin
-        </share-network>
+        </button>
     </v-modal>
     <!-- end modal share -->
 </div>

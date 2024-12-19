@@ -15,18 +15,23 @@
  *   <button v-tooltip:auto.html.live="clock" @click="clock = Date.now()">Updating Live</button>
  */
  Vue.directive('tooltip', function(el, binding){
+    var placement = jQuery(el).attr('tooltip-placement');
+    var trigger = jQuery(el).attr('tooltip-trigger');
+    var tooltipclass = jQuery(el).attr('tooltip-class');
     try {
         jQuery(el).tooltip({
+            template: `<div class="tooltip ${tooltipclass}"><div class="arrow"></div><div class="tooltip-inner"></div></div>`,
             title: binding.value,
-            placement: binding.arg,
-            trigger: 'hover'       
+            placement: placement ? placement : binding.arg,
+            trigger: trigger ? trigger : 'hover'
         });
     } catch($e) {
         jQuery(document).ready( function() {
             jQuery(el).tooltip({
+                template: `<div class="tooltip ${tooltipclass}"><div class="arrow"></div><div class="tooltip-inner"></div></div>`,
                 title: binding.value,
-                placement: binding.arg,
-                trigger: 'hover'       
+                placement: placement ? placement : binding.arg,
+                trigger: trigger ? trigger : 'hover'
             });
         });
     }

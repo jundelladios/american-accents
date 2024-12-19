@@ -27,7 +27,7 @@ class ProductSubcategoriesModel extends Model {
 
     public $fillable = [
         'product_category_id', 'sub_name', 'sub_slug', 'sub_description', 'priority', 'seo_content', 'categorize_as', 'banner_img', 
-        'catalogs', 'sub_name_alt'
+        'catalogs', 'sub_name_alt', 'bannerlist'
     ];
 
     protected $hidden = ['product_category_id', 'active'];
@@ -100,6 +100,18 @@ class ProductSubcategoriesModel extends Model {
 
         return $slug;
 
+    }
+
+
+    public function getBannerlistAttribute() {
+
+        if( !isset( $this->attributes['bannerlist'] ) ) {
+
+            return [];
+
+        }
+
+        return aa_json_array( $this->attributes['bannerlist'] );
     }
 
 }

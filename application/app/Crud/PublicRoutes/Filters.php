@@ -114,12 +114,12 @@ class Filters {
 
         return [
             // 'subcategories' => $this->getSubcategories($request),
-            'material' => $this->getMaterials($request),
-            'sizes' => $this->getSizes($request),
-            'thickness' => $this->getThickness($request),
+            'material' => isset($request['no_material']) ? [] : $this->getMaterials($request),
+            'sizes' => isset($request['no_sizes']) ? [] : $this->getSizes($request),
+            'thickness' => isset($request['no_thickness']) ? [] : $this->getThickness($request),
             // 'colors' => $this->getColors($request),
-            'methods' => $this->getMethods($request),
-            'range' => $this->getPrices($request)
+            'methods' => isset($request['no_methods']) ? [] : $this->getMethods($request),
+            'range' => isset($request['no_range']) ? [] : $this->getPrices($request)
         ];
 
     }
@@ -568,11 +568,21 @@ class Filters {
 
     }
 
+    public function getCategories( $request ) {
+
+        $categories = (new ProductPrintMethodModel)->getInstance( $request );
+        $categories->select('product_categories.cat_name', 'product_categories.cat_slug', 'product_categories.priority')
+        ->reorder('product_categories.priority', 'ASC')
+        ->groupby('product_categories.cat_name');
+
+        return Collection::toJson($categories->get());
+    }
+
     public function getSubcategories( $request ) {
 
         $subcategories = (new ProductPrintMethodModel)->getInstance( $request );
-        $subcategories->select('product_subcategories.sub_name', 'product_subcategories.sub_slug', 'product_categories.cat_slug', 'product_subcategories.priority')
-        ->orderBy('product_subcategories.priority')
+        $subcategories->select('product_subcategories.sub_name', 'product_subcategories.sub_slug', 'product_categories.cat_slug', 'product_subcategories.priority', 'product_subcategories.bannerlist')
+        ->reorder('product_subcategories.priority')
         ->groupby('product_subcategories.sub_name');
 
         return Collection::toJson($subcategories->get());
@@ -624,18 +634,21 @@ class Filters {
     public function getPrices( $request ) {
 
         $price = (new ProductPrintMethodModel)->getInstance( $request );
-        $price->select('pricing_data_value.value', 'product_categories.cat_slug');
+        $price->select('pricing_data_value.value', 'product_categories.cat_slug', 'pricing_data_value.decimal_value', 'pricing_data_value.show_currency')
+        ->whereNotNull( 'pricing_data_value.value' )
+        ->whereNotNull( 'pricing_data_value.product_print_method_id' )
+        ->groupBy('pricing_data_value.value');
 
-        $priceMin = $price->min('pricing_data_value.value');
+        // reset order by from builder instance
+        $price->getQuery()->orders = null;
 
-        $priceMax = $price->max('pricing_data_value.value');
+        $max = $price->orderBy('pricing_data_value.value', 'DESC')->first();
 
-        return [
-            'min' => $priceMin,
-            'max' => $priceMax,
-            'formatted_min' => aa_formatted_money( $priceMin ),
-            'formatted_max' => aa_formatted_money( $priceMax )
-        ];
+        $price->getQuery()->orders = null;
+
+        $min = $price->orderBy('pricing_data_value.value', 'ASC')->first();
+
+        return aa_range_formatter($min, $max);
 
     }
 
@@ -683,6 +696,167 @@ class Filters {
 
         return rest_response( 'Variation Query is Invalid', 422 );
 
+    }
+
+    private function variationSelectColumns($table)
+    {
+        $lists = array(
+            "$table.id",
+            "$table.priority",
+            "$table.created_at",
+            "$table.updated_at",
+            "$table.product_print_method_id",
+            "$table.vdsid",
+            "$table.vdsproductid"
+        );
+        return $lists;
+    }
+
+
+    public function getProductsVariations( $request ) {
+
+        $qrstr = $request['query'] ?? null;
+
+        // paginate            
+        $limit = 50;
+        if( isset( $request['paginate'] ) ) {
+            $limit = (int) $request['paginate'];
+        }
+
+        if(!in_array($request['variation'], array(
+            Constants::COLOR_STOCKSHAPE_VARIANT_KEY,
+            Constants::COLOR_VARIANT_KEY,
+            Constants::STOCK_SHAPE_VARIANT_KEY
+        )) || !isset( $request['variation'] )) 
+        {
+            return array(
+                'variation' => 'none',
+                'data' => null
+            );
+        }
+
+        if($request['variation'] === Constants::COLOR_STOCKSHAPE_VARIANT_KEY)
+        {
+            $colorstockshape = ProductColorAndStockShapeModel::query();
+            $colorstockshape->select(
+                array_merge(
+                    $this->variationSelectColumns("product_color_stockshape"),
+                    array(
+                        "product_color_stockshape.product_color_id",
+                        "product_color_stockshape.product_stockshape_id"
+                    )
+                )
+            );
+            $colorstockshape->addSelect(
+                DB::raw("IF( product_print_method.allow_print_method_prefix = 1, CONCAT(print_methods.method_prefix, products.product_name), products.product_name) AS product_combination_name")
+            );
+            $colorstockshape->join('product_print_method', 'product_print_method.id', '=', 'product_color_stockshape.product_print_method_id');
+            $colorstockshape->join('products', 'product_print_method.product_id', '=', 'products.id');
+            $colorstockshape->join('product_lines', 'product_print_method.product_line_id', '=', 'product_lines.id');
+            $colorstockshape->join('print_methods', 'product_lines.print_method_id', '=', 'print_methods.id');
+            $colorstockshape->join('product_stockshapes', 'product_stockshapes.id', '=', 'product_color_stockshape.product_stockshape_id');
+
+            if($qrstr)
+            {
+                $colorstockshape->where(DB::raw("IF( product_print_method.allow_print_method_prefix = 1, CONCAT(print_methods.method_prefix, products.product_name), products.product_name)"), 'LIKE', "%$qrstr%");
+            }
+
+            if(isset($request['active_only'])) {
+                $colorstockshape->where('products.active', 1)
+                ->where('product_print_method.active', 1);
+            }
+
+            $colorstockshape->where(DB::raw('JSON_LENGTH(product_color_stockshape.image)'), '>', 0);
+            $colorstockshape->orderBy('product_color_stockshape.priority')
+            ->orderBy('product_combination_name')
+            ->with(['theshape', 'thecolor']);
+            
+
+            return Collection::toJson($colorstockshape->paginate($limit));
+        }
+
+        
+        if($request['variation'] === Constants::COLOR_VARIANT_KEY)
+        {
+            // available colors
+            $colorsQueryInstance = ProductColorsModel::query();
+            $availablecolor = $colorsQueryInstance;
+            $availablecolor->select(
+                array_merge(
+                    $this->variationSelectColumns("product_colors"),
+                    array(
+                        "product_colors.colorhex",
+                        "product_colors.colorname",
+                        "product_colors.in_stock",
+                    )
+                )
+            );
+            $availablecolor->addSelect(
+                DB::raw("IF( product_print_method.allow_print_method_prefix = 1, CONCAT(print_methods.method_prefix, products.product_name), products.product_name) AS product_combination_name")
+            );
+            $availablecolor->join('product_print_method', 'product_print_method.id', '=', 'product_colors.product_print_method_id');
+            $availablecolor->join('products', 'product_print_method.product_id', '=', 'products.id');
+            $availablecolor->join('product_lines', 'product_print_method.product_line_id', '=', 'product_lines.id');
+            $availablecolor->join('print_methods', 'product_lines.print_method_id', '=', 'print_methods.id');
+
+            if($qrstr)
+            {
+                $availablecolor->where(DB::raw("IF( product_print_method.allow_print_method_prefix = 1, CONCAT(print_methods.method_prefix, products.product_name), products.product_name)"), 'LIKE', "%$qrstr%");
+            }
+
+            if(isset($request['active_only'])) {
+                $availablecolor->where('products.active', 1)
+                ->where('product_print_method.active', 1);
+            }
+
+            $availablecolor->where(DB::raw('JSON_LENGTH(product_colors.image)'), '>', 0);
+            $availablecolor->orderBy('product_combination_name');
+            
+            return Collection::toJson($availablecolor->paginate($limit));
+        }
+
+        if($request['variation'] === Constants::STOCK_SHAPE_VARIANT_KEY)
+        {
+            // stock shape
+            $stockshape = ProductStockShapesModel::query();
+            $stockshape->select(
+                array_merge(
+                    $this->variationSelectColumns("product_stockshapes"),
+                    array(
+                        "product_stockshapes.stockname",
+                        "product_stockshapes.code",
+                        "product_stockshapes.in_stock"
+                    )
+                )
+            );
+            $stockshape->addSelect(
+                DB::raw("IF( product_print_method.allow_print_method_prefix = 1, CONCAT(print_methods.method_prefix, products.product_name), products.product_name) AS product_combination_name")
+            );
+            $stockshape->join('product_print_method', 'product_print_method.id', '=', 'product_stockshapes.product_print_method_id');
+            $stockshape->join('products', 'product_print_method.product_id', '=', 'products.id');
+            $stockshape->join('product_lines', 'product_print_method.product_line_id', '=', 'product_lines.id');
+            $stockshape->join('print_methods', 'product_lines.print_method_id', '=', 'print_methods.id');
+
+            if($qrstr)
+            {
+                $stockshape->where(DB::raw("IF( product_print_method.allow_print_method_prefix = 1, CONCAT(print_methods.method_prefix, products.product_name), products.product_name)"), 'LIKE', "%$qrstr%");
+            }
+
+            if(isset($request['active_only'])) {
+                $stockshape->where('products.active', 1)
+                ->where('product_print_method.active', 1);
+            }
+            
+            $stockshape->where(DB::raw('JSON_LENGTH(product_stockshapes.image)'), '>', 0)
+            ->orderBy('product_combination_name');
+
+            return Collection::toJson($stockshape->paginate($limit));
+        }
+
+        return array(
+            'variation' => 'none',
+            'data' => null
+        );
     }
 
 }

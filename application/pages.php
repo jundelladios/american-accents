@@ -51,6 +51,9 @@ function aa_admin_menu_rest() {
     // Specification Types
     add_submenu_page( $parent, 'Specification Types', 'Specification Types', $type, aa_app_suffix() . 'specification-types', 'aa_admin_specification_types_page' );   
     
+    // QR Code Generator
+    add_submenu_page( $parent, 'QR Code Generator', 'QR Code Generator', $type, aa_app_suffix() . 'qrcode-generator', 'aa_admin_qrcode_generator_page' );  
+
     // Import/Export Tool
     add_submenu_page( $parent, 'Import/Export Tool', 'Import/Export Tool', $type, aa_app_suffix() . 'import-export', 'aa_admin_import_export_page' );
 
@@ -69,7 +72,11 @@ add_action( 'admin_menu', 'aa_admin_menu_rest' );
 function aa_admin_products_page() {
     if( isset( $_GET['productId'] ) ) {
         require_once( american_accent_plugin_base_dir() . 'application/templates/product-print-methods/index.php' );
-    } else {
+    } 
+    else if( isset( $_GET['sageDataBuilder'] ) ) {
+        require_once( american_accent_plugin_base_dir() . 'application/templates/sagedatabuilder/index.php' );
+    }
+    else {
         require_once( american_accent_plugin_base_dir() . 'application/templates/products/products.php' );
     }
 }
@@ -184,4 +191,10 @@ function aa_admin_import_export_page() {
 
     require_once( american_accent_plugin_base_dir() . 'application/templates/importexport/index.php' ); 
 
+}
+
+
+function aa_admin_qrcode_generator_page() {
+
+    require_once( american_accent_plugin_base_dir() . 'application/templates/qrcode.php' ); 
 }

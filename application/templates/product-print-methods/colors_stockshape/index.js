@@ -17,7 +17,9 @@ var printMethodColorStockshape = {
                     autoassignimg: 1,
                     autoassignidea: 1,
                     product_color_id: null,
-                    product_stockshape_id: null
+                    product_stockshape_id: null,
+                    vdsproductid: null,
+                    vdsid: null,
                 },
                 colors: {
                     data: [],
@@ -27,6 +29,7 @@ var printMethodColorStockshape = {
                     data: [],
                     loading: false
                 },
+                query: null,
                 pagination: {
                     page: 1,
                     limit: 60,
@@ -412,7 +415,8 @@ var printMethodColorStockshape = {
                         pagination: true,
                         limit: this.pcolorstockshape.pagination.limit,
                         page: this.pcolorstockshape.pagination.page,
-                        orderBy: 'colorname ASC,code ASC'
+                        orderBy: 'colorname ASC,code ASC',
+                        query: this.pcolorstockshape.query
                     }
                 });
                 this.pcolorstockshape.input.product_print_method_id = id;
@@ -437,7 +441,8 @@ var printMethodColorStockshape = {
                         pagination: true,
                         limit: this.pcolorstockshape.pagination.limit,
                         page: this.pcolorstockshape.pagination.page,
-                        orderBy: 'colorname ASC,code ASC'
+                        orderBy: 'colorname ASC,code ASC',
+                        query: this.pcolorstockshape.query
                     }
                 });
                 this.pcolorstockshape.data = [...this.pcolorstockshape.data, ...res.data.data];
@@ -460,6 +465,10 @@ var printMethodColorStockshape = {
                 this.pcolorstockshape.data.splice(index, 1);
                 await swal('Sucessfully Removed');
             }
+        },
+        searchEntryColorStockshapeQueryFilter() {
+            this.pcolorstockshape.data=[];
+            this.getColorStockShapesByProductId(this.pcolorstockshape.input.product_print_method_id);
         }
     }
 }

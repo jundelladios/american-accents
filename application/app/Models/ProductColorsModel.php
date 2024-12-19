@@ -21,7 +21,7 @@ class ProductColorsModel extends Model {
 
     protected $fillable = [
         'image', 'colorhex', 'colorname', 'priority', 'product_id', 'iscolorimage', 'colorimageurl', 'product_print_method_id', 'templates', 'isavailable', 'pantone', 'slug',
-        'idea_galleries', 'vdsid'
+        'idea_galleries', 'vdsid', 'vdsproductid', 'in_stock'
     ];
 
     protected $hidden = ['product_id'];

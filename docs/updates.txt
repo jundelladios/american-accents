@@ -1,0 +1,10 @@
+files:
+applications
+carbon-fields
+
+
+databases:
+
+products
+ - banner_img
+ - banner_content

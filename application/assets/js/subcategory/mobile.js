@@ -5,8 +5,8 @@ var mobileTemplate = /*html */`
         <transition name="plinetoggle" enter-active-class="animate slideInUp animate-half1" leave-active-class="animate fadeOutDown pline-absolute animate-half1">
             <div v-if="selected==null" class="container" key="pline1">
                 <div v-if="plinejson" class="row justify-content-center printmethodgrids v3 plistsmethod">
-                    <div v-for="(pline, index) in plinejson" :key="'plinejsonkey-mobile-' + index" class="col-lg-4 colpm">
-                        <a href="javascript:void(0)" @click.stop="setSelected(pline.hid)">
+                    <div v-for="(pline, index) in plinejson" :key="'plinejsonkey-mobile-' + index" :class="\`col-lg-4 colpm \${pline.method_name}\-\${pline.method_name2}\`">
+                        <a :href="\`\${inventoryJSVars.baseURL}product/\${pline.cat_slug}/\${pline.sub_slug}/print-method/\${pline.method_slug}\`"  @click.prevent="setSelected(pline.hid)">
                             <div class="col-print-method">
 
                                 <div class="timg mobile">
@@ -65,7 +65,9 @@ var mobileTemplate = /*html */`
 
                 <transition-group class="container overflow-hidden" tag="div" name="transition-arrange-mobile">
                     <!-- row -->
-                    <div v-for="(pline, index) in getArrangedData" :class="'plistsmethod v3 ' + pline.opened_accordion_class " :key="'reactive-index-mobile-' + pline.reactiveIndex">
+                    <div v-for="(pline, index) in getArrangedData" :key="'reactive-index-mobile-' + pline.reactiveIndex"
+                    :class="\`pmethodselected \${pline.method_name}\-\${pline.method_name2}\ plistsmethod v3 \${pline.opened_accordion_class}\`"
+                    >
                         <!-- col start -->
 
                         <div class="tag-labeled d-flex align-items-center" @click.stop="setSelected(pline.hid)">
@@ -116,7 +118,7 @@ var mobileTemplate = /*html */`
                                 </div>
 
                                 <div class="return-print-methods">
-                                    <a href="javascript: void(0)" @click.stop="setSelected(null)"><span class="arrow-icon">&#x2199;</span> <i class="text-uppercase">return to print methods</i></a>
+                                    <a :href="\`\${inventoryJSVars.baseURL}product/\${pline.cat_slug}/\${pline.sub_slug}\`" @click.prevent="setSelected(null)"><span class="arrow-icon">&#x2199;</span> <i class="text-uppercase">return to print methods</i></a>
                                 </div>
 
                             </div>

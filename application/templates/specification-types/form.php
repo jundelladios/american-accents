@@ -337,9 +337,11 @@
 
                 <button type="button" class="button button-secondary" @click="newSpecification">Add New Specification Field</button> -->
 
-                <div class="mt-5 mb-3">
+                <div class="floating-button-save">
                     <button type="submit" id="btn" v-if="input.index!=null" class="button button-primary">Save Changes</button>
                     <button type="submit" id="btn" v-else class="button button-primary">Save Specification</button>
+
+                    <a href="javascript:void(0)" @click.prevent="formInputs(false, {...defaultValue})" class="button button-default">Cancel</a>
                 </div>
 
             </form>

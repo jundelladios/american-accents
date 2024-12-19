@@ -18,8 +18,11 @@ class SubcategoryPage extends Page {
 
     private $subcategory = null;
     private $apiRequest = null;
+    private $params = [];
 
     public function set( $param ) {
+        
+        $this->params = $param;
 
         $subcategory = (new Filters)->getProductLines($param);
 
@@ -49,7 +52,7 @@ class SubcategoryPage extends Page {
         Assets::inventoryJsVars(array(
             'category' => $this->subcategory['cat_slug'],
             'subcategory' => $this->subcategory['sub_slug'],
-            'productOrMethod' => ""
+            'productOrMethod' => isset($this->params['method_filter']) && !empty($this->params['method_filter']) ? $this->params['method_filter'] : null
         ));
 
     }
@@ -63,22 +66,28 @@ class SubcategoryPage extends Page {
     public function template() {
 
         if( !$this->subcategory ) {
-            
             Page::notfound();
-
             require_once american_accent_plugin_base_dir() . '/templates/page-empty-method.php';
-
             exit;
         }
 
         // 301 redirect if 1 product line
         if( count($this->apiRequest) <= 1 ) {
-
             wp_redirect( home_url( 'product/' . $this->subcategory['cat_slug'] . '/?subcategory=' . $this->subcategory['sub_slug'] ), 301 ); 
-            
             exit();
-
         }
+
+
+        // if has print method and not found
+        if(isset($this->params['method_filter']) && !empty(isset($this->params['method_filter']))) {
+            $findmethodpline = array_search($this->params['method_filter'], array_column($this->apiRequest, 'method_slug'));
+            if(!is_int($findmethodpline) || $findmethodpline<0) {
+                Page::notfound();
+                require_once american_accent_plugin_base_dir() . '/templates/page-empty-method.php';
+                exit;
+            }
+        }
+
 
 
         Page::found();

@@ -40,7 +40,7 @@ var htmlTemplate = ``;
 
 
 htmlTemplate += /*html */`
-<div class="position-relative">`;
+<div>`;
 
 htmlTemplate += mainTemplate;
 

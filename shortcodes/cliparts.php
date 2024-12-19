@@ -52,9 +52,7 @@ function aa_sc_clipart( $atts ) {
                         <div class="p-3 clipartimg">
                             <?php aa_lazyimg([
                                 'src' => $cs['image'],
-                                'alt' => isset($cs['title']) ? $cs['title'] : '',
-                                'width' => 'auto',
-                                'height' => 'auto'
+                                'alt' => isset($cs['title']) ? $cs['title'] : ''
                             ]); ?>
                         </div>
                     <?php endif; ?>

@@ -26,7 +26,7 @@ class Update {
     
     private $statuses = ['priority'];
 
-    private $allowednulls = ['min_prod_days', 'imprint_charge'];
+    private $allowednulls = ['min_prod_days', 'imprint_charge', 'show_currency', 'decimal_value'];
 
     public function update( $request ) {
 

@@ -24,7 +24,7 @@ class ProductCategoriesModel extends Model {
     protected $table = "product_categories";
 
     protected $fillable = [
-        'cat_name', 'cat_slug', 'notes', 'priority', 'category_banner', 'category_banner_content', 'seo_content', 'template_section'
+        'cat_name', 'cat_slug', 'notes', 'priority', 'category_banner', 'category_banner_content', 'seo_content', 'template_section', 'bannerlist'
     ];
 
     protected $hidden = ['active'];
@@ -85,4 +85,17 @@ class ProductCategoriesModel extends Model {
         return $slug;
 
     }
+
+
+    public function getBannerlistAttribute() {
+
+        if( !isset( $this->attributes['bannerlist'] ) ) {
+
+            return [];
+
+        }
+
+        return aa_json_array( $this->attributes['bannerlist'] );
+    }
+
 }

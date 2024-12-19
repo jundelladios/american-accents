@@ -22,11 +22,11 @@ class Update {
 
     use ControllerTraits;
 
-    private $required = ['colorhex', 'colorname', 'id', 'image'];
+    private $required = ['colorhex', 'colorname', 'id'];
 
-    private $nulls = ['colorhex', 'iscolorimage', 'colorimageurl', 'templates', 'isavailable', 'pantone', 'idea_galleries', 'vdsid'];
+    private $nulls = ['colorhex', 'iscolorimage', 'colorimageurl', 'templates', 'isavailable', 'pantone', 'idea_galleries', 'vdsid', 'vdsproductid', 'image'];
 
-    private $statuses = ['priority'];
+    private $statuses = ['priority', 'in_stock'];
 
     public function update( $request ) {
 

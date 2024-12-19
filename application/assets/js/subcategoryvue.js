@@ -33,13 +33,25 @@ new Vue({
     mixins: [
         frontMixins
     ],
+    mounted() {
+        if(inventoryJSVars.productOrMethod) {
+            this.page = 1;
+            this.products.loading = false;
+            this.products.data = [];
+            this.getPrintMethod();
+        }
+    },
     watch: {
         selected(val) {
+            const urlupdate = `/product/${inventoryJSVars.category}/${inventoryJSVars.subcategory}`;
             if( val!= null ) {
+                window.history.pushState({}, null, `${urlupdate}/print-method/${this.getSelectedJson.method_slug}`);
                 this.page = 1;
                 this.products.loading = false;
                 this.products.data = [];
                 this.getPrintMethod();
+            } else {
+                window.history.pushState({}, null, urlupdate);
             }
         },
         getSelectedSizes() {
@@ -55,7 +67,7 @@ new Vue({
             this.loadProducts();
         },
         isMobile() {
-            this.selected = null;
+            //this.selected = null;
         }
     },
     components: {

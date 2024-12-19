@@ -1,7 +1,8 @@
 jQuery( function($) {
 
-    $.moneyFormat = function(value, cur = "$") {
-        return currency(value, { symbol: cur}).format();
+    $.moneyFormat = function(value, withcurrency = false) {
+        let currencysymbol = withcurrency && globalJSVars.inventoryCurrency ? globalJSVars.inventoryCurrency : '';
+        return currency(value, { symbol: currencysymbol }).format();
     }
 
     $.toJson = function(json) {

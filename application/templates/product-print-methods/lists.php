@@ -40,6 +40,7 @@
                         <a href="javascript:void(0)" @click.stop="getColorByProductId(combo.hid)" class="button mb-1">Set Colors</a>
                         <a href="javascript:void(0)" @click.stop="getStockShapesByProductId(combo.hid)"  class="button mb-1">Set Stock Shapes</a>
                         <a href="javascript:void(0)" @click.stop="getColorStockShapesByProductId(combo.hid)"  class="button mb-1">Set Colors + Stock Shapes</a>
+                        <a :href="`?page=american-accents-products&sageDataBuilder=${combo.hid}`" target="_blank" class="button mb-1">SAGE Data Builder</a>
 
                     <a href="javascript:void(0)" class="button mb-1" @click="updateStatus(combo.hid, index, 0)">{{ langs.delete }}</a>
                 </div>
@@ -51,5 +52,6 @@
         </tr>
     </tbody>
 </table>
+
 <p v-if="combos.loading" style="text-align:center;">Loading...</p>
 <p v-if="!combos.loading && !combos.data.length" style="text-align:center;">Product Combo not available.</p>

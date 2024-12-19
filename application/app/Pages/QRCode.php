@@ -51,6 +51,8 @@ class QRCode extends Page {
             echo  do_shortcode( '[kaya_qrcode content="'.get_query_var('content').'"]' );
             
             ?>
+			
+			<p style="margin-top: 20px;"><?php if(get_query_var('content')): echo get_query_var('content'); endif; ?></p>
 
         </div>
 

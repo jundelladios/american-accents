@@ -41,14 +41,6 @@ Paginator::currentPathResolver(function () {
     return null;
 });
 
-// GET THE APP SUFFIX
-function aa_app_suffix() {
-    if( defined('_APP_SUFFIX') ) {
-        return _APP_SUFFIX;
-    }
-    return "american-accents-";
-}
-
 // REST API ROUTES
 function aa_rest_api_init() {
     require plugin_dir_path( __FILE__ ) . 'routes.php';

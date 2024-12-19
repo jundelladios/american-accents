@@ -30,7 +30,7 @@ new Vue({
                 priceMax: 0,
                 priceMinFormatted: null,
                 priceMaxFormatted: null,
-                orderBy: null,
+                orderBy: `product_method_combination_name ASC`,
                 page: 1
             },
             storageKey: `filter-json`,
@@ -66,7 +66,7 @@ new Vue({
         //     handler(val) {
         //         console.log('material');
         //     },
-        //     deep: true
+        //     deep: true`
         // }
         'selectedFilterString': function() {
             this.filterParams.page=1;
@@ -108,6 +108,7 @@ new Vue({
                 thickness: this.filters.data && this.filters.data.thickness.filter( row => row.checked ).map( row => row.product_tickness_details ).join(','),
                 color: this.filters.data && this.filters.data.colors.filter( row => row.checked ).map( row => row.slug ).join(','),
                 printmethod: this.filters.data && this.filters.data.methods.filter( row => row.checked ).map( row => row.method_slug ).join(','),
+                subcategory_tags: subcategoryTags ? subcategoryTags : null,
                 ...this.filterParams,
                 paginate: 15
             }
@@ -136,8 +137,16 @@ new Vue({
         },
         optionalParams() {
             return {
-                subcategory: subcategoryParam
+                subcategory: subcategoryParam,
+                subcategory_tags :subcategoryTags
             }
+        },
+        getFirstSubcategoryBannerLists() {
+            if(this.filters.data.subcategories.length>0) {
+                const bannerlists = JSON.parse(this.filters.data.subcategories[0].bannerlist);
+                return Array.isArray(bannerlists) ? bannerlists : [];
+            }
+            return [];
         }
     },
     methods: {
@@ -183,8 +192,8 @@ new Vue({
 
                 e.filterParams.priceMin = res.data.range.min;
                 e.filterParams.priceMax = res.data.range.max;
-                e.filterParams.priceMinFormatted = `$${e.rangeValueSetter(e.filters.data.range.min)}`;
-                e.filterParams.priceMaxFormatted = `$${e.rangeValueSetter(e.filters.data.range.max)}`;
+                e.filterParams.priceMinFormatted = `${e.getglobaljsvars.inventoryCurrency}${e.rangeValueSetter(e.filters.data.range.min)}`;
+                e.filterParams.priceMaxFormatted = `${e.getglobaljsvars.inventoryCurrency}${e.rangeValueSetter(e.filters.data.range.max)}`;
 
                 e.filters.loading = false;
             } catch($e) {
@@ -234,7 +243,7 @@ new Vue({
                 }
                 e.subcategoriesLoading = false;
             } catch($e) {
-                e.subcategoriesLoading = false;
+                this.subcategoriesLoading = false;
                 return;
             }
         },
@@ -270,8 +279,8 @@ new Vue({
                     e.isRangeExec = false;
                     e.filterParams.priceMin = ui.values[0];
                     e.filterParams.priceMax = ui.values[1];
-                    e.filterParams.priceMinFormatted = `$${e.rangeValueSetter(ui.values[0])}`;
-                    e.filterParams.priceMaxFormatted = `$${e.rangeValueSetter(ui.values[1])}`;
+                    e.filterParams.priceMinFormatted = `${e.getglobaljsvars.inventoryCurrency}${e.rangeValueSetter(ui.values[0])}`;
+                    e.filterParams.priceMaxFormatted = `${e.getglobaljsvars.inventoryCurrency}${e.rangeValueSetter(ui.values[1])}`;
                     if(!e.isRangeReady) {
                         e.isRangeReady = true;
                     }
@@ -321,8 +330,8 @@ new Vue({
             jQuery(`.input-range .frange`).slider('values', 1, this.filters.data.range.max);
             this.filterParams.priceMin = this.filters.data.range.min;
             this.filterParams.priceMax = this.filters.data.range.max;
-            this.filterParams.priceMinFormatted = `$${this.rangeValueSetter(this.filters.data.range.min)}`;
-            this.filterParams.priceMaxFormatted = `$${this.rangeValueSetter(this.filters.data.range.max)}`;
+            this.filterParams.priceMinFormatted = `${this.getglobaljsvars.inventoryCurrency}${this.rangeValueSetter(this.filters.data.range.min)}`;
+            this.filterParams.priceMaxFormatted = `${this.getglobaljsvars.inventoryCurrency}${this.rangeValueSetter(this.filters.data.range.max)}`;
             await this.getProducts();
         },
         rangeValueSetter(value) {

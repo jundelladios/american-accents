@@ -33,6 +33,9 @@ var frontMixins = {
                 normal: `${inventoryJSVars.pluginURL}application/assets/img/square-placeholder.png`,
                 banner: `${inventoryJSVars.pluginURL}application/assets/img/banner-placeholder.png`,
             };
+        },
+        getglobaljsvars() {
+            return globalJSVars;
         }
     },
     methods: {
@@ -58,6 +61,36 @@ var frontMixins = {
         moneyFormat(val) {
             const value = parseFloat(Number(val));
             return isNaN(value) ? 0 : value;
+        },
+        download_zipfiles_api(files=[], output="downloads.zip") {
+
+            jQuery.ajax({
+                url: `${AA_JS_OBJ.API_BASE}/wp-json/v1/download/archive`,
+                type: 'POST',
+                cache:false,
+                data: { 
+                    files: files,
+                    output_filename: output
+                },
+                xhrFields:{
+                    responseType: 'blob'
+                },
+                success: function(data){
+                    var url = window.URL || window.webkitURL;
+                    var file = url.createObjectURL(data);
+            
+                    var link = document.createElement('a');
+                    link.setAttribute('href', file);
+                    link.setAttribute('download', output);
+                    link.click();
+            
+                    setTimeout(function(){  
+                        document.body.removeChild(link);
+                        url.revokeObjectURL(anchor.href);
+                    }, 1);
+                },
+            });
+
         }
     }
 }

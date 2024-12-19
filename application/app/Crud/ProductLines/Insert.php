@@ -28,7 +28,8 @@ class Insert {
 
     private $statuses = ['active', 'priority', 'second_side', 'wrap', 'bleed', 'multicolor', 'process', 'white_ink', 'hotstamp', 'per_thousand', 'per_item'];
 
-    private $allowedNulls = ['features', 'coupon_code_id', 'features_pivot', 'colors', 'compliances', 'image', 'pnotes', 'seo_content', 'banner_img', 'pnotes2', 'price_tagline'];
+    private $allowedNulls = ['features', 'coupon_code_id', 'features_pivot', 'colors', 'compliances', 'image', 'pnotes', 'seo_content', 'banner_img', 'pnotes2', 'price_tagline', 'show_currency',
+    ];
 
     public function store( $request ) {
 

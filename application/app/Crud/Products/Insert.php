@@ -47,7 +47,11 @@ class Insert {
         // 'product_depth',
         // 'area_sq_in',
         'specification_id',
-        'specs_json'
+        'specs_json',
+
+        'banner_img',
+        'banner_content',
+        'banner_class'
     ];
 
     private $postRequired = [

@@ -5,8 +5,7 @@ var productVue = new Vue({
         frontMixins
     ],
     components: {
-        VueSlickCarousel: window['vue-slick-carousel'],
-        ShareNetwork: VueSocialSharing.ShareNetwork
+        VueSlickCarousel: window['vue-slick-carousel']
     },
     data() {
         return {
@@ -106,6 +105,9 @@ var productVue = new Vue({
                     row.iscolorimage = row.thecolor.iscolorimage;
                     row.colorhex = row.thecolor.colorhex;
                     row._hid = row.thecolor.hid;
+                    row.in_stock = row.thecolor.in_stock && row.theshape.in_stock;
+                    row.isavailable = row.thecolor.isavailable;
+                    row.pantone = row.thecolor.pantone;
                     return row;
                 });
             }
@@ -148,6 +150,22 @@ var productVue = new Vue({
             return null;
         },
         getVariationEntries() {
+
+            const stocks = [];
+            if(this.productVariant) {
+                if(this.productVariant.hasOwnProperty('thecolor')) {
+                    stocks.push(this.productVariant.thecolor.in_stock);
+                }
+                if(this.productVariant.hasOwnProperty('theshape')) {
+                    stocks.push(this.productVariant.theshape.in_stock);
+                }
+                if(this.productVariant.hasOwnProperty('in_stock')) {
+                    stocks.push(this.productVariant.in_stock);
+                }
+            }
+
+            let out_of_stock = stocks.filter(stock => stock == 0).length;
+
             if( this._currentVariant ) {
                 return {
                     templatedata: this.productVariant ? this.productVariant.templatedata : [],
@@ -156,7 +174,8 @@ var productVue = new Vue({
                     variation: this.product.variations.key,
                     slug: this.variation,
                     isavailable: 1,
-                    variationName: this.getVariationName
+                    variationName: this.getVariationName,
+                    out_of_stock
                 }
             }
 
@@ -169,6 +188,7 @@ var productVue = new Vue({
                 variation: null,
                 slug: this.product.productURL,
                 isavailable: 1,
+                out_of_stock,
                 variationName: this.getVariationName
             };
         },
@@ -322,7 +342,7 @@ var productVue = new Vue({
                             var filterqty = pline.pvalues.find(x => x.quantity == qty);
                             var retpline = { quantity: qty, value: product.product_line_helpers.not_applicable, asterisk: 0 }
                             if( filterqty ) {
-                                retpline.value = filterqty.formatted_value_no_currency ? parseFloat(filterqty.formatted_value_no_currency).toFixed(filterqty.decimal_value) : filterqty.alternative_value;
+                                retpline.value = filterqty.labeled_value ? filterqty.labeled_value : filterqty.alternative_value;
                                 retpline.unit_value = filterqty.unit_value;
                                 retpline.asterisk = filterqty.asterisk;
                             }
@@ -330,7 +350,7 @@ var productVue = new Vue({
                         })
                     };
                     if( thevalue ) {
-                        ret.value = thevalue.formatted_value_no_currency ? parseFloat(thevalue.formatted_value_no_currency).toFixed(thevalue.decimal_value) : thevalue.alternative_value;
+                        ret.value = thevalue.labeled_value ? thevalue.labeled_value : thevalue.alternative_value;
                         ret.unit_value = thevalue.unit_value;
                         ret.asterisk = thevalue.asterisk;
                     }
@@ -354,7 +374,7 @@ var productVue = new Vue({
                 }
 
 
-                var imprintCharges = product.productline.imprinttypes.filter( row => row.sortref ).map( row => {
+                var imprintCharges = product.productline.imprinttypes.filter( row => row.sortref && row.formatted_value ).map( row => {
                     row.dupcount = product.productline.imprinttypes.filter(x => x.sortref == row.sortref).length
                     return row;
                 });
@@ -367,7 +387,6 @@ var productVue = new Vue({
                     }
                     return row;
                 });
-
 
                 product.theplinecharges = product.productline.pricing_data.map( row => {
                     var handlepercharge = [
@@ -396,7 +415,7 @@ var productVue = new Vue({
                     var theprice = e.product.pricings.find(p => p.quantity == qty); 
                     var ret = { quantity: qty, value: e.product.product_line_helpers.not_applicable, asterisk: 0 };
                     if( theprice ) {
-                        ret.value = theprice.formatted_value_no_currency ? parseFloat(theprice.formatted_value_no_currency).toFixed(theprice.decimal_value) : theprice.alternative_value;
+                        ret.value = theprice.labeled_value ? theprice.labeled_value : theprice.alternative_value;
                         ret.unit_value = theprice.unit_value;
                         ret.asterisk = theprice.asterisk;
                     }
@@ -415,7 +434,7 @@ var productVue = new Vue({
                         var theprice = row.pvalues.find(p => p.quantity == qty );
                         var ret = { quantity: qty, value: e.product.product_line_helpers.not_applicable, asterisk: 0 };
                         if( theprice ) {
-                            ret.value = theprice.formatted_value_no_currency ? parseFloat(theprice.formatted_value_no_currency).toFixed(theprice.decimal_value) : theprice.alternative_value;
+                            ret.value = theprice.labeled_value ? theprice.labeled_value : theprice.alternative_value;
                             ret.unit_value = theprice.unit_value;
                             ret.asterisk = theprice.asterisk;
                         }
@@ -535,8 +554,6 @@ var productVue = new Vue({
         };
 
         this.slickZoomSetter();
-
-        console.log(this.product);
     },
     methods: {
         slickZoomSetter() {

@@ -97,18 +97,18 @@
         global $wp;
 
         add_action( 'wp_head', function() use ($wp, $args) {
-            $imgcdn = defined( '_APP_IMG_CDN' ) && _APP_IMG_CDN ? _APP_IMG_CDN : '';
             ?>
             <script type="text/javascript">
                 const inventoryJSVars = {
+                    inventoryCurrency: '<?php echo carbon_get_theme_option( 'aa_admin_settings_currency' ); ?>',
                     SAGEVDSAUTH: '<?php echo carbon_get_theme_option( 'aa_admin_settings_vdsauthkey' ); ?>',
                     SAGEVDSSUPPID: '<?php echo carbon_get_theme_option( 'aa_admin_settings_vdssuppid' ); ?>',
                     permalink: '<?php echo home_url( $wp->request ); ?>',
                     baseURL: '<?php echo home_url('/'); ?>',
                     pluginURL: '<?php echo american_accent_plugin_base_url(); ?>',
                     fallbackImage: '<?php echo \Api\Media::fallback(); ?>',
-                    proxy: '<?php echo $imgcdn; ?>',
-                    isproxyEnabled: <?php echo $imgcdn ? 1 : 0; ?>,
+                    imageproxycdn: '<?php echo carbon_get_theme_option('aa_admin_settings_cdnproxy');  ?>',
+                    baseURLnoSlash: '<?php echo home_url(); ?>',
                     <?php foreach( $args as $key => $value ): ?>
                         <?php echo "'{$key}': '{$value}',"; ?>
                     <?php endforeach; ?>

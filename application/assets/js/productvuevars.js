@@ -86,9 +86,11 @@ var productcolorstemplate = /*html */`
         <div 
         v-for="(acolor, acolorindex) in colorListsIterate"
         :key="\`pcolorbind-\${acolorindex}\`"
-        :class="\`color-item \${color == acolor._hid ? 'active' : ''}\`" 
-        v-tooltip:top="acolor.colorname"
+        :class="\`color-item \${color == acolor._hid ? 'active' : ''} \${acolor.in_stock<1?'out-of-stock':''}\`" 
+        v-tooltip:top="acolor.in_stock<1 ? 'Out of Stock' : acolor.colorname"
         @click.stop="setColor(acolor._hid)"
+        :tooltip-placement="acolor.in_stock<1 ? 'bottom' : 'top'"
+        :tooltip-class="acolor.in_stock<1 ? 'tooltip-error' : ''"
         >
             <span v-if="!acolor.iscolorimage" class="color-hex" :style="'background: ' + acolor.colorhex + ';'"></span>
             <template v-else>
@@ -119,7 +121,7 @@ var productcolorstemplate = /*html */`
                     class="color-hex lazyload bg-cover" 
                     v-img:data-bgset="acolor.colorimageurl"
                     :fallback="getImageFallback.normal"
-                    :style="\`background-image:url(\${acolor.colorimageurl});\`"
+                    :style="\`background-image:url(\${AA_JS_OBJ.IMG_PRELOADER});\`"
                     ></span>
                     <span v-else
                     class="color-hex lazyload bg-cover" 
@@ -173,7 +175,7 @@ var productStockShapes = /*html */`
 
 
 var productfeaturesOptions = /*html */`
-<div data-accordion-module-item v-if="product.features_options2" class="product-accordion open mb-4">
+<div data-accordion-module-item v-if="product.features_options2" class="product-accordion open mb-4" attr-module="features-and-options">
     <button class="product-accordion-header align-items-center" data-accordion-module>
         <div class="accordion-header d-flex">
             <span class="icon icon-list"></span>
@@ -193,7 +195,7 @@ var productfeaturesOptions = /*html */`
 `;
 
 var compliancesData = /*html */`
-<div v-if="getComplianceArchive && getComplianceArchive.length" data-accordion-module-item class="product-accordion open mb-4">
+<div v-if="getComplianceArchive && getComplianceArchive.length" data-accordion-module-item class="product-accordion open mb-4" attr-module="compliances">
     <button class="product-accordion-header" data-accordion-module>
         <div class="accordion-header d-flex align-items-center">
             <span class="icon icon-icon-paper"></span>
@@ -227,7 +229,7 @@ var compliancesData = /*html */`
 `;
 
 var productSpecs = /*html */`
-<div v-if="product.specificationIterate && product.specificationIterate.length" data-accordion-module-item class="product-accordion open mb-4">
+<div v-if="product.specificationIterate && product.specificationIterate.length" data-accordion-module-item class="product-accordion open mb-4" attr-module="specifications">
     <button class="product-accordion-header" data-accordion-module>
         <div class="accordion-header d-flex">
             <span class="icon icon-pencil2"></span>

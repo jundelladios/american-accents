@@ -75,6 +75,16 @@
                     </div>
 
                     <div class="mb-2">
+                        <label class="d-block mb-2">Stock (0 if out of stock)</label>
+                        <input type="number" v-model="pcolors.input.in_stock">
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="d-block mb-2">VDS SAGE PRODUCT ID</label>
+                        <input type="text" v-model="pcolors.input.vdsproductid">
+                    </div>
+                    
+                    <div class="mb-2">
                         <label class="d-block mb-2">VDS SAGE ITEM #</label>
                         <input type="text" v-model="pcolors.input.vdsid">
                     </div>
@@ -280,7 +290,7 @@
                     <hr class="mt-5">
 
 
-                    <div class="mt-5 mb-2 mt-3">
+                    <div class="mt-5 mt-3 floating-button-save">
                         <button v-if="pcolors.input.id==null" type="submit" class="button button-primary">Add Color</button>
                         <button v-else type="submit" class="button button-primary">Save Color</button>
                         <a href="javascript: void(0)" class="button" @click.stop="resetColorsInputs({product_print_method_id:pcolors.input.product_print_method_id, index: null}); pcolorstate='lists'">View Colors</a>
@@ -322,6 +332,12 @@
                 <button type="button" @click="removeCheckedItems_" v-if="getIsSelectedColor.length" class="button mr-2">Remove ({{getIsSelectedColor.length}})</button>
             </div>
 
+            <div class="mb-3">
+                <form @submit.prevent="searchEntryColorQueryFilter" style="text-align:right;">
+                    <input placeholder="Search" type="text" v-model="pcolors.query" />
+                </form>
+            </div>
+
             <div class="row" v-if="pcolors.loading">
                 <div class="col-md-12">
                     <p style="text-align: center;">Loading..</p>
@@ -347,7 +363,13 @@
                             <div class="d-block mb-2">Priority #: {{ pcolor.priority }} ({{ pcolor.isavailable ? 'Available' : 'Not Available' }})</div>
                             <div class="d-block mb-2">Images: {{ pcolor.imagedata.length }}</div>
                             <div class="d-block mb-2">Templates: {{ pcolor.counttemplates }}</div>
+                            <div class="d-block mb-2">VDS SAGE PRODUCT ID: {{ pcolor.vdsproductid }}</div>
                             <div class="d-block mb-2">VDS SAGE ITEM #: {{ pcolor.vdsid }}</div>
+                            <div class="d-block mb-2">STOCK: {{ pcolor.in_stock }} 
+                                <span v-if="pcolor.in_stock>0" style="color:green;font-weight:bold">(In Stock)</span>
+                                <span v-else style="color:red;font-weight:bold">(Out of Stock)</span>
+                            </div>
+
                             <div class="d-block">
                                 <div class="d-block">
                                     <span v-if="!pcolor.iscolorimage" :style="`width: 40px; height: 40px; background: ${pcolor.colorhex}; display: block; border-radius: 100%;`"></span>

@@ -316,10 +316,17 @@ class DownloadController {
 
             # loop through each file
             foreach ($files as $file) {
-                # download file
-                $download_file = file_get_contents($file);
-                #add it to the zip
-                $zip->addFromString(basename($file), $download_file);
+                
+				# check remote request pdf if exists
+				$request = wp_remote_get($file);
+				$status = $request['response']['code'];
+				if($status !== 404){
+					# download file
+					$download_file = wp_remote_retrieve_body($request);
+					#add it to the zip
+					$zip->addFromString(basename($file), $download_file);
+				}
+				
             }
 
             # close zip
@@ -330,6 +337,36 @@ class DownloadController {
             header('Content-type: application/zip');
             readfile($tmp_file);
             unlink($tmp_file);
+
+            exit;
+
+        } catch( \Execption $e ) {
+
+            return rest_response( "This page is not available.", 404 );
+
+        }
+
+    }
+
+
+    public function archive( Request $request ) {
+
+        try {
+
+            $data = $request->get_params();
+
+            $validate = new Validator($data);
+
+            $validate->rule('required', ['files', 'output_filename']);
+
+            $validate->rule('array', ['files']);
+
+            if( !$validate->validate() ) {
+
+                return rest_response( $validate->errors(), 422 );
+            }
+
+            $this->download( $data['files'], $data['output_filename'] );
 
             exit;
 

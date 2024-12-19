@@ -34,7 +34,10 @@ var inputs = {
     area_sq_in: null,
     specification_id: null,
     specs_json: [],
-    spec_copy: []
+    spec_copy: [],
+    banner_img: null,
+    banner_content: null,
+    banner_class: null
 };
 
 var backupInputs = {...inputs};
@@ -378,6 +381,12 @@ var productsInstanceVue = new Vue({
                     return;
                 }
             }
-        }
+        },
+        chooseProductBanner() {
+            var $e = this;
+            this.chooseLibrary( `Select Color Image`, (url) => {
+                $e.inputs.banner_img = url;
+            });
+        },
     }
 })

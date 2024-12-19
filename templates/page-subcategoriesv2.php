@@ -21,7 +21,7 @@ get_header();
 <div id="main" class="site-main">
     <div class="fsubcategorytemplate mb-150">
         
-        <div v-cloak id="subcategoryVueController" class="position-relative">
+        <div v-cloak id="subcategoryVueController">
             <!-- vue html template binding client side -->
 
             <!-- preparation for ssr here -->

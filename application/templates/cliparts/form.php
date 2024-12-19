@@ -39,9 +39,11 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <button type="submit" id="btn" v-if="inputs.index!=null" class="button button-primary">Save Changes</button>
-                    <button type="submit" id="btn" v-else class="button button-primary">Save Clipart</button>
+                <div class="floating-button-save">
+                    <a href="javascript:void(0)" @click.stop="addClipArtIcon" class="button mr-2">Add clipart images</a>
+                    <button type="submit" id="btn" v-if="inputs.index!=null" class="button button-primary mr-2">Save Changes</button>
+                    <button type="submit" id="btn" v-else class="button button-primary mr-2">Save Clipart</button>
+                    <a href="javascript:void(0)" @click.prevent="formInputs(false, {...defaultValue})" class="button button-default">Cancel</a>
                 </div>
 
             </form>

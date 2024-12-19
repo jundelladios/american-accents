@@ -111,21 +111,8 @@ class ProductPage extends Page {
             Assets::vueslick();
 
             wp_enqueue_script( aa_app_suffix() . 'custom-vue', american_accent_plugin_base_url() . 'application/assets/libs/custom-vue.js', array(), null, true );
-
-            wp_enqueue_script( aa_app_suffix() . 'social-share', american_accent_plugin_base_url() . 'application/assets/libs/social-share.js', array(), null, true );
             
             wp_enqueue_style( aa_app_suffix() . 'inventory-product-page', american_accent_plugin_base_url() . 'application/assets/css/productv2.css', array(), null, null );
-
-            // image zoom
-
-            wp_enqueue_script( aa_app_suffix() . 'elevatezoom-js', american_accent_plugin_base_url() . 'application/assets/libs/elevatezoom/elevatezoom.js', array(), null, true );
-
-
-            // PRINT JS
-            wp_enqueue_style( aa_app_suffix() . 'print-js-css', american_accent_plugin_base_url() . 'application/assets/libs/printjs/printjs.css', array(), null, null );
-
-            wp_enqueue_script( aa_app_suffix() . 'print-js-js', american_accent_plugin_base_url() . 'application/assets/libs/printjs/printjs.js', array(), null, true );
-
             
             // VUE START
             wp_enqueue_script( aa_app_suffix() . 'product-vuevars-premiumbg', american_accent_plugin_base_url() . 'application/assets/js/product/premiumbg.js', array(), null, true );
@@ -143,8 +130,6 @@ class ProductPage extends Page {
             wp_enqueue_script( aa_app_suffix() . 'product-vuevars-pricing', american_accent_plugin_base_url() . 'application/assets/js/product/pricing.js', array(), null, true );
 
             wp_enqueue_script( aa_app_suffix() . 'product-vuevars-template', american_accent_plugin_base_url() . 'application/assets/js/product/template.js', array(), null, true );
-
-            // wp_enqueue_script( aa_app_suffix() . 'product-vuevars-print', american_accent_plugin_base_url() . 'application/assets/js/product/print.js', array(), null, true );
             
             wp_enqueue_script( aa_app_suffix() . 'product-vuevars', american_accent_plugin_base_url() . 'application/assets/js/productvuevars.js', array(), null, true );
 

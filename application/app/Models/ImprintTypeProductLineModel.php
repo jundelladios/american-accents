@@ -20,12 +20,12 @@ class ImprintTypeProductLineModel extends Model {
     protected $table = "imprint_type_product_line";
 
     protected $fillable = [
-        'imprint_type_id', 'productline_id', 'min_prod_days', 'imprint_charge', 'image', 'priority'
+        'imprint_type_id', 'productline_id', 'min_prod_days', 'imprint_charge', 'image', 'priority', 'decimal_value', 'show_currency'
     ];
 
     protected $hidden = ['imprint_type_id', 'productline_id'];
 
-    protected $appends = ['hid', 'formatted_value', 'sortref'];
+    protected $appends = ['hid', 'formatted_value', 'sortref', 'labeled_value'];
 
     public function getHidAttribute() {
         // Hasher for the ID
@@ -40,7 +40,17 @@ class ImprintTypeProductLineModel extends Model {
 
     public function getFormattedValueAttribute() {
 
-        return aa_formatted_money( $this->imprint_charge, false, true );
+        return aa_formatted_money( $this->imprint_charge, false );
+
+    }
+
+    public function getLabeledValueAttribute() {
+
+        $decimal = (int) $this->attributes['decimal_value'];
+
+        $withcurrency = (int) $this->attributes['show_currency'];
+
+        return aa_formatted_money(number_format($this->attributes['imprint_charge'], $decimal), !$withcurrency);
 
     }
 

@@ -24,7 +24,7 @@ class Update {
 
     private $required = ['quantity'];
 
-    private $allowedNulls = ['value', 'alternative_value', 'product_print_method_id', 'unit_value'];
+    private $allowedNulls = ['value', 'alternative_value', 'product_print_method_id', 'unit_value', 'show_currency'];
 
     public function update( $request ) {
 

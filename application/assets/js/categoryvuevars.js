@@ -29,8 +29,75 @@ var orderBy = [
 var htmlTemplate = /*html*/`
     <div class="vue-template-wrap f-inventory-category-template mb-150">
 
-        <v-img :img="getApiRequest.category_banner" :alt="getApiRequest.cat_name" :nofallback="true" :fallback="getImageFallback.banner" class="mb4 full-width" :width="1903" :height="643" />
+        <!-- for category banners -->
+        <vue-slick-carousel
+        class="slider-module"
+        v-if="getApiRequest.bannerlist.length && !optionalParams.subcategory" 
+        :dots="true"
+        :infinite="false"
+        :dontAnimate="false"
+        :autoplay="true"
+        :autoplaySpeed="3000"
+        :pauseOnHover="true"
+        :draggable="true"
+        :swipe="true"
+        :swipeToSlide="true"
+        :focusOnSelect="true">
+            <div v-for="(banner, bannerindex) in getApiRequest.bannerlist" 
+            :key="'categorybanner-'+bannerindex" 
+            class="img-full slider-item">
+                <div class="slide-bg">
+                    <v-img 
+                    :img="banner.image" 
+                    :alt="banner.alt ? banner.alt : banner.title" 
+                    draggable="false"
+                    />
+                </div>
+            </div>
+            <template #nextArrow="arrowOption">
+                <button type="button" class="slick-indicator slick-next"><span class="icon icon-arrow-right"></span></button>
+            </template>
+            <template #prevArrow="arrowOption">
+                <button type="button" class="slick-indicator slick-prev"><span class="rotate-left icon icon-arrow-right"></span></button>
+            </template>
+        </vue-slick-carousel>
+        <!-- end for category banners -->
 
+        <!-- for subcategory banners only -->
+        <vue-slick-carousel
+        class="slider-module"
+        v-if="getFirstSubcategoryBannerLists.length && optionalParams.subcategory" 
+        :dots="true"
+        :infinite="false"
+        :dontAnimate="false"
+        :autoplay="true"
+        :autoplaySpeed="3000"
+        :pauseOnHover="true"
+        :draggable="true"
+        :swipe="true"
+        :swipeToSlide="true"
+        :focusOnSelect="true">
+            <div v-for="(banner, bannerindex) in getFirstSubcategoryBannerLists" 
+            :key="'categorybanner-'+bannerindex" 
+            class="img-full slider-item">
+                <div class="slide-bg">
+                    <v-img 
+                    :img="banner.image" 
+                    :alt="banner.alt ? banner.alt : banner.title" 
+                    draggable="false"
+                    />
+                </div>
+            </div>
+            <template #nextArrow="arrowOption">
+                <button type="button" class="slick-indicator slick-next"><span class="icon icon-arrow-right"></span></button>
+            </template>
+            <template #prevArrow="arrowOption">
+                <button type="button" class="slick-indicator slick-prev"><span class="rotate-left icon icon-arrow-right"></span></button>
+            </template>
+        </vue-slick-carousel>
+        <!-- end of subcategory banners -->
+
+        
         <div class="container" id="topcategory">
             <div class="row">
 

@@ -8,6 +8,7 @@ var inputs = {
     category_banner_content: '',
     index: null,
     template_section: 1,
+    bannerlist: [],
     seo_content: {
         description: ``,
         image: ``
@@ -30,7 +31,8 @@ var categoryinstanceVue = new Vue({
             sort: 'asc',
             form: false,
             input: {...inputs},
-            inactive: false
+            inactive: false,
+            dragGrid: false,
         }
     },
     computed: {
@@ -119,7 +121,13 @@ var categoryinstanceVue = new Vue({
         async updateData() {
             try {
                 await this.showLoading();
-                const res = await api.put('/categories', {...this.input, id: this.input.hid, seo_content: this.jsonToString(this.input.seo_content) });
+                const res = await api.put('/categories', {
+                    ...this.input, 
+                    id: this.input.hid, 
+                    seo_content: this.jsonToString(this.input.seo_content),
+                    bannerlist: this.jsonToString(this.input.bannerlist),
+                });
+
                 this.categories[this.input.index] = res.data;
                 swal('Changes has been saved.', { icon: 'success' });
                 this.formInputs(false, this.defaultValue);
@@ -130,7 +138,12 @@ var categoryinstanceVue = new Vue({
         async insertData() {
             try {
                 await this.showLoading();
-                const res = await api.post('/categories', {...this.input, seo_content: this.jsonToString(this.input.seo_content)});
+                const res = await api.post('/categories', {
+                    ...this.input, 
+                    seo_content: this.jsonToString(this.input.seo_content),
+                    bannerlist: this.jsonToString(this.input.bannerlist),
+                });
+
                 this.categories.unshift(res.data);
                 swal('New Category has been added.', { icon: 'success' });
                 this.formInputs(false, this.defaultValue);
@@ -195,6 +208,18 @@ var categoryinstanceVue = new Vue({
                     return;
                 }
             }
+        },
+
+        selectBanner(index) {
+            var $e = this;
+            $e.chooseLibrary('Select Banner Image', function(url, obj) {
+                $e.$set($e.input.bannerlist, index, {
+                    ...$e.input.bannerlist[index],
+                    title: obj.title,
+                    alt: obj.alt,
+                    image: url
+                })
+            });
         }
     }
 });

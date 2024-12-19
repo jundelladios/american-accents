@@ -19,6 +19,13 @@
         <small>Note: Export database and add it to the backup lists.</small>
 
         <div class="d-block mt-3">
+            <input 
+            type="text" 
+            v-model="backup.filename" 
+            placeholder="Enter name of backup" 
+            style="max-width: 300px;"
+            class="full-width mb-3">
+
             <button @click="exportdb" id="btn" class="button button-primary">Execute Backup</button>
         </div>
     </div>

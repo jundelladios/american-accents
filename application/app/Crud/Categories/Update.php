@@ -38,7 +38,7 @@ class Update {
             $data = rest_requests( $request->get_params(), array_merge( 
                 $this->required, 
                 $this->allowedNulls, 
-                ['id'], 
+                ['id', 'bannerlist'], 
                 $this->statuses 
             ));
 
@@ -46,6 +46,8 @@ class Update {
             $validate = new Validator($data);
 
             $validate->rule('required', 'id');
+            
+            $validate->rule('jsonString', ['bannerlist'], '/bannerlist.json');
 
             $this->_required( $validate, $data, $this->required);
 

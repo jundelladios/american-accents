@@ -28,7 +28,8 @@ class ProductColorAndStockShapeModel extends Model {
         'idea_galleries',
         'product_color_id',
         'product_stockshape_id',
-        'vdsid'
+        'vdsid',
+        'vdsproductid'
     ];
 
     protected $hidden = ['product_color_id', 'product_stockshape_id'];
@@ -123,14 +124,14 @@ class ProductColorAndStockShapeModel extends Model {
     public function theshape() {
 
         return $this->hasOne(ProductStockShapesModel::class, 'id', 'product_stockshape_id')
-        ->select(['id', 'stockname', 'code', 'product_print_method_id']);
+        ->select(['id', 'stockname', 'code', 'product_print_method_id', 'in_stock']);
 
     }
 
     public function thecolor() {
 
         return $this->hasOne(ProductColorsModel::class, 'id', 'product_color_id')
-        ->select(['id', 'colorhex', 'colorname', 'iscolorimage', 'colorimageurl', 'pantone', 'product_print_method_id']);
+        ->select(['id', 'colorhex', 'colorname', 'iscolorimage', 'colorimageurl', 'pantone', 'product_print_method_id', 'in_stock', 'isavailable']);
 
     }
 

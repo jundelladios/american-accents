@@ -26,9 +26,9 @@ class Update {
 
     use ControllerTraits;
 
-    private $required = ['product_stockshape_id', 'product_color_id', 'id', 'image'];
+    private $required = ['product_stockshape_id', 'product_color_id', 'id'];
 
-    private $nulls = ['templates', 'idea_galleries', 'vdsid'];
+    private $nulls = ['templates', 'idea_galleries', 'vdsid', 'vdsproductid', 'image'];
 
     private $statuses = ['priority'];
 

@@ -25,7 +25,9 @@ class ProductStockShapesModel extends Model {
         'code',
         'stockimage',
         'idea_galleries',
-        'vdsid'
+        'vdsid',
+        'vdsproductid',
+        'in_stock'
     ];
 
     protected $appends = ['hid', 'imagedata', 'ideagallerydata', 'counttemplates', 'templatedata'];

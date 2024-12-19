@@ -11,6 +11,11 @@ Routes::map('/ref/qrcode', function( $params ) {
     $page->render();
 });
 
+Routes::map('/products', function( $params ) {
+    $page = new \Api\Pages\ProductsPage();
+    $page->render();
+});
+
 Routes::map('/product/search', function( $params ) {
     $page = new \Api\Pages\SearchPage();
     $page->render();
@@ -25,23 +30,31 @@ Routes::map('/product/:category', function( $params ) {
     $page->render(); 
 });
 
-
 Routes::map('/product/:category/:subcategory', function( $params ) {
     $page = new \Api\Pages\SubcategoryPage();
     $page->set(array(
         'category' => $params['category'],
         'subcategory' => $params['subcategory']
     ));
-    
     // $productline = $page->getJSONData();
     // if( is_array($productline) && count($productline) > 0 && isset($productline[0]) && $productline[0]['is_unprinted'] == 1 ) {
 
     //     $page->render_unprinted(); 
     // }
-
     $page->render();
-
 });
+
+
+Routes::map('/product/:category/:subcategory/print-method/:method', function( $params ) {
+    $page = new \Api\Pages\SubcategoryPage();
+    $page->set(array(
+        'category' => $params['category'],
+        'subcategory' => $params['subcategory'],
+        'method_filter' => $params['method']
+    ));
+    $page->render();
+});
+
 
 
 Routes::map('/product/:category/:subcategory/:product', function( $params ) {

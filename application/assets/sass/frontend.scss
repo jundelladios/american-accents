@@ -119,27 +119,6 @@ $primary: #1f4385;
   }
 }
 
-.modal {
-  .close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    opacity: 1;
-    font-family: auto;
-    font-size: 30px;
-    color: #707070;
-  }
-
-  .modal-header {
-      border-bottom: 0;
-  }
-
-  .modal-body {
-      padding-left: 50px;
-      padding-right: 50px;
-  }
-}
-
 .tfeature {
   padding: 0;
   margin: 0;
@@ -545,37 +524,6 @@ $primary: #1f4385;
   font-size: 10px;
 }
 
-.modal-content {
-  border: 0!important;
-}
-
-.asterisk {
-  color: #F7B51B;
-}
-
-
-.modal.fade .modal-dialog{
-  -webkit-transform: translate(0,0);
-  transform: translate(0,0);
-}
-
-.zoom-in {
-  transform: scale(0)!important;
-  opacity: 0;
-  -webkit-transition: .2s all 0s;
-  -moz-transition: .2s all 0s;
-  -ms-transition: .2s all 0s;
-  -o-transition: .2s all 0s;
-  transition: .2s all 0s;
-  display: block !important;
-}
-
-.zoom-in.show {
-  opacity: 1;
-  transform: scale(1)!important;
-  transform:none;
-}
-
 .full-width {
   width: 100%;
 }
@@ -761,6 +709,20 @@ $primary: #1f4385;
       .ccolorname-filter {
         display: block;
       }
+    }
+
+    &.out-of-stock {
+      &:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            border: 0.1px solid red;
+            top: 2px;
+            left: 47%;
+            transform: rotate(45deg);
+            border-radius: 50%;
+            max-height: 84%;
+        }
     }
   }
 }
@@ -975,11 +937,6 @@ $primary: #1f4385;
 
 }
 
-
-.modal-dynamic-component {
-  background: rgba(0,0,0,0.5);
-}
-
 * {
   -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
   color-adjust: exact !important;                 /*Firefox*/
@@ -999,4 +956,36 @@ $primary: #1f4385;
     display: none!important;
   }
   
+}
+
+
+
+.tooltip.show {
+  opacity: 1!important;
+}
+.tooltip-error {
+  .arrow {
+    &:before {
+      border-bottom-color: #FF0000!important;
+    }
+  }
+  .tooltip-inner {
+    background: #FF0000!important;
+  }
+}
+
+
+.product-banner-grid {
+  &.out-of-stock {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    background: red;
+    height: auto;
+    color: #fff;
+    font-weight: bold;
+  }
 }

@@ -36,7 +36,7 @@ class Insert {
             $data = rest_requests( $request->get_params(), array_merge( 
                 $this->required, 
                 $this->allowedNulls,
-                ['template_section']
+                ['template_section', 'bannerlist']
             ));
     
             // Validation
@@ -44,6 +44,8 @@ class Insert {
     
             $validate->rule('required', $this->required);
     
+            $validate->rule('jsonString', ['bannerlist'], '/bannerlist.json');
+
             if( !$validate->validate() ) {
     
                 return rest_response( $validate->errors(), 422 );

@@ -59,3 +59,5 @@ require_once plugin_dir_path( __FILE__ ) . 'routes/collections.php';
 require_once plugin_dir_path( __FILE__ ) . 'routes/specificationtypes.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'routes/product-color-and-stockshape.php';
+
+require_once plugin_dir_path( __FILE__ ) . 'routes/vdsitems.php';

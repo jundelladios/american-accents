@@ -15,19 +15,15 @@ use Brick\Money\Context\AutoContext;
 
 use Brick\Money\Context\CustomContext;
 
-function aa_formatted_money( $value, $nocurrency = false, $isautocontext = false ) {
+function aa_formatted_money( $value, $nocurrency = false ) {
     
     if( $value ) {
 
-        $formatted = Money::of($value, 'USD', $isautocontext ? new AutoContext() : new CustomContext(3));
+        $theval = $value;
 
-        if( !$nocurrency ) {
+        if($nocurrency) { return $theval; }
 
-            return $formatted->formatTo('en_US');
-
-        }
-
-        return str_replace('$', null, $formatted->formatTo('en_US')); 
+        return carbon_get_theme_option( 'aa_admin_settings_currency' )."$theval";
 
     }
 
@@ -91,77 +87,6 @@ function get_aa_hashID( $id ) {
 
 }
 
-// SEO Image Speed Boost
-function aa_lazyimg( $attrs = [] ) {
-
-    $defaults = [
-        'class' => '',
-        'src' => '',
-        'alt' => ''
-    ];
-
-    $attrs = array_merge( $defaults, $attrs );
-    
-    $srcset = \Api\Media::imageproxy($attrs['src']);
-
-    $imgurl = \Api\Media::imageURLCDN($attrs['src']);
-
-    ob_start();
-    $atts = "";
-    foreach( $attrs as $key => $val ) {
-        if( $key != 'src' && $key != 'class' ) {
-            $atts .= $key;
-            $atts .= '="' . $val . '" ';
-        }
-    }
-
-    ?>
-    <img 
-        class="lazyload lz-blur <?php echo $attrs['class']; ?>" 
-        <?php echo $atts; ?>
-        <?php if( defined( '_APP_IMG_CDN' ) && _APP_IMG_CDN ): ?>
-            src="<?php echo $imgurl; ?>"
-            data-srcset="<?php echo $srcset; ?>"
-            width="auto"
-            height="auto"
-            data-sizes="auto"
-            alt="<?php echo $attrs['alt'] ?>"
-        <?php else: ?>
-            src="<?php echo $imgurl; ?>"
-        <?php endif; ?>
-    />
-    <?php
-    echo ob_get_clean();
-}
-
-// SEO Background Image Speed Boost
-function aa_lazyBg( $url, $style="" ) {
-
-    $str = "";
-
-    $image = \Api\Media::imageproxy($url);
-
-    if( defined( '_APP_IMG_CDN' ) && _APP_IMG_CDN ) {
-
-        $str .= 'data-bgset="'.$image.'"';
-
-    } else {
-
-        $str .= 'style="background: url('.$url.');"';
-
-    }
-
-    echo $str;
-
-} 
-
-// image proxy function
-function aa_image_proxy( $url ) {
-
-    return \Api\Media::imageproxy( $url );
-
-}
-
 
 
 function aa_json_array( $json ) {
@@ -195,4 +120,25 @@ function aa_json_data( $json ) {
 
     return null;
     
+}
+
+
+function aa_range_formatter($min, $max) {
+
+    if(!$min || !$max || !isset($min) || !isset($max)) {
+        return [
+            'min' => 0,
+            'max' => 0,
+            'formatted_min' => aa_formatted_money(0),
+            'formatted_max' => aa_formatted_money(0),
+        ];
+    }
+
+    return [
+        'min' => $min->value,
+        'max' => $max->value,
+        'formatted_min' => aa_formatted_money(number_format($min->value, $min->decimal_value)),
+        'formatted_max' => aa_formatted_money(number_format($max->value, $max->decimal_value))
+    ];
+
 }

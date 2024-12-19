@@ -130,9 +130,11 @@
                         </div>
 
 
-                        <div class="mt-5 d-block">
+                        <div class="mt-5 d-block floating-button-save">
                             <button id="btn" type="submit" v-if="inputs.hid" class="button button-primary">Save Changes</button>
                             <button id="btn" type="submit" v-else class="button button-primary">Save Product Combo</button>
+
+                            <a href="javascript:void(0)" @click.prevent="formInputs(false, {...defaultValue})" class="button button-default">Cancel</a>
                         </div>
 
                     </form>

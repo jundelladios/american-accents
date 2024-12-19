@@ -68,6 +68,12 @@ class PublicController {
 
     }
 
+    public function getCategories( Request $request ) {
+
+        return (new Filters)->getCategories( $request->get_params()  );
+
+    }
+
     public function getColors( Request $request ) {
 
         return (new Filters)->getColors( $request->get_params()  );
@@ -91,6 +97,12 @@ class PublicController {
     public function productTemplates( Request $request ) {
 
         return (new Filters)->productTemplates( $request );
+
+    }
+
+    public function getProductsVariations( Request $request ) {
+
+        return (new Filters)->getProductsVariations( $request );
 
     }
 

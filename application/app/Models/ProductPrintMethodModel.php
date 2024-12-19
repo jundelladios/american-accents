@@ -146,26 +146,18 @@ class ProductPrintMethodModel extends Model {
 
         if( self::$withoutAppends ) { return null; }
 
-        $min = PricingDataValueModel::where( 'product_print_method_id', $this->id )
+        $price = PricingDataValueModel::where( 'product_print_method_id', $this->id )
         ->whereNotNull( 'pricing_data_value.value' )
         ->whereNotNull( 'pricing_data_value.product_print_method_id' )
-        ->min( 'value' );
+        ->groupBy( 'pricing_data_value.value' );
 
-        $max = PricingDataValueModel::where( 'product_print_method_id', $this->id )
-        ->whereNotNull( 'pricing_data_value.value' )
-        ->whereNotNull( 'pricing_data_value.product_print_method_id' )
-        ->max( 'value' );
+        $max = $price->orderBy('pricing_data_value.value', 'DESC')->first();
 
-        $formatted_min = aa_formatted_money( PricingDataValueModel::where( 'product_print_method_id', $this->id )->min( 'value' ) );
+        $price->getQuery()->orders = null;
 
-        $formatted_max = aa_formatted_money( PricingDataValueModel::where( 'product_print_method_id', $this->id )->max( 'value' ) );
+        $min = $price->orderBy('pricing_data_value.value', 'ASC')->first();
 
-        return [
-            'min' => $min,
-            'max' => $max,
-            'formatted_min' => $formatted_min,
-            'formatted_max' => $formatted_max
-        ];
+        return aa_range_formatter($min, $max);
 
     }
 
@@ -226,7 +218,8 @@ class ProductPrintMethodModel extends Model {
             'product_color_stockshape.product_print_method_id', 
             'product_color_stockshape.product_stockshape_id', 
             'product_color_stockshape.product_color_id',
-            'product_color_stockshape.vdsid'
+            'product_color_stockshape.vdsid',
+            'product_color_stockshape.vdsproductid'
         )
         ->where('product_color_stockshape.product_print_method_id', $this->id)
         ->where(DB::raw('JSON_LENGTH(product_color_stockshape.image)'), '>', 0);
@@ -248,10 +241,10 @@ class ProductPrintMethodModel extends Model {
             ];
         }
 
-        $colors = ProductColorsModel::select('id', 'colorhex', 'colorname', 'iscolorimage', 'colorimageurl', 'pantone', 'product_print_method_id', 'image', 'slug', 'isavailable', 'vdsid')->where('product_print_method_id', $this->id);
+        $colorsQueryInstance = ProductColorsModel::select('id', 'colorhex', 'colorname', 'iscolorimage', 'colorimageurl', 'pantone', 'product_print_method_id', 'image', 'slug', 'isavailable', 'vdsid', 'vdsproductid', 'in_stock')->where('product_print_method_id', $this->id);
 
         // available colors
-        $availablecolor = $colors;
+        $availablecolor = $colorsQueryInstance;
         $availablecolor->where(DB::raw('JSON_LENGTH(image)'), '>', 0)
         ->where('isavailable', 1)
         ->orderBy('priority');
@@ -264,7 +257,7 @@ class ProductPrintMethodModel extends Model {
         }
 
         // stock shape
-        $stockshape = ProductStockShapesModel::select('id', 'stockname', 'code', 'product_print_method_id', 'image', 'slug', 'vdsid')->where('product_print_method_id', $this->id)
+        $stockshape = ProductStockShapesModel::select('id', 'stockname', 'code', 'product_print_method_id', 'image', 'slug', 'vdsid', 'vdsproductid', 'in_stock')->where('product_print_method_id', $this->id)
         ->where(DB::raw('JSON_LENGTH(image)'), '>', 0)
         ->orderBy('code');
         if( $stockshape->count() ) {
@@ -276,9 +269,9 @@ class ProductPrintMethodModel extends Model {
         }
 
         // default color which is not available
-        $nonavailablecolor = $colors;
-        $nonavailablecolor->where(DB::raw('JSON_LENGTH(image)'), '>', 0)
-        ->where('isavailable', 0)
+        $noColorsQueryInstance = ProductColorsModel::select('id', 'colorhex', 'colorname', 'iscolorimage', 'colorimageurl', 'pantone', 'product_print_method_id', 'image', 'slug', 'isavailable', 'vdsid', 'vdsproductid', 'in_stock')->where('product_print_method_id', $this->id);
+        $nonavailablecolor = $noColorsQueryInstance;
+        $nonavailablecolor->where('isavailable', 0)
         ->orderBy('priority');
         if( $nonavailablecolor->count() ) {
             return [
@@ -343,6 +336,14 @@ class ProductPrintMethodModel extends Model {
             $query->whereIn('product_subcategories.sub_slug', explode(",", $request['subcategory']));
 
         }
+
+        // subcategory tags
+        if( isset( $request['subcategory_tags'] ) && !empty( $request['subcategory_tags'] ) ) {
+            
+            $query->whereIn(DB::raw('REPLACE(product_subcategories.categorize_as, " ", "-")'), explode(",", $request['subcategory_tags']));
+
+        }
+
 
         // print method filter
         if( (isset( $request['printmethod'] ) && !empty( $request['printmethod'] )) ) {

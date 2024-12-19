@@ -121,16 +121,16 @@ Vue.directive('autocolor', function(el, binding) {
 });
 
 Vue.directive('img', function(el, binding) {
+    var imagecdnproxy = binding.value.replace(inventoryJSVars.baseURLnoSlash, inventoryJSVars.imageproxycdn);
     var srcset = `
-        ${inventoryJSVars.proxy}/q_lossless+w_400+to_webp+ret_img/${binding.value} 400w,
-        ${inventoryJSVars.proxy}/q_lossless+w_600+to_webp+ret_img/${binding.value} 600w,
-        ${inventoryJSVars.proxy}/q_lossless+w_800+to_webp+ret_img/${binding.value} 800w,
-        ${inventoryJSVars.proxy}/q_lossless+w_1600+to_webp+ret_img/${binding.value} 1600w,
-        ${inventoryJSVars.proxy}/q_lossless+w_1920+to_webp+ret_img/${binding.value} 1920w,
-        ${inventoryJSVars.proxy}/q_lossless+w_2050+to_webp+ret_img/${binding.value} 2050w
-    `;
+        ${imagecdnproxy}?width=400 600w,
+        ${imagecdnproxy}?width=600 800w,
+        ${imagecdnproxy}?width=800 1600w,
+        ${imagecdnproxy}?width=1600 1900w,
+        ${imagecdnproxy} 2050w
+    `; 
 
-    if( !inventoryJSVars.isproxyEnabled ) {
+    if( !inventoryJSVars.imageproxycdn ) {
         srcset = binding.value;
     }
     el.setAttribute(binding.arg, srcset);
@@ -152,6 +152,7 @@ Vue.component('v-img', {
         v-bind="$attrs" 
         v-on="$listeners" 
         data-sizes="auto"
+        :src="thesrc"
         :data-src="thesrc"
         :data-aspectratio="\`\${width}/\${height}\`"
         :width="width"
@@ -180,27 +181,30 @@ Vue.component('v-img', {
     },
     computed: {
         srcset() {
-            if( !inventoryJSVars.isproxyEnabled ) { return this.img; }
+            if( !inventoryJSVars.imageproxycdn ) { return this.img; }
+            var imagecdnproxy = this.img.replace(inventoryJSVars.baseURLnoSlash, inventoryJSVars.imageproxycdn);
             var srcset = `
-                ${inventoryJSVars.proxy}/q_lossless+w_400+to_webp+ret_img/${this.img} 400w,
-                ${inventoryJSVars.proxy}/q_lossless+w_600+to_webp+ret_img/${this.img} 600w,
-                ${inventoryJSVars.proxy}/q_lossless+w_800+to_webp+ret_img/${this.img} 800w,
-                ${inventoryJSVars.proxy}/q_lossless+w_1600+to_webp+ret_img/${this.img} 1600w,
-                ${inventoryJSVars.proxy}/q_lossless+w_1920+to_webp+ret_img/${this.img} 1920w,
-                ${inventoryJSVars.proxy}/q_lossless+w_2050+to_webp+ret_img/${this.img} 2050w
+                ${imagecdnproxy}?width=400 600w,
+                ${imagecdnproxy}?width=600 800w,
+                ${imagecdnproxy}?width=800 1600w,
+                ${imagecdnproxy}?width=1600 1900w,
+                ${imagecdnproxy} 2050w
             `;
             return srcset;
         },
         thesrc() {
-            if( !inventoryJSVars.isproxyEnabled ) { return this.img; }
-            return `${inventoryJSVars.proxy}/q_lossless+to_webp+ret_img/${this.img}`;
+            if( !inventoryJSVars.imageproxycdn ) { return this.img; }
+            return AA_JS_OBJ.IMG_PRELOADER;
         },
         getFallback() {
             let fallback = inventoryJSVars.fallbackImage;
             if( !this.fallback ) {
                 this.fallback = fallback;
             }
-            if( inventoryJSVars.isproxyEnabled ) { return `${inventoryJSVars.proxy}/q_lossless+to_webp+ret_img/${this.fallback}`; }
+            if( inventoryJSVars.imageproxycdn ) { 
+                var imagecdnproxy = this.fallback.replace(inventoryJSVars.baseURLnoSlash, inventoryJSVars.imageproxycdn);
+                return imagecdnproxy; 
+            }
             return fallback;
         }
     }

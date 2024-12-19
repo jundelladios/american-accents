@@ -12,7 +12,8 @@ var inputs = {
     categorize_as: null,
     banner_img: null,
     catalogs: [],
-    sub_name_alt: null
+    sub_name_alt: null,
+    bannerlist: []
 };
 
 var subCatInstanceVue = new Vue({
@@ -31,6 +32,7 @@ var subCatInstanceVue = new Vue({
             form: false,
             input: {...inputs},
             catalogdrag: false,
+            dragGrid: false,
             printMethods: {
                 loading: false,
                 data: [],
@@ -168,7 +170,8 @@ var subCatInstanceVue = new Vue({
                     ...this.input, 
                     id: this.input.hid, 
                     seo_content: this.jsonToString(this.input.seo_content),
-                    catalogs: this.jsonToString(this.input.catalogs)
+                    catalogs: this.jsonToString(this.input.catalogs),
+                    bannerlist: this.jsonToString(this.input.bannerlist)
                 });
                 this.subcategories[this.input.index] = res.data;
                 swal('Changes has been saved.', { icon: 'success' });
@@ -183,7 +186,8 @@ var subCatInstanceVue = new Vue({
                 const res = await api.post('/subcategories', {
                     ...this.input, product_category_id: this.categoryId, 
                     seo_content: this.jsonToString(this.input.seo_content),
-                    catalogs: this.jsonToString(this.input.catalogs)
+                    catalogs: this.jsonToString(this.input.catalogs),
+                    bannerlist: this.jsonToString(this.input.bannerlist)
                 });
                 this.subcategories.unshift(res.data);
                 swal('New subcategory has been added.', { icon: 'success' });
@@ -314,6 +318,18 @@ var subCatInstanceVue = new Vue({
                     return;
                 }
             }
+        },
+
+        selectBanner(index) {
+            var $e = this;
+            $e.chooseLibrary('Select Banner Image', function(url, obj) {
+                $e.$set($e.input.bannerlist, index, {
+                    ...$e.input.bannerlist[index],
+                    title: obj.title,
+                    alt: obj.alt,
+                    image: url
+                })
+            });
         }
     }
 });

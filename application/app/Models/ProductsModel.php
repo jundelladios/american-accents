@@ -57,7 +57,12 @@ class ProductsModel extends Model {
         'product_depth',
         'area_sq_in',
         'specification_id',
-        'specs_json'
+        'specs_json',
+
+
+        'banner_img',
+        'banner_content',
+        'banner_class'
     ];
 
     protected $hidden = [

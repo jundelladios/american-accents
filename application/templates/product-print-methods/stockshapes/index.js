@@ -16,8 +16,12 @@ var productStockShapes = {
                     templates: [],
                     id: null,
                     autoassignimg: null,
-                    autoassignidea: null
+                    autoassignidea: null,
+                    vdsproductid: null,
+                    vdsid: null,
+                    in_stock: 1
                 },
+                query: null,
                 pagination: {
                     page: 1,
                     limit: 60,
@@ -356,7 +360,8 @@ var productStockShapes = {
                         product_print_method_id: id,
                         pagination: true,
                         limit: this.stockshape.pagination.limit,
-                        page: this.stockshape.pagination.page
+                        page: this.stockshape.pagination.page,
+                        query: this.stockshape.query
                     }
                 });
                 this.stockshape.input.product_print_method_id = id;
@@ -381,6 +386,7 @@ var productStockShapes = {
                         pagination: true,
                         limit: this.stockshape.pagination.limit,
                         page: this.stockshape.pagination.page,
+                        query: this.stockshape.query
                     }
                 });
                 this.stockshape.data = [...this.stockshape.data, ...res.data.data];
@@ -414,6 +420,10 @@ var productStockShapes = {
                 this.stockshape.data.splice(index, 1);
                 await swal('Sucessfully Removed');
             }
+        },
+        searchEntryStockshapeQueryFilter() {
+            this.stockshape.data = [];
+            this.getStockShapesByProductId(this.stockshape.input.product_print_method_id);
         }
     }
 }

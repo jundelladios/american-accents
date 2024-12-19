@@ -6,8 +6,8 @@ var desktopTemplate = /*html */`
         <transition name="plinetoggle" enter-active-class="animate slideInUp animate-half1" leave-active-class="animate fadeOutDown pline-absolute animate-half1">
             <div v-if="selected==null" class="container" key="pline1">
                 <div v-if="plinejson" class="row justify-content-center printmethodgrids plistsmethod">
-                    <div v-for="(pline, index) in plinejson" :key="'plinejsonkey-' + pline.hid" class="col-md-4 colpm">
-                        <a href="javascript:void(0)" @click.stop="selected=pline.hid">
+                    <div v-for="(pline, index) in plinejson" :key="'plinejsonkey-' + pline.hid" :class="\`col-md-4 colpm \${pline.method_name}\-\${pline.method_name2}\`">
+                        <a :href="\`\${inventoryJSVars.baseURL}product/\${pline.cat_slug}/\${pline.sub_slug}/print-method/\${pline.method_slug}\`" @click.prevent="selected=pline.hid">
                             <div class="col-print-method"> 
 
                                 <div class="content-handle">
@@ -69,7 +69,9 @@ var desktopTemplate = /*html */`
 
                 <transition-group class="container custom-container" name="transition-arrange">
                     <!-- row -->
-                    <div v-for="(pline, index) in getArrangedData" :class="'plistsmethod v2 ' + pline.opened_accordion_class" :key="'pline-reactive-desktop-' + pline.reactiveIndex">
+                    <div v-for="(pline, index) in getArrangedData" :key="'pline-reactive-desktop-' + pline.reactiveIndex"
+                    :class="\`pmethodselected \${pline.method_name}\-\${pline.method_name2}\ plistsmethod v2 \${pline.opened_accordion_class}\`"
+                    >
                         <!-- col start -->
                         <div class="col-blue colwrap blue">
                             <div class="imagebehind">
@@ -109,7 +111,7 @@ var desktopTemplate = /*html */`
                                 </div>
 
                                 <div class="return-print-methods">
-                                    <a href="javascript: void(0)" @click.stop="setSelected(null)"><span class="arrow-icon">&#x2199;</span> <i class="text-uppercase">return to print methods</i></a>
+                                    <a :href="\`\${inventoryJSVars.baseURL}product/\${pline.cat_slug}/\${pline.sub_slug}\`" @click.prevent="setSelected(null)"><span class="arrow-icon">&#x2199;</span> <i class="text-uppercase">return to print methods</i></a>
                                 </div>
 
                             </div>
@@ -167,7 +169,7 @@ var desktopTemplate = /*html */`
                         <!-- endcol -->
 
                         <!-- col start -->
-                        <a href="javascript: void(0)" @click.stop="selected=pline.hid" class="col-tag">
+                        <a :href="\`\${inventoryJSVars.baseURL}product/\${pline.cat_slug}/\${pline.sub_slug}/print-method/\${pline.method_slug}\`" @click.prevent="selected=pline.hid" class="col-tag">
                             <div class="col-tag-content">
                                 <span class="name1">{{pline.method_name}}</span>
                                 <span class="name2 text-uppercase" :style="'color: ' + pline.method_hex + ';'">{{pline.method_name2}}</span>

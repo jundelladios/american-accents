@@ -52,6 +52,22 @@ class Retrieve {
 
             }
 
+            if(isset( $request['query'])) {
+                $query = $request['query'];
+                $colorstockshape->where(function($qs) use($query) {
+                    $qs->where('product_colors.colorhex', 'LIKE', "%$query%")
+                    ->orWhere('product_colors.colorname', 'LIKE', "%$query%")
+                    ->orWhere('product_colors.pantone', 'LIKE', "%$query%")
+
+
+                    ->orWhere('product_stockshapes.stockname', 'LIKE', "%$query%")
+                    ->orWhere('product_stockshapes.code', 'LIKE', "%$query%")
+
+                    ->orWhere('product_color_stockshape.vdsid', 'LIKE', "%$query%")
+                    ->orWhere('product_color_stockshape.vdsproductid', 'LIKE', "%$query%");
+                });
+            }
+
             $colorstockshape->with(['theshape']);
 
             $colorstockshape->with(['thecolor']);

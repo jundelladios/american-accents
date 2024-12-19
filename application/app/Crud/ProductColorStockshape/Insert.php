@@ -95,7 +95,7 @@ class Insert {
             $data['slug'] = rest_slug_generator( $color['colorname'] . '-' . $shape['code']);
 
 
-            $exists = ProductColorAndStockShapeModel::where('slug', $data['slug'])->first();
+            $exists = ProductColorAndStockShapeModel::where('product_print_method_id', $data['product_print_method_id'])->where('slug', $data['slug'])->first();
 
             if( $exists ) {
 

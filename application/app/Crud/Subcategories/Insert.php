@@ -39,7 +39,8 @@ class Insert {
                 $this->required,
                 $this->allowedNulls,
                 $this->postRequired,
-                $this->statuses
+                $this->statuses,
+                ['bannerlist']
             ));
 
             // Validation
@@ -51,6 +52,8 @@ class Insert {
             ));
 
             $validate->rule('jsonString', ['catalogs'], '/subcategorycatalog.json');
+
+            $validate->rule('jsonString', ['bannerlist'], '/bannerlist.json');
 
             if( !$validate->validate() ) {
 

@@ -32,7 +32,7 @@ class Insert {
 
     private $nulls = ['colorhex', 'iscolorimage', 'colorimageurl', 'templates', 'isavailable', 'pantone', 'idea_galleries', 'image', 'vdsid'];
 
-    private $statuses = ['priority'];
+    private $statuses = ['priority', 'in_stock'];
 
     public function store( $request ) {
 

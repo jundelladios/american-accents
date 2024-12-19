@@ -89,7 +89,7 @@ var template_ = /*html */`
                                 </div>
 
                                 <div class="button-actions mt-3">
-                                    <a href="#" @click.prevent="templateEmail(tmp)" class="btn-action button-light"><span class="icon mr-1 icon-email"></span> email</a>
+                                    <a href="#" :data-url="tmp.link" data-type="email" class="btn-action button-light aa_social_share"><span class="icon mr-1 icon-email"></span> email</a>
                                     <a :href="tmp.link" target="_blank"
                                     class="btn-action button-light frontend-desktop-only"><span class="icon mr-1 icon-icon-print"></span> print</a>
                                     <a v-if="tmp.link" :href="tmp.link" target="_blank" rel="nofollow" download class="btn-action button-light"><span class="icon mr-1 icon-download-single"></span> download</a>

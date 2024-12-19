@@ -29,7 +29,8 @@ var chargesValuesInputs = {
     asterisk: 0,
     alternative_value: null,
     unit_value: null,
-    decimal_value: 3
+    decimal_value: 3,
+    show_currency: false
 }
 
 var chargesInstance = new Vue({

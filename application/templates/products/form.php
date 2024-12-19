@@ -114,10 +114,14 @@
                                 </div>
                             </template>
                         </template> -->
+                        
+                        <?php require_once( american_accent_plugin_base_dir() . 'application/templates/products/forms/banners.php' ); ?>
+
                     </div>
 
-                    <div class="mt-4">
+                    <div class="floating-button-save">
                         <button id="btn" type="submit" class="button button-primary">Save Product</button>
+                        <a href="javascript:void(0)" @click.prevent="formInputs(false, {...defaultValue})" class="button button-default">Cancel</a>
                     </div>
 
                 </form>

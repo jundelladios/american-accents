@@ -22,9 +22,12 @@
                             <span class="v-error">{{errors.first('priority')}}</span>
                         </div>
 
-                        <div class="mb-3">
-                            <button type="submit" id="btn" v-if="inputs.index!=null" class="button button-primary">Save Changes</button>
-                            <button type="submit" id="btn" v-else class="button button-primary">Save Collection</button>
+                        <div class="floating-button-save">
+                            <a href="javascript: void(0)" @click.stop="addCollection" class="button mr-2">Add Stock Shape</a>
+                            <button type="submit" id="btn" v-if="inputs.index!=null" class="button button-primary mr-2">Save Changes</button>
+                            <button type="submit" id="btn" v-else class="button button-primary mr-2">Save Collection</button>
+
+                            <a href="javascript:void(0)" @click.prevent="formInputs(false, {...defaultValue})" class="button button-default">Cancel</a>
                         </div>
                     </div>
                     <div class="col-lg-9 col-sm-12">
@@ -88,12 +91,6 @@
 
                                 </transition-group>
                             </draggable>
-
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <a href="javascript: void(0)" @click.stop="addCollection" class="button">Add Stock Shape</a>
-                                </div>
-                            </div>
 
                         </div>
                     </div>

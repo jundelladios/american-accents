@@ -16,6 +16,46 @@
                     </a>
                     <a href="javascript:void(0)" v-if="input.banner_img" @click.stop="input.banner_img=''"><small>Remove Banner</small></a>
                 </div> -->
+
+                <div class="mb-3">
+                    <h4 class="mb-0">Banners</h4>
+                    <p>You can drag and drop to arrange the banners.</p>
+                </div>
+                
+                <draggable 
+                v-model="input.bannerlist" 
+                class="v-draggable spec"
+                tag="div" 
+                v-bind="vueDragOptions"
+                @start="dragGrid = true"
+                @end="dragGrid = false"
+                key="bannerlist-drag"
+                >
+                    <transition-group type="transition" tag="div" :name="!dragGrid ? 'flip-list' : null">
+                        <div v-for="(cat, cati) in input.bannerlist" :key="`input-catalog-${cati}`" class="mb-3 p-3 v-drag-item" style="border:1px solid #ccc;">
+
+                            <a href="javascript:void(0)" @click.stop="selectBanner(cati)" class="d-block link-img mb-3" style="width: fit-content;">
+                                <img v-if="cat.image" :src="cat.image" alt="" style="max-width: 100px;">
+                                <img v-else src="<?php echo american_accent_plugin_base_url() . 'application/assets/img/placeholder-square.png'; ?>" alt="" style="max-width: 100px;">
+                            </a>
+
+                            <input type="text" v-model="input.bannerlist[cati].title" placeholder="Enter Banner Title" class="full-width mb-2">
+                            <input type="text" v-model="input.bannerlist[cati].alt" class="full-width mb-2" placeholder="Enter Banner Alt Text">
+                            <a href="#" class="mb-2 mr-2" @click.stop="selectBanner(cati)">Select Banner</a>
+                            <a href="#" class="mb-2" @click.stop="input.bannerlist.splice(cati, 1)">Remove</a>
+                        </div>
+                    </transition-group>
+                </draggable>
+
+                <div class="mb-3">
+                    <button type="button" class="button" @click="() => {
+                        if(!Array.isArray(input.bannerlist)) {
+                            input.bannerlist = [];
+                        }
+                        input.bannerlist.push({ alt: '', title: '', image: '' });
+                    }">Add Banner</button>
+                </div>
+
                 <div class="mb-3">
                     <label class="d-block mb-2" for="sub_name">Subcategory Name</label>
                     <input type="text" 
@@ -133,9 +173,11 @@
                     <p>More information with <a href="https://developers.facebook.com/docs/sharing/webmasters/" target="_blank">Open Graph</a>.</p>
                 </div>
 
-                <div class="mb-3">
+                <div class=" floating-button-save">
                     <button id="btn" typpe="submit" v-if="input.index!=null" class="button button-primary">Save Changes</button>
                     <button id="btn" typpe="submit" v-else class="button button-primary">Save Category</button>
+
+                    <a href="javascript:void(0)" @click.prevent="formInputs(false, {...defaultValue})" class="button button-default">Cancel</a>
                 </div>
             </form>
         </div>

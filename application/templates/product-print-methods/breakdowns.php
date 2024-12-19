@@ -37,6 +37,13 @@
             <small class="d-block">If value using non-numeric.</small>
         </div>
 
+        <div class="mb-2">
+            <label>
+                <input type="checkbox" v-model="priceInputs.show_currency" :true-value="1" :false-value="0">
+                Show currency?
+            </label>
+        </div>
+
     </div>
 
     <div class="mt-2">

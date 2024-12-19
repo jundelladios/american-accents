@@ -18,6 +18,7 @@ const inputs = {
     per_thousand: 0,
     per_item: 1,
     setup_charge: 40,
+    show_currency: 1,
     colors: [
         {
             type: ``, // Foil, Metalic Inc, Neon Inc, Standard, Product

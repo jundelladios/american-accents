@@ -11,7 +11,13 @@ function aa_sc_stockshape( $atts ) {
         'collg' => 4,
         'colmd' => 3,
         'colsm' => 2, 
-        'colxs' => 1
+        'colxs' => 1,
+        'modalmaintitle' => "Downloads",
+        'modalsubtitle' => "STOCK SHAPES",
+        'is_enabled_email' => 1,
+        'is_enabled_print' => 1,
+        'is_enabled_download' => 1,
+        'is_enabled_share' => 1,
     );
 
     $param = shortcode_atts($default, $atts);
@@ -26,6 +32,10 @@ function aa_sc_stockshape( $atts ) {
 
     if(!$apiRequest['data']) { return `<div></div>`; }
 
+    $moduleid = wp_unique_id( 'stochshape_sc_module_' );
+
+    $entryReusableModal = [];
+
     ob_start();
 
     ?>
@@ -37,11 +47,15 @@ function aa_sc_stockshape( $atts ) {
     aa-grid-<?php echo $param['colmd']; ?>-md
     aa-grid-<?php echo $param['colsm']; ?>-sm
     aa-grid-<?php echo $param['colxs']; ?>-xs
-    ">
+    "
+    data-module-id="<?php echo $moduleid; ?>"
+    >
 
         <?php foreach($apiRequest['data'] as $scs ): ?>
 
             <?php
+
+            $firstindexer = 0;
 
             foreach( $scs['collections'] as $sc ):
 
@@ -55,17 +69,22 @@ function aa_sc_stockshape( $atts ) {
             }
 
             $alt .= $code;
+
+            $entryReusableModal[] = array(
+                '_modal_image' => $sc['image'],
+                '_modal_image_alt' => $alt,
+                '_modal_print_title' => $code . ' - ' . $stockname,
+                '_modal_label' => $code . ' - ' . $stockname,
+            );
                 
             ?>
 
                 <div class="position-relative scwrap">
                     <?php if( isset( $sc['image'] )): ?>
-                        <div class="p-3 bgimg">
+                        <div class="p-3 bgimg cursor-pointer" data-modal-trigger="<?php echo $firstindexer; ?>">
                             <?php aa_lazyimg([
                                 'src' => $sc['image'],
-                                'alt' => "$alt",
-                                'width' => 'auto',
-                                'height' => 'auto'
+                                'alt' => "$alt"
                             ]); ?>
                         </div>
                     <?php endif; ?>
@@ -74,13 +93,25 @@ function aa_sc_stockshape( $atts ) {
                     <?php if( $stockname): ?><span class="scname"><?php echo $stockname; ?></span><?php endif; ?>
                 </div>
 
-            <?php endforeach; ?>
+            <?php $firstindexer++; endforeach; ?>
 
         <?php endforeach; ?>
 
     </div>
 
     <?php
+
+    if( function_exists('americanAccentsReusableModalContent')):
+    echo americanAccentsReusableModalContent( 
+        $moduleid, 
+        $entryReusableModal, 
+        array_merge($param, [
+            'modal_title' => $param['modalmaintitle'],
+            'modal_subtitle' => $param['modalsubtitle'],
+            'download_file_name' => $param['modalmaintitle'] . ' ' . $param['modalsubtitle']
+        ])
+    ); 
+    endif;
 
 
     $html = ob_get_clean();

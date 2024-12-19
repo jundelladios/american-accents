@@ -44,6 +44,16 @@
                     </div>
 
                     <div class="mb-2">
+                        <label class="d-block mb-2">Stock (0 if out of stock)</label>
+                        <input type="number" v-model="stockshape.input.in_stock">
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="d-block mb-2">VDS SAGE PRODUCT ID</label>
+                        <input type="text" v-model="stockshape.input.vdsproductid">
+                    </div>
+
+                    <div class="mb-2">
                         <label class="d-block mb-2">VDS SAGE ITEM #</label>
                         <input type="text" v-model="stockshape.input.vdsid">
                     </div>
@@ -240,7 +250,7 @@
                     <hr class="mt-5">
 
 
-                    <div class="mt-5 mb-2 mt-3">
+                    <div class="mt-5 mt-3 floating-button-save">
                         <button v-if="stockshape.input.id==null" type="submit" class="button button-primary">Add Stock Shape</button>
                         <button v-else type="submit" class="button button-primary">Save Stock Shape</button>
                         <a href="javascript: void(0)" class="button" @click.stop="resetStockShapesInputs({product_print_method_id:stockshape.input.product_print_method_id, index: null}); pstockshapestate='lists'">View Stock Shapes</a>
@@ -283,6 +293,12 @@
                 <button type="button" @click="removeCheckedItems_stockshape_" v-if="getIsSelectedStockshape.length" class="button mr-2">Remove ({{getIsSelectedStockshape.length}})</button>
             </div>
 
+            <div class="mb-3">
+                <form @submit.prevent="searchEntryStockshapeQueryFilter" style="text-align:right;">
+                    <input placeholder="Search" type="text" v-model="stockshape.query" />
+                </form>
+            </div>
+
             <div class="row" v-if="stockshape.loading">
                 <div class="col-md-12">
                     <p style="text-align: center;">Loading..</p>
@@ -311,7 +327,12 @@
                             <div class="d-block mb-2">Priority #: {{ pshape.priority }}</div>
                             <div class="d-block mb-2">Images: {{ pshape.imagedata.length }}</div>
                             <div class="d-block mb-2">Templates: {{ pshape.counttemplates }}</div>
+                            <div class="d-block mb-2">VDS SAGE PRODUCT ID: {{ pshape.vdsproductid }}</div>
                             <div class="d-block mb-2">VDS SAGE ITEM #: {{ pshape.vdsid }}</div>
+                            <div class="d-block mb-2">STOCK: {{ pshape.in_stock }} 
+                                <span v-if="pshape.in_stock>0" style="color:green;font-weight:bold">(In Stock)</span>
+                                <span v-else style="color:red;font-weight:bold">(Out of Stock)</span>
+                            </div>
 
                             <div class="d-block mt-3 mb-2">
 

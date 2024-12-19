@@ -1,6 +1,7 @@
 var printmethodcompare = /*html */`
 <div>
-    <div v-if="!pcompare.loading && pcompare.data && pcompare.data.length && !product.productline.printmethod.is_unprinted" class="product-method">
+    <div v-if="!pcompare.loading && pcompare.data && pcompare.data.length && !product.productline.printmethod.is_unprinted" 
+    :class="\`product-method \${product.productline.printmethod.method_name}\-\${product.productline.printmethod.method_name2}\`">
         <span class="d-block mname1">{{ product.productline.printmethod.method_name }}</span>
         <span class="d-block mname2" :style="\`color:\${product.productline.printmethod.method_hex};\`">{{product.productline.printmethod.method_name2}}</span>
         <button v-if="pcompare.data.length > 1" data-toggle="modal" data-target="#comparePrintMethod" class="print-hide text-left d-block btnv2-link compare"><i class="icon-compare"></i> <span>compare print methods</span></button>
@@ -79,7 +80,7 @@ var printmethodcomparemodal = /*html */`
                                     <!-- setup charge -->
                                     <tr v-if="cproduct.productline.formatted_setup_charge">
                                         <td class="text-left" :colspan="cproduct.productline.pricing_data.length+2">
-                                            Setup Charge {{ cproduct.productline.formatted_setup_charge }} (v) <template v-for="(scper, scperindex) in cproduct.setupChargePer">{{ scper.text }}<template v-if="scperindex+1!=cproduct.setupChargePer.length">,&nbsp;</template></template>
+                                            Setup Charge {{ cproduct.productline.formatted_setup_charge }} <span v-if="getglobaljsvars.chargesIndicator">{{getglobaljsvars.chargesIndicator}}</span> <template v-for="(scper, scperindex) in cproduct.setupChargePer">{{ scper.text }}<template v-if="scperindex+1!=cproduct.setupChargePer.length">,&nbsp;</template></template>
                                         </td>
                                     </tr>
                                     <!-- end of setup charge -->
@@ -87,7 +88,7 @@ var printmethodcomparemodal = /*html */`
                                     <!-- imrpint types -->
                                     <tr v-for="(imprint, imprintindex) in cproduct.theimprinttypes" :key="\`the-imprint-index-\${imprintindex}\`">
                                         <td class="text-left" :colspan="cproduct.productline.pricing_data.length+2">
-                                            {{ imprint.textlabel }} Die Charge {{ imprint.formatted_value }} (v) (<small style="white-space: nowrap;" v-if="imprint.min_prod_days"><i>Minimum {{imprint.min_prod_days}} production days</i></small>)
+                                            {{ imprint.textlabel }} <span v-if="getglobaljsvars.diechargeLabel">{{getglobaljsvars.diechargeLabel}}</span> {{ imprint.labeled_value }} <span v-if="getglobaljsvars.chargesIndicator">{{getglobaljsvars.chargesIndicator}}</span> <small style="white-space: nowrap;" v-if="imprint.min_prod_days">(<i>Minimum {{imprint.min_prod_days}} production days</i>)</small>
                                         </td>
                                     </tr>
                                     <!-- end of imprint types -->
@@ -107,7 +108,7 @@ var printmethodcomparemodal = /*html */`
                                                 <span>{{ tplc.chargetypes.charge_name }}</span>
                                                 <small v-if="tplc.perchargeTexts.length"> 
                                                     - <i class="price-charges" v-for="(pctxt, pctxtindex) in tplc.perchargeTexts" :key="\`pctxt-index-\${pctxtindex}\`">
-                                                    {{ pctxt.text }} (v)<template v-if="pctxtindex+1!=tplc.perchargeTexts.length">, </template>
+                                                    {{ pctxt.text }} <span v-if="getglobaljsvars.chargesIndicator">{{getglobaljsvars.chargesIndicator}}</span><template v-if="pctxtindex+1!=tplc.perchargeTexts.length">, </template>
                                                     </i>
                                                 </small>
                                             </p>

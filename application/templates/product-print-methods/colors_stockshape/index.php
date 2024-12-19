@@ -60,6 +60,11 @@
                     </div>
 
                     <div class="mb-2">
+                        <label class="d-block mb-2">VDS SAGE PRODUCT ID</label>
+                        <input type="text" v-model="pcolorstockshape.input.vdsproductid">
+                    </div>
+
+                    <div class="mb-2">
                         <label class="d-block mb-2">VDS SAGE ITEM #</label>
                         <input type="text" v-model="pcolorstockshape.input.vdsid">
                     </div>
@@ -265,7 +270,7 @@
                     <hr class="mt-5">
 
 
-                    <div class="mt-5 mb-2 mt-3">
+                    <div class="mt-5 mt-3 floating-button-save">
                         <button v-if="pcolorstockshape.input.id==null" type="submit" class="button button-primary">Add Color + Stockshape</button>
                         <button v-else type="submit" class="button button-primary">Save Color + Stockshape</button>
                         <a href="javascript: void(0)" class="button" @click.stop="resetColorsStockshapeInputs({product_print_method_id:pcolorstockshape.input.product_print_method_id, index: null}); pcolorstockshapestate='lists'">View Color + Stockshapes</a>
@@ -298,6 +303,13 @@
                 <button type="button" @click="removeCheckedItems_color_stockshape_" v-if="getIsSelectedColorStockshape.length" class="button mr-2">Remove ({{getIsSelectedColorStockshape.length}})</button>
             </div>
 
+
+            <div class="mb-3">
+                <form @submit.prevent="searchEntryColorStockshapeQueryFilter" style="text-align:right;">
+                    <input placeholder="Search" type="text" v-model="pcolorstockshape.query" />
+                </form>
+            </div>
+
             <div class="row" v-if="pcolorstockshape.loading">
                 <div class="col-md-12">
                     <p style="text-align: center;">Loading..</p>
@@ -328,6 +340,7 @@
                             <div class="d-block mb-2">Priority #: {{ pcs.priority }}</div>
                             <div class="d-block mb-2">Images: {{ pcs.imagedata.length }}</div>
                             <div class="d-block mb-2">Templates: {{ pcs.counttemplates }}</div>
+                            <div class="d-block mb-2">VDS SAGE PRODUCT ID: {{ pcs.vdsproductid }}</div>
                             <div class="d-block mb-2">VDS SAGE ITEM #: {{ pcs.vdsid }}</div>
                             <div class="d-block mt-3 mb-2">
 

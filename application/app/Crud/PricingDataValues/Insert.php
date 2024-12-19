@@ -24,7 +24,7 @@ class Insert {
 
     private $required = ['quantity'];
 
-    private $allowedNulls = ['value', 'product_print_method_id', 'pricing_data_id', 'asterisk', 'alternative_value', 'unit_value', 'decimal_value'];
+    private $allowedNulls = ['value', 'product_print_method_id', 'pricing_data_id', 'asterisk', 'alternative_value', 'unit_value', 'decimal_value', 'show_currency'];
 
     public function store( $request ) {
 

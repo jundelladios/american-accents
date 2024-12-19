@@ -165,6 +165,14 @@
                     <input type="checkbox" :true-value="1" :false-value="0" v-model="chargesValuesInputs.asterisk"> This value has asterisk?
                 </label>
             </div>
+
+            <div class="mb-2">
+                <label>
+                    <input type="checkbox" v-model="chargesValuesInputs.show_currency" :true-value="1" :false-value="0">
+                    Show currency?
+                </label>
+            </div>
+
             <div class="mt-2">
                 <button type="submit" v-if="chargesValuesInputs.index==null" class="button button-primary">Save Breakdown</button>
                 <div v-else>

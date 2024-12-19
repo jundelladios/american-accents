@@ -11,6 +11,16 @@ register_rest_route( $apiVersion, 'public/getProducts', array(
     )
 ));
 
+register_rest_route( $apiVersion, 'public/getProductsVariations', array(
+    array(
+        'methods' => 'GET',
+        'callback' => array( new Api\Controllers\PublicController, 'getProductsVariations' ),
+        'permission_callback' => function( $request ) {
+            return true;
+        }
+    )
+));
+
 register_rest_route( $apiVersion, 'public/products/search', array(
     array(
         'methods' => 'GET',
@@ -117,6 +127,17 @@ register_rest_route( $apiVersion, '/download/compliances', array(
 ));
 
 
+register_rest_route( $apiVersion, '/download/archive', array(
+    array(
+        'methods' => 'POST',
+        'callback' => array( new Api\Controllers\DownloadController, 'archive' ),
+        'permission_callback' => function( $request ) {
+            return true;
+        }
+    )
+));
+
+
 register_rest_route( $apiVersion, 'pdftoimage', array(
     array(
         'methods' => 'POST',
@@ -211,6 +232,17 @@ register_rest_route( $apiVersion, 'public/filter/getMaterials', array(
     array(
         'methods' => 'GET',
         'callback' => array( new Api\Controllers\PublicController, 'getMaterials' ),
+        'permission_callback' => function( $request ) {
+            return true;
+        }
+    )
+));
+
+
+register_rest_route( $apiVersion, 'public/filter/getCategories', array(
+    array(
+        'methods' => 'GET',
+        'callback' => array( new Api\Controllers\PublicController, 'getCategories' ),
         'permission_callback' => function( $request ) {
             return true;
         }

@@ -48,6 +48,16 @@ class Retrieve {
 
             }
 
+            if(isset( $request['query'])) {
+                $query = $request['query'];
+                $stockshape->where(function($qs) use($query) {
+                    $qs->where('stockname', 'LIKE', "%$query%")
+                    ->orWhere('code', 'LIKE', "%$query%")
+                    ->orWhere('vdsid', 'LIKE', "%$query%")
+                    ->orWhere('vdsproductid', 'LIKE', "%$query%");
+                });
+            }
+
             $stockshape->orderBy('priority');
 
             return $this->getHelper( $stockshape, $request, false );

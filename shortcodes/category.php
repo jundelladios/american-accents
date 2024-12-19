@@ -6,6 +6,7 @@ function aa_sc_category( $atts ) {
 
     $default = array(
         'ref_id' => null,
+        'submenutag' => 0
     );
 
     $param = shortcode_atts($default, $atts);
@@ -77,7 +78,13 @@ function aa_sc_category( $atts ) {
                     <div class="grouped-menu-item-child-list">
                         <?php foreach( $iterateTree as $key => $value ): ?>
                         <?php if( $key != $nulled ): ?>
+
+                            <?php if(!$param['submenutag']): ?>
                             <strong class="stitle d-block"><?php echo $key; ?></strong>
+                            <?php else: ?>
+                            <a class="stitle d-block" href="<?php echo home_url( '/product/' . $cat[0]['cat_slug'] . '/?subcategory_tags=' . strtolower(str_replace(" ", "-", $key )) ) ?>"><?php echo $key; ?></a>
+                            <?php endif; ?>
+
                             <ul class="list-unstyled link-ul-item">
                                 <?php foreach( $value as $listlink ): ?>
                                     <li class="link-item">

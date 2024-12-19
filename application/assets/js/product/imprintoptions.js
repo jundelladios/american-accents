@@ -1,5 +1,5 @@
 var imprintOptions = /*html */`
-<div v-if="product.productline.plinecolors.length || product.productline.imprinttypes.length" data-accordion-module-item class="product-accordion open mb-4">
+<div v-if="product.productline.plinecolors.length || product.productline.imprinttypes.length" data-accordion-module-item class="product-accordion open mb-4" attr-module="imprint-options">
     <button class="product-accordion-header" data-accordion-module>
         <div class="accordion-header d-flex align-items-center">
             <span class="icon icon-swatch-book"></span>
@@ -32,7 +32,7 @@ var imprintOptions = /*html */`
                     <div v-if="pcolor.isImage && pcolor.image" 
                     class="color-hex lazyload bg-cover"
                     v-img:data-bgset="pcolor.image"
-                    :style="\`background-image:url(\${pcolor.image});\`"
+                    :style="\`background-image:url(\${AA_JS_OBJ.IMG_PRELOADER});\`"
                     ></div>
 
                     <div 
@@ -60,7 +60,7 @@ var imprintOptions = /*html */`
                     <div class="imprint-bg lazyload" 
                     v-if="imprnt.image"
                     v-img:data-bgset="imprnt.image"
-                    :style="\`background-image:url(\${imprnt.image});\`"
+                    :style="\`background-image:url(\${AA_JS_OBJ.IMG_PRELOADER});\`"
                     ></div>
                     <span>{{ imprnt.imprinttype.title }}</span>
                 </div>

@@ -30,7 +30,7 @@ class Insert {
 
     private $nulls = ['templates', 'idea_galleries', 'stockname', 'image', 'vdsid'];
 
-    private $statuses = ['priority'];
+    private $statuses = ['priority', 'in_stock'];
 
     public function store( $request ) {
 
