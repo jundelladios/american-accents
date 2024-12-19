@@ -60,3 +60,7 @@ update product_lines set setup_charge=0, coupon_code_id=NULL;
 
 # removing v values for pricing data
 update pricing_data set spot_color_value=NULL, per_color_value=NULL, per_piece_value=NULL, per_side_value=NULL, per_thousand_value=NULL;
+
+
+# mysql strict mode disable, remove no sql join strict
+set global sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';

@@ -130,7 +130,7 @@ trait ControllerTraits {
     }
 
 
-    public function updateURLStatements($statements = [], $old, $new ) {
+    public function updateURLStatements($statements = [], $old="", $new="" ) {
 
         $jsnold = addslashes(str_replace('"', '', json_encode($old)));
 
@@ -155,7 +155,7 @@ trait ControllerTraits {
 
 
 
-    public function massUpdate($instance, $columns = [], $keyColumn) {
+    public function massUpdate($instance, $columns = [], $keyColumn="") {
 
         $str = '';
 
