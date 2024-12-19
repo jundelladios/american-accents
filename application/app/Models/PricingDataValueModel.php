@@ -60,7 +60,7 @@ class PricingDataValueModel extends Model {
             return $this->attributes['alternative_value'];
         }
 
-        return aa_formatted_money(number_format($this->attributes['value'], $decimal), !$withcurrency);
+        return aa_formatted_money(number_format($this->attributes['value']  ?? 0, $decimal), !$withcurrency);
 
     }
 }

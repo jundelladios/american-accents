@@ -137,8 +137,8 @@ function aa_range_formatter($min, $max) {
     return [
         'min' => $min->value,
         'max' => $max->value,
-        'formatted_min' => aa_formatted_money(number_format($min->value, $min->decimal_value)),
-        'formatted_max' => aa_formatted_money(number_format($max->value, $max->decimal_value))
+        'formatted_min' => aa_formatted_money(number_format($min->value ?? 0, $min->decimal_value)),
+        'formatted_max' => aa_formatted_money(number_format($max->value  ?? 0, $max->decimal_value))
     ];
 
 }

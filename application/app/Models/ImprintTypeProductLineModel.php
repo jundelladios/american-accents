@@ -50,7 +50,7 @@ class ImprintTypeProductLineModel extends Model {
 
         $withcurrency = (int) $this->attributes['show_currency'];
 
-        return aa_formatted_money(number_format($this->attributes['imprint_charge'], $decimal), !$withcurrency);
+        return aa_formatted_money(number_format($this->attributes['imprint_charge']  ?? 0, $decimal), !$withcurrency);
 
     }
 

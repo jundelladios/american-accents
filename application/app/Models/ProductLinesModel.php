@@ -147,7 +147,7 @@ class ProductLinesModel extends Model {
 
         $withcurrency = (int) $this->attributes['show_currency'];
 
-        return aa_formatted_money(number_format($this->setup_charge), !$withcurrency);
+        return aa_formatted_money(number_format($this->setup_charge  ?? 0), !$withcurrency);
 
     }
 
