@@ -56,6 +56,7 @@
 }
 
 .full-width { width: 100%; }
+.full-height { height: 100%; }
 .vc-chrome {
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif!important;
     position: absolute;
@@ -361,4 +362,12 @@ ul {
     margin: 0!important;
     background: #fff;
     text-align: center;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .anim-thumbnail {
+    height: 90%;
   }

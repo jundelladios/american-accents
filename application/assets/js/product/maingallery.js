@@ -32,15 +32,27 @@ var productCarouselImages = /*html */`
                 v-for="(dfimg, dfimgindex) in getVariationEntries.imagedata" 
                 :key="'dfimg-key-'+dfimgindex" 
                 @click.stop="openMainGalleryPopup(dfimgindex)">
-                    <div class="img-fit-wrap"
+                    <div 
+                    v-if="dfimg.image.split('.').pop() != 'html'"
+                    class="img-fit-wrap"
                     :style="{
                         paddingTop: dfimg.top + '%'
                     }"
                     >
+                        
                         <v-img 
                         :data-zoom-image="dfimg.image"
                         :img="dfimg.image"
                         />
+                    </div>
+
+                    <div
+                    v-else
+                    :style="{
+                        paddingTop: dfimg.top + '%'
+                    }"
+                    >
+                        <iframe :src="dfimg.image" class="full-width full-height border-0" scrolling="no"></iframe>
                     </div>
                 </div>
             </template>
@@ -70,8 +82,10 @@ var productCarouselImages = /*html */`
         v-bind="maingallerythumbcarousel"
         :draggable="false"
         >
-            <div class="img-slide-item mb-0" v-for="(dfimg, dfimgindex) in getVariationEntries.imagedata" :key="'dfimg-key-'+dfimgindex">
-                <div class="img-fit-wrap p-2 position-relative"
+            <div class="img-slide-item mb-0 bg-transparent" v-for="(dfimg, dfimgindex) in getVariationEntries.imagedata" :key="'dfimg-key-'+dfimgindex">
+                <div 
+                v-if="dfimg.image.split('.').pop() != 'html'"
+                class="img-fit-wrap p-2 position-relative bg-slidethumb"
                 :style="{
                     paddingTop: dfimg.top + '%'
                 }"
@@ -80,6 +94,18 @@ var productCarouselImages = /*html */`
                     :img="dfimg.image" 
                     />
                 </div>
+
+                <div
+                v-else
+                class="img-fit-wrap p-2 position-relative bg-transparent"
+                :style="{
+                    paddingTop: dfimg.top + '%'
+                }"
+                >
+
+                    <iframe :src="dfimg.image" class="full-width full-height border-0" scrolling="no"></iframe>
+                </div>
+
             </div>
         </vue-slick-carousel>
     </div>
@@ -133,7 +159,9 @@ var maingallerypopup = /*html */`
                                 v-for="(img, imgi) in getVariationEntries.imagedata" 
                                 :key="'popupgal-modal-main-key-'+imgi"
                                 >
-                                    <div class="img-fit-wrap"
+                                    <div 
+                                    v-if="img.image.split('.').pop() != 'html'"
+                                    class="img-fit-wrap"
                                     :style="{
                                         paddingTop: img.top + '%!important'
                                     }"
@@ -144,7 +172,25 @@ var maingallerypopup = /*html */`
                                         :height="411"
                                         :akt="img.title"
                                         />
+
+                                        <iframe 
+                                        v-else
+                                        :src="img.image" class="full-width full-height border-0" scrolling="no"></iframe>
                                     </div>
+
+
+                                    <div 
+                                    v-else
+                                    class="img-fit-wrap p-0"
+                                    :style="{
+                                        paddingTop: img.top + '%!important'
+                                    }"
+                                    >
+                                        <iframe 
+                                        :src="img.image" class="full-width full-height border-0" scrolling="no"></iframe>
+                                    </div>
+
+
 
                                     <div class="button-actions mt-3">
                                         <a href="#" :data-url="img.image" data-type="email" class="btn-action button-light aa_social_share"><span class="icon mr-1 icon-email"></span> email</a>
@@ -187,8 +233,10 @@ var maingallerypopup = /*html */`
                                 v-for="(img, imgi) in getVariationEntries.imagedata" 
                                 :key="'ideagallery-modal-thumb-key-'+imgi"
                                 class="aa-idea-thumbnail-slide">
-                                    <div class="img-slide-item">
-                                        <div class="img-fit-wrap p-2"
+                                    <div class="img-slide-item bg-transparent">
+                                        <div 
+                                        v-if="img.image.split('.').pop() != 'html'"
+                                        class="img-fit-wrap p-2 bg-slidethumb"
                                         :style="{
                                             paddingTop: img.top + '%!important'
                                         }"
@@ -200,8 +248,18 @@ var maingallerypopup = /*html */`
                                             :alt="img.title"
                                             />
                                         </div>
+
+                                        <div 
+                                        v-else
+                                        class="img-fit-wrap p-2 bg-transparent"
+                                        :style="{
+                                            paddingTop: img.top + '%!important'
+                                        }"
+                                        >
+                                            <iframe 
+                                            :src="img.image" class="full-width full-height border-0" scrolling="no"></iframe>
+                                        </div>
                                     </div>
-                                    
                                 </div>
 
 

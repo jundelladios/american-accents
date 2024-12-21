@@ -8,6 +8,17 @@ $responsive: 992px;
     font-size: 14px;
     color: $body;
 
+    .carousel-main {
+        background: transparent!important;
+    }
+
+    .carousel {
+        .img-slide-item,
+        .slick-slide {
+            margin-bottom: 10px!important;
+        }
+    }
+
     .categoryname {
         font-size: 42px;
         color: $grey;

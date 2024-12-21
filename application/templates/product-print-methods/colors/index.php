@@ -132,8 +132,21 @@
                                         </div>
 
                                         <a href="javascript:void(0)" @click.stop="choosecolorimage(index)" class="d-block link-img img-form-wrap mb-2">
-                                            <img v-if="pcolors.input.image[index].image" :src="pcolors.input.image[index].image" alt="" class="full-width">
-                                            <img v-else src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                            <template v-if="!pcolors?.input?.image?.[index]?.image">
+                                                <img src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                            </template>
+                                            <template v-else>
+                                                <template v-if="!pcolorimg?.type">
+                                                    <img :src="pcolors.input.image[index].image" alt="" class="full-width">
+                                                </template>
+                                                <template v-else>
+                                                    <img v-if="pcolorimg?.type != 'html'" :src="pcolors.input.image[index].image" alt="" class="full-width">
+                                                    <div v-if="pcolorimg?.type == 'html'" class="anim-thumbnail">
+                                                        <iframe :src="pcolors.input.image[index].image" class="full-height full-width" scrolling="no"></iframe>
+                                                        <p class="text-center m-0">Click here to choose media</p>
+                                                    </div>
+                                                </template>
+                                            </template>
                                         </a>
                                         
                                         <div class="mb-2">
@@ -251,8 +264,21 @@
                                     </div>
 
                                     <a href="javascript:void(0)" @click.stop="chooseideagalleryimage(index)" class="d-block link-img img-form-wrap mb-2">
-                                        <img v-if="pcolors.input.idea_galleries[index].image" :src="pcolors.input.idea_galleries[index].image" alt="" class="full-width">
-                                        <img v-else src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        <template v-if="!pcolors?.input?.idea_galleries?.[index]?.image">
+                                            <img src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        </template>
+                                        <template v-else>
+                                            <template v-if="!pcolorimg?.type">
+                                                <img :src="pcolors.input.idea_galleries[index].image" alt="" class="full-width">
+                                            </template>
+                                            <template v-else>
+                                                <img v-if="pcolorimg?.type != 'html'" :src="pcolors.input.idea_galleries[index].image" alt="" class="full-width">
+                                                <div v-if="pcolorimg?.type == 'html'" class="anim-thumbnail">
+                                                    <iframe :src="pcolors.input.idea_galleries[index].image" class="full-height full-width" scrolling="no"></iframe>
+                                                    <p class="text-center m-0">Click here to choose media</p>
+                                                </div>
+                                            </template>
+                                        </template>
                                     </a>
 
                                     <div v-if="!pcolors.input.idea_galleries[index].usecurfile" class="mb-2">

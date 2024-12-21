@@ -214,7 +214,8 @@ var productStockShapes = {
         stockshapeaddcolorimage() {
             this.stockshape.input.image.push({
                 image: ``,
-                title: ``
+                title: ``,
+                type: ``
             });
         },
         stockshapeaddIdeaGallery() {
@@ -222,7 +223,8 @@ var productStockShapes = {
                 text: ``,
                 image: ``,
                 downloadLink: ``,
-                usecurfile: 1
+                usecurfile: 1,
+                type: ``
             });
         },
         stockshapeaddTemplates() {
@@ -296,6 +298,12 @@ var productStockShapes = {
             this.chooseLibrary( `Choose Product Stock Shape Image`, (url, obj) => {
                 $e.stockshape.input.image[index].image = url;
                 $e.stockshape.input.image[index].title = obj.title;
+                var fileExt = url.split('.').pop();
+                $e.stockshape.input.image[index].type = fileExt;
+            }, {
+                library: {
+                    type: ['image', 'text/html']
+                },
             });
         },
         stockshapechooseideagalleryimage(index) {
@@ -303,6 +311,12 @@ var productStockShapes = {
             this.chooseLibrary( `Choose Idea gallery image`, (url, obj) => {
                 $e.stockshape.input.idea_galleries[index].image = url;
                 $e.stockshape.input.idea_galleries[index].text = obj.title;
+                var fileExt = url.split('.').pop();
+                $e.stockshape.input.idea_galleries[index].type = fileExt;
+            }, {
+                library: {
+                    type: ['image', 'text/html']
+                },
             });
         },
         async saveProductStockShape() {

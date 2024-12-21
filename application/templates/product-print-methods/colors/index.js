@@ -226,7 +226,8 @@ var printMethodColors = {
         addcolorimage() {
             this.pcolors.input.image.push({
                 image: ``,
-                title: ``
+                title: ``,
+                type: ``
             });
         },
         addIdeaGallery() {
@@ -234,7 +235,8 @@ var printMethodColors = {
                 text: ``,
                 image: ``,
                 downloadLink: ``,
-                usecurfile: 1
+                usecurfile: 1,
+                type: ``
             });
         },
         addTemplates() {
@@ -321,6 +323,12 @@ var printMethodColors = {
             this.chooseLibrary( `Choose Product Color Image`, (url, obj) => {
                 $e.pcolors.input.image[index].image = url;
                 $e.pcolors.input.image[index].title = obj.title;
+                var fileExt = url.split('.').pop();
+                $e.pcolors.input.image[index].type = fileExt;
+            }, {
+                library: {
+                    type: ['image', 'text/html']
+                },
             });
         },
         chooseideagalleryimage(index) {
@@ -328,6 +336,12 @@ var printMethodColors = {
             this.chooseLibrary( `Choose Idea gallery image`, (url, obj) => {
                 $e.pcolors.input.idea_galleries[index].image = url;
                 $e.pcolors.input.idea_galleries[index].text = obj.title;
+                var fileExt = url.split('.').pop();
+                $e.pcolors.input.idea_galleries[index].type = fileExt;
+            }, {
+                library: {
+                    type: ['image', 'text/html']
+                },
             });
         },
         async saveProductColor() {

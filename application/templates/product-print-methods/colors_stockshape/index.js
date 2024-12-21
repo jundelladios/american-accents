@@ -197,13 +197,20 @@ var printMethodColorStockshape = {
             this.chooseLibrary( `Choose Product Color Image`, (url, obj) => {
                 $e.pcolorstockshape.input.image[index].image = url;
                 $e.pcolorstockshape.input.image[index].title = obj.title;
+                var fileExt = url.split('.').pop();
+                $e.pcolorstockshape.input.image[index].type = fileExt;
+            }, {
+                library: {
+                    type: ['image', 'text/html']
+                },
             });
         },
         // product colors
         stcclr_addcolorimage() {
             this.pcolorstockshape.input.image.push({
                 image: ``,
-                title: ``
+                title: ``,
+                type: ``
             });
         },
         stcclr_addIdeaGallery() {
@@ -211,7 +218,8 @@ var printMethodColorStockshape = {
                 text: ``,
                 image: ``,
                 downloadLink: ``,
-                usecurfile: 1
+                usecurfile: 1,
+                type: ``
             });
         },
         stcclr_addTemplates() {
@@ -357,6 +365,12 @@ var printMethodColorStockshape = {
             this.chooseLibrary( `Choose Idea gallery image`, (url, obj) => {
                 $e.pcolorstockshape.input.idea_galleries[index].image = url;
                 $e.pcolorstockshape.input.idea_galleries[index].text = obj.title;
+                var fileExt = url.split('.').pop();
+                $e.pcolorstockshape.input.idea_galleries[index].type = fileExt;
+            }, {
+                library: {
+                    type: ['image', 'text/html']
+                },
             });
         },
         async stcclr_saveProductColorStockshape() {

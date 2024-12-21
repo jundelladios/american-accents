@@ -95,8 +95,21 @@
                                     </div>
 
                                     <a href="javascript:void(0)" @click.stop="stockshapechoosecolorimage(index)" class="d-block link-img img-form-wrap mb-2">
-                                        <img v-if="stockshape.input.image[index].image" :src="stockshape.input.image[index].image" alt="" class="full-width">
-                                        <img v-else src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        <template v-if="!stockshape?.input?.image?.[index]?.image">
+                                            <img src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        </template>
+                                        <template v-else>
+                                            <template v-if="!pstockimg?.type">
+                                                <img :src="stockshape.input.image[index].image" alt="" class="full-width">
+                                            </template>
+                                            <template v-else>
+                                                <img v-if="pstockimg?.type != 'html'" :src="stockshape.input.image[index].image" alt="" class="full-width">
+                                                <div v-if="pstockimg?.type == 'html'" class="anim-thumbnail">
+                                                    <iframe :src="stockshape.input.image[index].image" class="full-height full-width" scrolling="no"></iframe>
+                                                    <p class="text-center m-0">Click here to choose media</p>
+                                                </div>
+                                            </template>
+                                        </template>
                                     </a>
 
                                     <div class="mb-2">
@@ -211,8 +224,21 @@
                                     </div>
 
                                     <a href="javascript:void(0)" @click.stop="stockshapechooseideagalleryimage(index)" class="d-block link-img img-form-wrap mb-2">
-                                        <img v-if="stockshape.input.idea_galleries[index].image" :src="stockshape.input.idea_galleries[index].image" alt="" class="full-width">
-                                        <img v-else src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        <template v-if="!stockshape?.input?.idea_galleries?.[index]?.image">
+                                            <img src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        </template>
+                                        <template v-else>
+                                            <template v-if="!pstockimg?.type">
+                                                <img :src="stockshape.input.idea_galleries[index].image" alt="" class="full-width">
+                                            </template>
+                                            <template v-else>
+                                                <img v-if="pstockimg?.type != 'html'" :src="stockshape.input.idea_galleries[index].image" alt="" class="full-width">
+                                                <div v-if="pstockimg?.type == 'html'" class="anim-thumbnail">
+                                                    <iframe :src="stockshape.input.idea_galleries[index].image" class="full-height full-width" scrolling="no"></iframe>
+                                                    <p class="text-center m-0">Click here to choose media</p>
+                                                </div>
+                                            </template>
+                                        </template>
                                     </a>
 
                                     <div v-if="!stockshape.input.idea_galleries[index].usecurfile" class="mb-2">

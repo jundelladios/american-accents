@@ -111,9 +111,22 @@
                                         :checked="pcolorimg._isSelected">
                                     </div>
                                     
-                                    <a href="javascript:void(0)" @click.stop="stcclr_choosecolorstockshapeimage(index)" class="d-block link-img img-form-wrap mb-2">
-                                            <img v-if="pcolorstockshape.input.image[index].image" :src="pcolorstockshape.input.image[index].image" alt="" class="full-width">
-                                            <img v-else src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        <a href="javascript:void(0)" @click.stop="stcclr_choosecolorstockshapeimage(index)" class="d-block link-img img-form-wrap mb-2">
+                                            <template v-if="!pcolorstockshape?.input?.image?.[index]?.image">
+                                                <img src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                            </template>
+                                            <template v-else>
+                                                <template v-if="!pcolorimg?.type">
+                                                    <img :src="pcolorstockshape.input.image[index].image" alt="" class="full-width">
+                                                </template>
+                                                <template v-else>
+                                                    <img v-if="pcolorimg?.type != 'html'" :src="pcolorstockshape.input.image[index].image" alt="" class="full-width">
+                                                    <div v-if="pcolorimg?.type == 'html'" class="anim-thumbnail">
+                                                        <iframe :src="pcolorstockshape.input.image[index].image" class="full-height full-width" scrolling="no"></iframe>
+                                                        <p class="text-center m-0">Click here to choose media</p>
+                                                    </div>
+                                                </template>
+                                            </template>
                                         </a>
 
                                         <div class="mb-2">
@@ -230,9 +243,23 @@
                                         :checked="pcolorimg._isSelected">
                                     </div>
 
+
                                     <a href="javascript:void(0)" @click.stop="stcclr_chooseideagalleryimage(index)" class="d-block link-img img-form-wrap mb-2">
-                                        <img v-if="pcolorstockshape.input.idea_galleries[index].image" :src="pcolorstockshape.input.idea_galleries[index].image" alt="" class="full-width">
-                                        <img v-else src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        <template v-if="!pcolorstockshape?.input?.idea_galleries?.[index]?.image">
+                                            <img src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/placeholder.png'; ?>" alt="" class="full-width">
+                                        </template>
+                                        <template v-else>
+                                            <template v-if="!pcolorimg?.type">
+                                                <img :src="pcolorstockshape.input.idea_galleries[index].image" alt="" class="full-width">
+                                            </template>
+                                            <template v-else>
+                                                <img v-if="pcolorimg?.type != 'html'" :src="pcolorstockshape.input.idea_galleries[index].image" alt="" class="full-width">
+                                                <div v-if="pcolorimg?.type == 'html'" class="anim-thumbnail">
+                                                    <iframe :src="pcolorstockshape.input.idea_galleries[index].image" class="full-height full-width" scrolling="no"></iframe>
+                                                    <p class="text-center m-0">Click here to choose media</p>
+                                                </div>
+                                            </template>
+                                        </template>
                                     </a>
 
                                     <div v-if="!pcolorstockshape.input.idea_galleries[index].usecurfile" class="mb-2">

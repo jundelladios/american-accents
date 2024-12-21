@@ -528,6 +528,14 @@ $primary: #1f4385;
   width: 100%;
 }
 
+.full-height {
+  height: 100%;
+}
+
+.border-0 {
+  border: 0;
+}
+
 .btn {
   @media screen and (max-width: $breakpoint) {
     font-size: 10px!important;
@@ -541,6 +549,14 @@ $primary: #1f4385;
   align-items: flex-end;
   padding: 30px;
   overflow: hidden;
+}
+
+.bg-slidethumb {
+  background: #e6e6e6!important;
+}
+
+.bg-transparent {
+  background: transparent!important;
 }
 
 .product-image-slick {
