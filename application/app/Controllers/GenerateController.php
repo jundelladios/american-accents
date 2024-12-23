@@ -195,7 +195,7 @@ class GenerateController {
         // Validation
         $validate = new Validator($params);
 
-        $validate->rule('required', $this->pdfs);
+        $validate->rule('required', ['id']);
 
         if( class_exists('pdf_thumbnail_generator') ) {
             $imgurl = get_pdf_thumbnail_url( $params['id'] );
