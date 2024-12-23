@@ -203,11 +203,7 @@ class GenerateController {
 
         $validate->rule('required', ['id']);
 
-        if( class_exists('pdf_thumbnail_generator') ) {
-            $imgurl = get_pdf_thumbnail_url( $params['id'] );
-        } else {
-            $imgurl = false;
-        }
+        $imgurl = wp_get_attachment_image_url( $params['id'], 'full' );
 
         return [
             'image' => $imgurl
