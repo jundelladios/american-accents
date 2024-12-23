@@ -14,6 +14,12 @@ use Api\Constants;
 
 use Valitron\Validator;
 
+use Api\Hasher;
+
+use Api\Crud\PublicRoutes\Filters;
+
+use Api\Crud\PublicRoutes\Images;
+
 class GenerateController {
 
     // private $pdfs = ['pdf', 'title'];
@@ -209,4 +215,37 @@ class GenerateController {
 
     }
 
+
+    public function animated_medias( Request $request ) {
+
+        $params = $request->get_params();
+
+        // allowed requests
+        $data = rest_requests( $params, array_merge( 
+            ['id', 'color', 'code', 'type']
+        ));
+
+        $data['id'] = Hasher::decode( $data['id'] );
+
+        $product = (new Filters)->getProductName(array(
+            'id' => $data['id']
+        ));
+
+        if(!$product) { return []; }
+
+        $color = $data['color'] ? "_" . $data['color'] : "";
+        $shape = $data['code'] ? "_" . $data['code'] : "";
+
+        $filetitle = (new Images)->formattitle($product['product_method_combination_name'] . $color . $shape);
+
+        $animatedlists = (new Images)->get(array(
+            'options' => array(
+                $filetitle . '_' . $data['type'] . '.*'
+            )
+        ), 
+         "[(.html)]$"
+        );
+
+        return $animatedlists;
+    }
 }

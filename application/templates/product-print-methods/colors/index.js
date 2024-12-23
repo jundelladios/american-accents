@@ -331,6 +331,29 @@ var printMethodColors = {
                 },
             });
         },
+        async pullAnimatedMediasColors(param) {
+            var confirm = await swal('Are you sure you want to pull animated medias?', {
+                buttons: true,
+            });
+            if( confirm ) {
+                const $e = this;
+                await this.showLoading();
+                const res = await api.post(`/animated-medias`, param);
+                const pulltype = param?.type == 'idg' ? "idea_galleries": "image";
+                res.data.map(x => {
+                    const isExists = $e.pcolors.input[pulltype].find(pt => pt.image == x.meta_file);
+                    if(!isExists) {
+                        var fileExt = x.meta_file.split('.').pop();
+                        $e.pcolors.input[pulltype].push({
+                            image: x.meta_file,
+                            title: x.post_title,
+                            type: fileExt
+                        });
+                    }
+                })
+                await swal('Animated medias has been pulled, please review the lists.', { icon: 'success' });
+            }
+        },
         chooseideagalleryimage(index) {
             var $e = this;
             this.chooseLibrary( `Choose Idea gallery image`, (url, obj) => {

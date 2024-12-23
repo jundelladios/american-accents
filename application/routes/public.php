@@ -151,7 +151,18 @@ register_rest_route( $apiVersion, 'pdftoimage', array(
     // )
 ));
 
-
+register_rest_route( $apiVersion, 'animated-medias', array(
+    array(
+        'methods' => 'POST',
+        'callback' => array( new Api\Controllers\GenerateController, 'animated_medias' ),
+        'permission_callback' => 'apiAuthorizeCB'
+    ),
+    // array(
+    //     'methods' => 'PUT',
+    //     'callback' => array( new Api\Controllers\GenerateController, 'filebird' ),
+    //     'permission_callback' => 'apiAuthorizeCB'
+    // )
+));
 
 // register_rest_route( $apiVersion, 'public/test', array(
 //     array(

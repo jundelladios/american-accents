@@ -87,6 +87,12 @@
                             <button type="button" @click="pcolorstockshape_toggleSelectKey('image', true)" class="button mr-2">Select All Images</button>
                             <button type="button" @click="pcolorstockshape_toggleSelectKey('image', false)" class="button mr-2">Unselect Images</button>
                             <button type="button" @click="pcolorstockshape_removeCheckedItems_('image', 'Are you sure you want to remove selected images?')" v-if="pcolorstockshape_getIsSelectedImage.length" class="button mr-2">Remove {{pcolorstockshape_getIsSelectedImage.length}} Images</button>
+                            <button v-if="stcclr_selectedColor && stcclr_selectedStockShape && stcclr_selectedColor.colorname && stcclr_selectedStockShape.code" type="button" @click="pullAnimatedMediasColorsStockShape({
+                                id: pcolorstockselectedcombo.hid,
+                                color: stcclr_selectedColor.colorname,
+                                code: stcclr_selectedStockShape.code,
+                                type: 'main'
+                            })" class="button mr-2">Pull animated medias</button>
                         </div>
 
                         <!-- <div class="mb-2">
@@ -223,6 +229,12 @@
                         <button type="button" @click="pcolorstockshape_toggleSelectKey('idea_galleries', true)" class="button mr-2">Select All Idea Gallery</button>
                         <button type="button" @click="pcolorstockshape_toggleSelectKey('idea_galleries', false)" class="button mr-2">Unselect Idea Gallery</button>
                         <button type="button" @click="pcolorstockshape_removeCheckedItems_('idea_galleries', 'Are you sure you want to remove selected idea gallery?')" v-if="pcolorstockshape_getIsSelectedIdeaGallery.length" class="button mr-2">Remove {{pcolorstockshape_getIsSelectedIdeaGallery.length}} Idea Gallery</button>
+                        <button v-if="stcclr_selectedColor && stcclr_selectedStockShape && stcclr_selectedColor?.colorname && stcclr_selectedStockShape?.code" type="button" @click="pullAnimatedMediasColorsStockShape({
+                            id: pcolorstockselectedcombo.hid,
+                            color: stcclr_selectedColor?.colorname,
+                            code: stcclr_selectedStockShape?.code,
+                            type: 'idg'
+                        })" class="button mr-2">Pull animated medias</button>
                     </div>
 
                     <div v-if="pcolorstockshape.input.idea_galleries && !pcolorstockshape.input.autoassignidea" class="mb-2 col-md-12">

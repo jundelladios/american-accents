@@ -107,6 +107,11 @@
                             <button type="button" @click="pcolors_toggleSelectKey('image', true)" class="button mr-2">Select All Images</button>
                             <button type="button" @click="pcolors_toggleSelectKey('image', false)" class="button mr-2">Unselect Images</button>
                             <button type="button" @click="pcolors_removeCheckedItems_('image', 'Are you sure you want to remove selected images?')" v-if="pcolors_getIsSelectedImage.length" class="button mr-2">Remove {{pcolors_getIsSelectedImage.length}} Images</button>
+                            <button v-if="pcolors.input.colorname" type="button" @click="pullAnimatedMediasColors({
+                                id: pcolorselectedcombo.hid,
+                                color: pcolors.input.colorname,
+                                type: 'main'
+                            })" class="button mr-2">Pull animated medias</button>
                         </div>
 
                         <!-- <div class="mb-2">
@@ -243,6 +248,11 @@
                         <button type="button" @click="pcolors_toggleSelectKey('idea_galleries', true)" class="button mr-2">Select All Idea Gallery</button>
                         <button type="button" @click="pcolors_toggleSelectKey('idea_galleries', false)" class="button mr-2">Unselect Idea Gallery</button>
                         <button type="button" @click="pcolors_removeCheckedItems_('idea_galleries', 'Are you sure you want to remove selected idea gallery?')" v-if="pcolors_getIsSelectedIdeaGallery.length" class="button mr-2">Remove {{pcolors_getIsSelectedIdeaGallery.length}} Idea Gallery</button>
+                        <button v-if="pcolors.input.colorname" type="button" @click="pullAnimatedMediasColors({
+                            id: pcolorselectedcombo.hid,
+                            color: pcolors.input.colorname,
+                            type: 'idg'
+                        })" class="button mr-2">Pull animated medias</button>
                     </div>
 
                     <div v-if="pcolors.input.idea_galleries && !pcolors.input.autoassignidea" class="mb-2 col-md-12">
