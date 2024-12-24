@@ -54,7 +54,6 @@ class Media {
         if($cdnproxy) {
             $imgurl = str_replace(home_url(), $cdnproxy, $url);
             return "
-            $imgurl?width=400 600w,
             $imgurl?width=600 800w,
             $imgurl?width=800 1600w,
             $imgurl?width=1600 1900w,
@@ -86,7 +85,7 @@ class Media {
 
             $finalsrc = $imgurl;
 
-            $preloader = "$imgurl?width=400";
+            $preloader = "$imgurl?width=600";
 
             return array(
                 'src' => $url[0],

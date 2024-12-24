@@ -123,7 +123,6 @@ Vue.directive('autocolor', function(el, binding) {
 Vue.directive('img', function(el, binding) {
     var imagecdnproxy = binding.value.replace(inventoryJSVars.baseURLnoSlash, inventoryJSVars.imageproxycdn);
     var srcset = `
-        ${imagecdnproxy}?width=400 600w,
         ${imagecdnproxy}?width=600 800w,
         ${imagecdnproxy}?width=800 1600w,
         ${imagecdnproxy}?width=1600 1900w,
@@ -184,7 +183,6 @@ Vue.component('v-img', {
             if( !inventoryJSVars.imageproxycdn ) { return this.img; }
             var imagecdnproxy = this.img.replace(inventoryJSVars.baseURLnoSlash, inventoryJSVars.imageproxycdn);
             var srcset = `
-                ${imagecdnproxy}?width=400 600w,
                 ${imagecdnproxy}?width=600 800w,
                 ${imagecdnproxy}?width=800 1600w,
                 ${imagecdnproxy}?width=1600 1900w,
