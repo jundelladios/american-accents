@@ -3,6 +3,7 @@ $grey: #727272;
 $body: #707070;
 $light: #ffffff;
 $responsive: 992px;
+$responsivemobile: 768px;
 
 .fproducttemplate {
     font-size: 14px;
@@ -803,7 +804,44 @@ $responsive: 992px;
             }
         }
     }
+
+    @media screen and (max-width: 992px) {
+        .carousel-idea-thumbnail {
+            .img-slide-item {
+                width: 100%;
+                height: 80px;
+            }
+        }
+    }
+
+    @media screen and (max-width: 470px) {
+        .carousel-idea-thumbnail {
+            .img-slide-item {
+                width: 100%;
+                height: 45px;
+            }
+        }
+    }
+
+    .modal-dialog-centered {
+        margin: 0 auto!important;
+        padding: 10px;
+    }
       
+    #ideagallerymodal .idea-modal-arrow, 
+    .modalgallerypopup .idea-modal-arrow {
+        z-index: 99;
+
+        @media screen and (max-width: $responsive) {
+            &.right {
+                right: -35px!important;
+            }
+
+            &.left {
+                left: -35px!important;
+            }
+        }
+    }
 }
 
 
