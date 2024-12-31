@@ -301,7 +301,23 @@ var productVue = new Vue({
                 focusOnSelect: true,
                 asNavFor: this.popupMainGalleryNav,
                 drag: false,
-                infinite: true
+                infinite: true,
+                responsive: [
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 4,
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 4,
+                        }
+                    }
+                ]
             }
         },
         ideagallerycarousel() {
@@ -325,7 +341,23 @@ var productVue = new Vue({
                 focusOnSelect: true,
                 asNavFor: this.ideamaingalleryNavfor,
                 drag: false,
-                infinite: true
+                infinite: true,
+                responsive: [
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 4,
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 4,
+                        }
+                    }
+                ]
             }
         },
         interateCompareData() {
