@@ -36,40 +36,45 @@ var ideagalleries = /*html */`
 
                 <div v-for="(idg, ideagallerykey) in getVariationEntries.ideagallerydata.slice(0, limit)" 
                 :key="'idea-gallery-key' + ideagallerykey" 
-                class="img-slide-item bg-transparent"
+                class=" bg-transparent"
                 @click.stop="openidegallerydefaultImage(ideagallerykey)"
                 >
-                    <div 
-                    v-if="idg.image.split('.').pop() != 'html'"
-                    class="img-fit-wrap p-2 bg-slidethumb"
-                    :style="{
-                        paddingTop: idg.top + '%!important'
-                    }"
-                    >
-                        <v-img 
-                        :loading="variantLoading"
-                        loadersize="sm"
-                        :img="idg.image"
-                        :width="62"
-                        :height="61"
-                        />
+                    
+                    <div v-if="idg.image.split('.').pop() != 'html'">
+                        <div 
+                        class="img-slide-item img-fit-wrap p-2 bg-slidethumb bg-slidethumbidg"
+                        :style="{
+                            paddingTop: idg.top + '%!important'
+                        }"
+                        >
+                            <v-img 
+                            :loading="variantLoading"
+                            loadersize="sm"
+                            :img="idg.image"
+                            :width="62"
+                            :height="61"
+                            />
+                        </div>
+                        <span class="img-slide-caption idgthumb mt-1">{{idg.text}}</span>
                     </div>
                     
-                    <div 
-                    v-else
-                    class="img-fit-wrap p-2 bg-transparent"
-                    :style="{
-                        paddingTop: idg.top + '%!important'
-                    }"
-                    >
-                        <iframe 
-                        :src="idg.image" class="full-width full-height border-0 overflow-hidden" scrolling="no"></iframe>
+                    <div v-else>
+                        <div 
+                        class="img-slide-item img-fit-wrap p-2 bg-transparent bg-slidethumbidg"
+                        :style="{
+                            paddingTop: idg.top + '%!important'
+                        }"
+                        >
+                            <iframe 
+                            :src="idg.image" class="full-width full-height border-0 overflow-hidden" scrolling="no"></iframe>
+                        </div>
+                        <span class="img-slide-caption idgthumb mt-1">{{idg.text}}</span>
                     </div>
 
                 </div>
 
                 <div 
-                class="img-slide-item align-items-center justify-content-center" 
+                class="img-slide-item align-items-center justify-content-center more-idg" 
                 @click.stop="openidegallerydefaultImage(0)">
                     <div class="more-item-gallery">
                         <span class="icon d-block icon-image"></span>
@@ -143,6 +148,8 @@ var ideagalleries = /*html */`
                                     </div>
 
 
+                                    <span class="img-slide-caption mt-2 mb-2">{{idg.text}}</span>
+
 
                                     <div class="button-actions mt-3">
                                         <a href="#" :data-url="idg.image" data-type="email" class="btn-action button-light aa_social_share"><span class="icon mr-1 icon-email"></span> email</a>
@@ -189,10 +196,11 @@ var ideagalleries = /*html */`
                                 v-for="(idg, ideagallerykey) in getVariationEntries.ideagallerydata" 
                                 :key="'ideagallery-modal-thumb-key-'+ideagallerykey"
                                 class="aa-idea-thumbnail-slide">
-                                    <div class="img-slide-item bg-transparent">
+
+                                    <div v-if="idg.image.split('.').pop() != 'html'">
                                         <div 
                                         v-if="idg.image.split('.').pop() != 'html'"
-                                        class="img-fit-wrap p-2 bg-slidethumb"
+                                        class="img-fit-wrap p-2 bg-slidethumb img-slide-item"
                                         :style="{
                                             paddingTop: idg.top + '%!important'
                                         }"
@@ -203,10 +211,12 @@ var ideagalleries = /*html */`
                                             :height="52"
                                             />
                                         </div>
+                                        <span class="img-slide-caption">{{idg.text}}</span>
+                                    </div>
 
+                                    <div v-else>
                                         <div 
-                                        v-else
-                                        class="img-fit-wrap p-2 bg-transparent"
+                                        class="img-fit-wrap p-2 bg-slidethumb img-slide-item"
                                         :style="{
                                             paddingTop: idg.top + '%!important'
                                         }"
@@ -214,6 +224,7 @@ var ideagalleries = /*html */`
                                             <iframe 
                                             :src="idg.image" class="full-width full-height border-0" scrolling="no"></iframe>
                                         </div>
+                                        <span class="img-slide-caption">{{idg.text}}</span>
                                     </div>
                                     
                                 </div>

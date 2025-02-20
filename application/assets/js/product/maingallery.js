@@ -83,27 +83,33 @@ var productCarouselImages = /*html */`
         :draggable="false"
         >
             <div class="img-slide-item mb-0 bg-transparent" v-for="(dfimg, dfimgindex) in getVariationEntries.imagedata" :key="'dfimg-key-'+dfimgindex">
-                <div 
-                v-if="dfimg.image.split('.').pop() != 'html'"
-                class="img-fit-wrap p-2 position-relative bg-slidethumb"
-                :style="{
-                    paddingTop: dfimg.top + '%'
-                }"
-                >
-                    <v-img 
-                    :img="dfimg.image" 
-                    />
+            
+                <div v-if="dfimg.image.split('.').pop() != 'html'">
+                    <div 
+                    class="img-fit-wrap p-2 position-relative bg-slidethumb"
+                    :style="{
+                        paddingTop: dfimg.top + '%'
+                    }"
+                    >
+                        <v-img 
+                        :img="dfimg.image" 
+                        />
+                    </div>
+                    <span class="img-slide-caption mt-1">{{dfimg.title}}</span>
                 </div>
 
-                <div
-                v-else
-                class="img-fit-wrap p-2 position-relative bg-transparent"
-                :style="{
-                    paddingTop: dfimg.top + '%'
-                }"
-                >
+                
+                <div v-else>
+                    <div
+                    class="img-fit-wrap p-2 position-relative bg-transparent"
+                    :style="{
+                        paddingTop: dfimg.top + '%'
+                    }"
+                    >
 
-                    <iframe :src="dfimg.image" class="full-width full-height border-0" scrolling="no"></iframe>
+                        <iframe :src="dfimg.image" class="full-width full-height border-0" scrolling="no"></iframe>
+                    </div>
+                    <span class="img-slide-caption mt-1">{{dfimg.title}}</span>
                 </div>
 
             </div>
@@ -191,6 +197,8 @@ var maingallerypopup = /*html */`
                                     </div>
 
 
+                                    <span class="img-slide-caption mt-2 mb-2">{{img.title}}</span>
+
 
                                     <div class="button-actions mt-3">
                                         <a href="#" :data-url="img.image" data-type="email" class="btn-action button-light aa_social_share"><span class="icon mr-1 icon-email"></span> email</a>
@@ -233,10 +241,10 @@ var maingallerypopup = /*html */`
                                 v-for="(img, imgi) in getVariationEntries.imagedata" 
                                 :key="'ideagallery-modal-thumb-key-'+imgi"
                                 class="aa-idea-thumbnail-slide">
-                                    <div class="img-slide-item bg-transparent">
+                                        
+                                    <div v-if="img.image.split('.').pop() != 'html'">
                                         <div 
-                                        v-if="img.image.split('.').pop() != 'html'"
-                                        class="img-fit-wrap p-2 bg-slidethumb"
+                                        class="img-fit-wrap p-2 bg-slidethumb img-slide-item"
                                         :style="{
                                             paddingTop: img.top + '%!important'
                                         }"
@@ -248,10 +256,11 @@ var maingallerypopup = /*html */`
                                             :alt="img.title"
                                             />
                                         </div>
-
+                                        <span class="img-slide-caption">{{img.title}}</span>
+                                    </div>
+                                    <div v-else>
                                         <div 
-                                        v-else
-                                        class="img-fit-wrap p-2 bg-transparent"
+                                        class="img-fit-wrap p-2 bg-transparent img-slide-item"
                                         :style="{
                                             paddingTop: img.top + '%!important'
                                         }"
@@ -259,7 +268,9 @@ var maingallerypopup = /*html */`
                                             <iframe 
                                             :src="img.image" class="full-width full-height border-0" scrolling="no"></iframe>
                                         </div>
+                                        <span class="img-slide-caption">{{img.title}}</span>
                                     </div>
+
                                 </div>
 
 

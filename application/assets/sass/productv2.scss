@@ -9,6 +9,22 @@ $responsivemobile: 768px;
     font-size: 14px;
     color: $body;
 
+    .img-slide-caption {
+        font-size: 10px;
+        display: block;
+        text-align: center;
+        word-break: break-word;
+        cursor: pointer;
+
+        &.idgthumb {
+            width: 60px;
+        }
+    }
+
+    .more-idg {
+        margin-left: 0!important;
+    }
+
     .carousel-main {
         background: transparent!important;
     }
@@ -17,6 +33,12 @@ $responsivemobile: 768px;
         .img-slide-item,
         .slick-slide {
             margin-bottom: 10px!important;
+        }
+
+        .bg-slidethumbidg {
+            margin-bottom: 0!important;
+            margin-right: 8px!important;
+            width: 60px!important;
         }
     }
 
