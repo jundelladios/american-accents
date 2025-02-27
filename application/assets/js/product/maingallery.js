@@ -54,6 +54,8 @@ var productCarouselImages = /*html */`
                     >
                         <iframe :src="dfimg.image" class="full-width full-height border-0" scrolling="no"></iframe>
                     </div>
+
+                    <span class="img-slide-caption mt-2">{{dfimg.title}}</span>
                 </div>
             </template>
 
@@ -69,6 +71,7 @@ var productCarouselImages = /*html */`
                         :img="product.productcomboimage.image" :alt="\`\${product.product_method_combination_name}\`"
                         />
                     </div>
+                    <span class="img-slide-caption mt-2">{{dfimg.title}}</span>
                 </div>
             </template>
         </vue-slick-carousel>
