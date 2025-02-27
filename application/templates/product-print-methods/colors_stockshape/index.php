@@ -126,8 +126,8 @@
                                                     <img :src="pcolorstockshape.input.image[index].image" alt="" class="full-width">
                                                 </template>
                                                 <template v-else>
-                                                    <img v-if="pcolorimg?.type != 'html'" :src="pcolorstockshape.input.image[index].image" alt="" class="full-width">
-                                                    <div v-if="pcolorimg?.type == 'html'" class="anim-thumbnail">
+                                                    <img v-if="pcolorimg.image.split('.').pop() != 'html'" :src="pcolorstockshape.input.image[index].image" alt="" class="full-width">
+                                                    <div v-if="pcolorimg.image.split('.').pop() == 'html'" class="anim-thumbnail">
                                                         <iframe :src="pcolorstockshape.input.image[index].image" class="full-height full-width" scrolling="no"></iframe>
                                                         <p class="text-center m-0">Click here to choose media</p>
                                                     </div>
@@ -233,7 +233,7 @@
                             id: pcolorstockselectedcombo.hid,
                             color: stcclr_selectedColor?.colorname,
                             code: stcclr_selectedStockShape?.code,
-                            type: 'idg'
+                            type: 'ig'
                         })" class="button mr-2">Pull animated medias</button>
                     </div>
 
@@ -265,8 +265,8 @@
                                                 <img :src="pcolorstockshape.input.idea_galleries[index].image" alt="" class="full-width">
                                             </template>
                                             <template v-else>
-                                                <img v-if="pcolorimg?.type != 'html'" :src="pcolorstockshape.input.idea_galleries[index].image" alt="" class="full-width">
-                                                <div v-if="pcolorimg?.type == 'html'" class="anim-thumbnail">
+                                                <img v-if="pcolorimg.image.split('.').pop() != 'html'" :src="pcolorstockshape.input.idea_galleries[index].image" alt="" class="full-width">
+                                                <div v-if="pcolorimg.image.split('.').pop() == 'html'" class="anim-thumbnail">
                                                     <iframe :src="pcolorstockshape.input.idea_galleries[index].image" class="full-height full-width" scrolling="no"></iframe>
                                                     <p class="text-center m-0">Click here to choose media</p>
                                                 </div>

@@ -80,15 +80,20 @@ class Generatev2 {
                     $filetitle,
                     $filetitle.'_main.*'
                 )
-            ));
+            ), "[(.jpg)(.jpeg)(.gif)(.png)(.html)]$");
 
             $imgs = [];
 
             foreach( $imageSet as $img ):
-                $imgs[] = array(
+                $mimetype = wp_check_filetype($img->meta_file)['type'];
+                $imgpush = array(
                     'image' => $img->meta_file,
-                    'title' => get_the_title( $img->post_id )
+                    'title' => get_the_title( $img->post_id ),
                 );
+                if(!str_contains( $mimetype, "image" )) {
+                    $imgpush['type'] = $mimetype;
+                }
+                $imgs[] = $imgpush;
             endforeach;
 
             $data['image'] = json_encode( $imgs );
@@ -99,17 +104,23 @@ class Generatev2 {
                 'options' => array(
                     $filetitle . '_ig.*'
                 )
-            ));
+            ), "[(.jpg)(.jpeg)(.gif)(.png)(.html)]$");
 
             $idea = [];
 
             foreach( $ideaSet as $img ):
-                $idea[] = array(
+                $mimetype = wp_check_filetype($img->meta_file)['type'];
+                $ideapush = array(
                     'image' => $img->meta_file,
                     'text' => get_the_title( $img->post_id ),
                     'downloadLink' => '',
-                    'usecurfile' => 1
+                    'usecurfile' => 1,
                 );
+                if(!str_contains( $mimetype, "image" )) {
+                    $ideapush['type'] = $mimetype;
+                    $ideapush['usecurfile'] = 0;
+                }
+                $idea[] = $ideapush;
             endforeach;
 
             $data['idea_galleries'] = json_encode( $idea );

@@ -327,15 +327,24 @@ var productStockShapes = {
                 const $e = this;
                 await this.showLoading();
                 const res = await api.post(`/animated-medias`, param);
-                const pulltype = param?.type == 'idg' ? "idea_galleries": "image";
+                const pulltype = param?.type == 'ig' ? "idea_galleries": "image";
                 res.data.map(x => {
                     const isExists = $e.stockshape.input[pulltype].find(pt => pt.image == x.meta_file);
                     if(!isExists) {
                         var fileExt = x.meta_file.split('.').pop();
                         $e.stockshape.input[pulltype].push({
-                            image: x.meta_file,
-                            title: x.post_title,
-                            type: fileExt
+                            ...pulltype == "idea_galleries" && {
+                                image: x.meta_file,
+                                text: x.post_title,
+                                type: fileExt,
+                                downloadLink: "",
+                                usecurfile: 0
+                            },
+                            ...pulltype == "image" && {
+                                image: x.meta_file,
+                                title: x.post_title,
+                                type: fileExt
+                            }
                         });
                     }
                 })

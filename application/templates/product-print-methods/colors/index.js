@@ -339,19 +339,29 @@ var printMethodColors = {
                 const $e = this;
                 await this.showLoading();
                 const res = await api.post(`/animated-medias`, param);
-                const pulltype = param?.type == 'idg' ? "idea_galleries": "image";
+                const pulltype = param?.type == 'ig' ? "idea_galleries": "image";
                 res.data.map(x => {
                     const isExists = $e.pcolors.input[pulltype].find(pt => pt.image == x.meta_file);
                     if(!isExists) {
                         var fileExt = x.meta_file.split('.').pop();
                         $e.pcolors.input[pulltype].push({
-                            image: x.meta_file,
-                            title: x.post_title,
-                            type: fileExt
+                            ...pulltype == "idea_galleries" && {
+                                image: x.meta_file,
+                                text: x.post_title,
+                                type: fileExt,
+                                downloadLink: "",
+                                usecurfile: 0
+                            },
+                            ...pulltype == "image" && {
+                                image: x.meta_file,
+                                title: x.post_title,
+                                type: fileExt
+                            }
                         });
                     }
                 })
                 await swal('Animated medias has been pulled, please review the lists.', { icon: 'success' });
+                console.log($e.pcolors.input[pulltype])
             }
         },
         chooseideagalleryimage(index) {
