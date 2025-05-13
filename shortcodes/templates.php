@@ -165,10 +165,12 @@ function aa_sc_templates( $atts ) {
                                         .append(
                                             $('<div/>', { class: 'tmpimgewrap' })
                                             .append($('<img/>', { 
-                                                src: AA_JS_OBJ.CDNSRCMIN(cltmp.preview), 
-                                                srcset: AA_JS_OBJ.SRCSET(cltmp.preview),
-                                                'data-sizes': 'auto',
-                                                class: 'lazyload lz-blur'
+                                                'src': AA_JS_OBJ.IMG_PRELOADER,
+                                                'data-breeze': AA_JS_OBJ.CDNSRCMIN(cltmp.preview), 
+                                                'data-brsrcset': AA_JS_OBJ.SRCSET(cltmp.preview),
+                                                'data-brsizes': AA_JS_OBJ.SRCSIZES(),
+                                                class: 'br-lazy',
+                                                loading: 'lazy'
                                             }))
                                         )
                                         .append($('<h5/>').html(row.product_method_combination_name))
@@ -188,10 +190,12 @@ function aa_sc_templates( $atts ) {
                                         .append(
                                             $('<div/>', { class: 'tmpimgewrap' })
                                             .append($('<img/>', { 
-                                                src: AA_JS_OBJ.CDNSRCMIN(cstmp.preview), 
-                                                srcset: AA_JS_OBJ.SRCSET(cstmp.preview),
-                                                'data-sizes': 'auto',
-                                                class: 'lazyload lz-blur'
+                                                'src': AA_JS_OBJ.IMG_PRELOADER,
+                                                'data-breeze': AA_JS_OBJ.CDNSRCMIN(cstmp.preview), 
+                                                'data-brsrcset': AA_JS_OBJ.SRCSET(cstmp.preview),
+                                                'data-brsizes': AA_JS_OBJ.SRCSIZES(),
+                                                class: 'br-lazy',
+                                                loading: 'lazy'
                                             }))
                                         )
                                         .append($('<h5/>').html(row.product_method_combination_name))
@@ -210,11 +214,13 @@ function aa_sc_templates( $atts ) {
                                         $('<a/>', { href: stmp.link, target: '_blank', class: 'tmplink' })
                                         .append(
                                             $('<div/>', { class: 'tmpimgewrap' })
-                                            .append($('<img/>', { 
-                                                src: AA_JS_OBJ.CDNSRCMIN(stmp.preview), 
-                                                srcset: AA_JS_OBJ.SRCSET(stmp.preview),
-                                                'data-sizes': 'auto',
-                                                class: 'lazyload lz-blur'
+                                            .append($('<img/>', {
+                                                'src': AA_JS_OBJ.IMG_PRELOADER,
+                                                'data-breeze': AA_JS_OBJ.CDNSRCMIN(stmp.preview), 
+                                                'data-brsrcset': AA_JS_OBJ.SRCSET(stmp.preview),
+                                                'data-brsizes': AA_JS_OBJ.SRCSIZES(),
+                                                class: 'br-lazy',
+                                                loading: 'lazy'
                                             }))
                                         )
                                         .append($('<h5/>').html(row.product_method_combination_name))
@@ -262,7 +268,7 @@ function aa_sc_templates( $atts ) {
                     callback({ productline: productline, template: htmltemplate, page: producttemplatesdata[productline].page });
                     producttemplatesdata[productline].page++;
                     producttemplatesdata[productline].id = productline;
-
+                    window.AALazyLoadInstance.update();
                 }
 
                 $(document).on('aa_accordion_show_done', '[data-category]', function() {

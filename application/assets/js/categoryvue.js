@@ -260,6 +260,7 @@ new Vue({
                 this.products.metas = { ...res.data, data: null };
                 this.products.loading = false;
                 !$args.mounted && this.refreshSlicks();
+                window.AALazyLoadInstance.update();
             } catch($e) {
                 this.products.loading = false;
                 return;

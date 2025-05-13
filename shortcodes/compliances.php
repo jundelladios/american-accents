@@ -77,10 +77,12 @@ function aa_sc_compliances( $atts ) {
                                         .append(
                                             $('<div/>', { class: 'tmpimgewrap' })
                                             .append($('<img/>', { 
-                                                src: AA_JS_OBJ.CDNSRCMIN(comp.previewImage), 
-                                                srcset: AA_JS_OBJ.SRCSET(comp.previewImage),
-                                                'data-sizes': 'auto',
-                                                class: 'lazyload lz-blur'
+                                                'src': AA_JS_OBJ.IMG_PRELOADER,
+                                                'data-breeze': AA_JS_OBJ.CDNSRCMIN(comp.previewImage), 
+                                                'data-brsrcset': AA_JS_OBJ.SRCSET(comp.previewImage),
+                                                'data-brsizes': AA_JS_OBJ.SRCSIZES(),
+                                                class: 'br-lazy',
+                                                loading: 'lazy'
                                             }))
                                         )
                                         .append($('<h5/>').html(comp.compliance))
@@ -131,6 +133,7 @@ function aa_sc_compliances( $atts ) {
                         elemcontent.html(html);
                     }
                     productlinescompliancedata[category] = plines.data;
+                    window.AALazyLoadInstance.update();
                 }
 
 

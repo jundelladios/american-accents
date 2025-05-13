@@ -14,9 +14,6 @@
 get_header(); ?>
 <div class="container" style="margin-top: 50px;">
     <div class="row align-items-center" style="min-height:50vh;">
-        <!-- <div class="col-md-4">
-            <img src="<?php echo american_accent_plugin_base_url() . '/application/assets/img/notfound.png'; ?>" class="lazyload lz-blur">
-        </div> -->
         <div class="col-md-8">
             <h4 class="font-weight-bold">This subcategory doesn't have product line.</h4>
             <p>Please get back soon.</p>

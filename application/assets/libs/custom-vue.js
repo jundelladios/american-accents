@@ -133,6 +133,14 @@ Vue.directive('img', function(el, binding) {
         srcset = binding.value;
     }
     el.setAttribute(binding.arg, srcset);
+    el.setAttribute('class', `${el.getAttribute('class')} has_background_image br-lazy`);
+    el.setAttribute('data-brsizes', `
+        (min-width: 991px) 1900px,
+      (min-width: 768px) 1600px,
+      (min-width: 576px) 800px,
+      100vw
+    `);
+    el.setAttribute('loading', `lazy`);
 });
 
 Vue.component('v-img', {
@@ -145,19 +153,19 @@ Vue.component('v-img', {
             </div>
         </div>
         <img v-else-if="!loading && img" 
-        :data-srcset="srcset" 
-        class="lz-blur lazyload img-fit-center" 
+        :data-brsrcset="srcset" 
+        :data-brsizes="srcsizes"
+        :data-breeze="datasrc"
+        :src="thesrc"
+        class="br-lazy img-fit-center" 
         :fallback="getFallback" 
         v-bind="$attrs" 
         v-on="$listeners" 
-        data-sizes="auto"
-        :src="thesrc"
-        :data-src="thesrc"
-        :data-aspectratio="\`\${width}/\${height}\`"
         :width="width"
         :height="height"
+        loading="lazy"
         >
-        <img v-else-if="!loading && !img && !nofallback" :src="getFallback" v-bind="$attrs" class="lz-blur lazyload img-fit-center" :fallback="getFallback" alt="no-image" v-on="$listeners"
+        <img v-else-if="!loading && !img && !nofallback" :src="getFallback" v-bind="$attrs" class="br-lazy img-fit-center" :fallback="getFallback" alt="no-image" v-on="$listeners"
         :width="width"
         :height="height"
         >
@@ -180,19 +188,27 @@ Vue.component('v-img', {
     },
     computed: {
         srcset() {
-            if( !inventoryJSVars.imageproxycdn ) { return this.img; }
-            var imagecdnproxy = this.img.replace(inventoryJSVars.baseURLnoSlash, inventoryJSVars.imageproxycdn);
             var srcset = `
-                ${imagecdnproxy}?width=600 800w,
-                ${imagecdnproxy}?width=800 1600w,
-                ${imagecdnproxy}?width=1600 1900w,
-                ${imagecdnproxy} 2050w
+                ${this.datasrc}?width=600 800w,
+                ${this.datasrc}?width=800 1600w,
+                ${this.datasrc}?width=1600 1900w,
+                ${this.datasrc} 2050w
             `;
             return srcset;
         },
+        srcsizes() {
+            return AA_JS_OBJ.SRCSIZES();
+        },
         thesrc() {
-            if( !inventoryJSVars.imageproxycdn ) { return this.img; }
             return AA_JS_OBJ.IMG_PRELOADER;
+        },
+        datasrc() {
+            if( !inventoryJSVars.imageproxycdn ) { return this.img; }
+            var imagecdnproxy = this.img.replace(
+                inventoryJSVars.baseURLnoSlash,
+                inventoryJSVars.imageproxycdn
+            );
+            return imagecdnproxy;
         },
         getFallback() {
             let fallback = inventoryJSVars.fallbackImage;

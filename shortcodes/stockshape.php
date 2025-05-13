@@ -82,10 +82,7 @@ function aa_sc_stockshape( $atts ) {
                 <div class="position-relative scwrap">
                     <?php if( isset( $sc['image'] )): ?>
                         <div class="p-3 bgimg cursor-pointer" data-modal-trigger="<?php echo $firstindexer; ?>">
-                            <?php aa_lazyimg([
-                                'src' => $sc['image'],
-                                'alt' => "$alt"
-                            ]); ?>
+                            <img src="<?php echo $sc['image']; ?>" alt="<?php echo $alt; ?>" />
                         </div>
                     <?php endif; ?>
 

@@ -50,10 +50,7 @@ function aa_sc_clipart( $atts ) {
                 <div class="position-relative clipartwrap">
                     <?php if( isset( $cs['image'] )): ?>
                         <div class="p-3 clipartimg">
-                            <?php aa_lazyimg([
-                                'src' => $cs['image'],
-                                'alt' => isset($cs['title']) ? $cs['title'] : ''
-                            ]); ?>
+                            <img src="<?php echo $cs['image']; ?>" alt="<?php echo isset($cs['title']) ? $cs['title'] : ''; ?>" />
                         </div>
                     <?php endif; ?>
 

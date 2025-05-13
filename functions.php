@@ -123,89 +123,37 @@ function wpdb_image_attachment_details($image_url) {
     }
 }
 
-
-// SEO Image Speed Boost
-function aa_lazyimg( $attrs = [] ) {
-
-    $defaults = [
-        'class' => '',
-        'src' => '',
-        'alt' => ''
-    ];
-
-    $attrs = array_merge( $defaults, $attrs );
-    
-    $srcset = \Api\Media::imageproxy($attrs['src']);
-
-    $imgurl = \Api\Media::imageURLCDN($attrs['src']);
-
-    ob_start();
-    $atts = "";
-    foreach( $attrs as $key => $val ) {
-        if( $key != 'src' && $key != 'class' ) {
-            $atts .= $key;
-            $atts .= '="' . $val . '" ';
-        }
+function aa_generate_placeholder_image( $width = 0, $height = 0 ) {
+    if ( ! is_numeric( $width ) ) {
+        $width = 0;
     }
 
-    $excludesLazyload = explode(',', preg_replace("/\r|\n/", "", carbon_get_theme_option('aa_admin_settings_nolazyloadlists')));
-    $isExcludeLazyload = array_search($attrs['src'], $excludesLazyload);
+    if ( ! is_numeric( $height ) ) {
+        $height = 0;
+    }
 
-    ?>
-    <img 
-        <?php echo $atts; ?>
-        <?php if( carbon_get_theme_option('aa_admin_settings_cdnproxy') && !is_int($isExcludeLazyload) ): ?>
-            src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E"
-            data-srcset="<?php echo $srcset; ?>"
-            data-sizes="auto"
-            alt="<?php echo $attrs['alt'] ?>"
-            class="lazyload lz-blur <?php echo $attrs['class']; ?>" 
-        <?php else: ?>
-            <?php 
-            $imgdetails = wpdb_image_attachment_details($attrs['src']);
-            if($imgdetails): 
-            ?>
-            width="<?php echo $imgdetails['width']; ?>"
-            height="<?php echo $imgdetails['height']; ?>"
-            alt="<?php echo $imgdetails['alt']; ?>"
-            <?php endif; ?>
-            loading="eager"
-            class="<?php echo $attrs['class']; ?>" 
-            src="<?php echo $imgurl; ?>"
-        <?php endif; ?>
-    />
-    <?php
-    echo ob_get_clean();
+    if ( ! empty( $width ) ) {
+        $width = absint( $width );
+    }
+
+    if ( ! empty( $height ) ) {
+        $height = absint( $height );
+    }
+
+    //return "data:image/svg+xml;utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20{$width}%20{$height}'%3E%3C/svg%3E";
+    // Generate the SVG
+    $svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {$width} {$height}'></svg>";
+
+    // Convert the SVG to a base64 string
+    $svg_base64 = base64_encode( $svg );
+
+    return "data:image/svg+xml;base64,{$svg_base64}";
 }
-
-// SEO Background Image Speed Boost
-function aa_lazyBg( $url, $style="" ) {
-
-    $str = "";
-
-    $image = \Api\Media::imageproxy($url);
-
-    if( carbon_get_theme_option('aa_admin_settings_cdnproxy') ) {
-
-        $str .= 'data-bgset="'.$image.'" style="background:url('."data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E".')"';
-
-    } else {
-
-        $str .= 'style="background: url('.$url.');"';
-
-    }
-
-    echo $str;
-
-} 
 
 // image proxy function
 function aa_image_proxy( $url ) {
-
-    return \Api\Media::imageproxy( $url );
-
+  return \Api\Media::imageproxy( $url );
 }
-
 
 
 add_action( 'wp_head', function() {
@@ -284,3 +232,16 @@ add_action( 'admin_init', function() {
         wp_mkdir_p( $uploads_dir );
     }
 });
+
+
+function aa_is_page_editor() {
+  if( !function_exists( 'get_current_screen' ) ) {
+    return false;
+  }
+
+  $screen = get_current_screen();
+  if ( $screen->is_block_editor === true ) {
+    return true;
+  }
+  return false;
+}

@@ -75,11 +75,7 @@ function aa_sc_premiumbg( $atts ) {
                 <div class="position-relative bgwrap">
                     <?php if( isset( $bg['image'] ) && $bg['image'] ): ?>
                         <div class="p-3 bgimg cursor-pointer" data-modal-trigger="<?php echo $firstindexer; ?>">
-                            <?php aa_lazyimg([
-                                'src' => $bg['image'],
-                                'alt' => "$code $type",
-                                'class' => 'pbg'
-                            ]); ?>
+                            <img src="<?php echo $bg['image']; ?>" alt="<?php echo "{$code} {$type}"; ?>" class="pbg" />
                         </div>
                     <?php else: ?>
                         <div class="p-3 bgimg">
