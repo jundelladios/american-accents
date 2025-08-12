@@ -3,13 +3,20 @@
  * Plugin Name: American Accents Plugin
  * Plugin URI: mailto:jundell@ad-ios.com
  * Description: American Accents Inventory System
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Jun Dell
  * Author URI: mailto:jundell@ad-ios.com
  */
 
 // Composer Libs
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+PucFactory::buildUpdateChecker(
+    'https://github.com/jundelladios/american-accents',
+    __FILE__,
+    'american-accents'
+  );
 
 function aa_app_config_isReady() {
 
