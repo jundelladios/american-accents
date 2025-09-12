@@ -141,9 +141,7 @@ function aa_lazyimg( $attrs = [] ) {
     ];
 
     $attrs = array_merge( $defaults, $attrs );
-    
     $srcset = \Api\Media::imageproxy($attrs['src']);
-
     $imgurl = \Api\Media::imageURLCDN($attrs['src']);
 
     ob_start();
@@ -160,25 +158,31 @@ function aa_lazyimg( $attrs = [] ) {
 
     ?>
     <img 
+        src="<?php echo $attrs['src']; ?>"
+        class="<?php echo $attrs['class']; ?>"
+
         <?php echo $atts; ?>
-        <?php if( carbon_get_theme_option('aa_admin_settings_cdnproxy') && !is_int($isExcludeLazyload) ): ?>
-            src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E"
-            data-srcset="<?php echo $srcset; ?>"
-            data-sizes="auto"
-            alt="<?php echo $attrs['alt'] ?>"
-            class="lazyload lz-blur <?php echo $attrs['class']; ?>" 
-        <?php else: ?>
-            <?php 
-            $imgdetails = wpdb_image_attachment_details($attrs['src']);
-            if($imgdetails): 
-            ?>
-            width="<?php echo $imgdetails['width']; ?>"
-            height="<?php echo $imgdetails['height']; ?>"
-            alt="<?php echo $imgdetails['alt']; ?>"
-            <?php endif; ?>
+        <?php if( carbon_get_theme_option('aa_admin_settings_cdnproxy') ): ?>
+        srcset="<?php echo $srcset; ?>"
+        <?php endif; ?>
+
+        <?php 
+        $imgdetails = wpdb_image_attachment_details($attrs['src']);
+        if($imgdetails): 
+        ?>
+        width="<?php echo $imgdetails['width']; ?>"
+        height="<?php echo $imgdetails['height']; ?>"
+        alt="<?php echo $imgdetails['alt']; ?>"
+        <?php endif; ?>
+
+
+        <?php if( !$attrs['loading'] ): ?>
+            loading="lazy"
+        <?php endif; ?>
+
+        <?php if( is_int($isExcludeLazyload) ): ?>
             loading="eager"
-            class="<?php echo $attrs['class']; ?>" 
-            src="<?php echo $imgurl; ?>"
+            decoding="async"
         <?php endif; ?>
     />
     <?php

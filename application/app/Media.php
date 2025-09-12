@@ -49,16 +49,19 @@ class Media {
         return $url;
     }
 
+
+
     public static function imageproxy($url) {
         $cdnproxy = carbon_get_theme_option('aa_admin_settings_cdnproxy');
         if($cdnproxy) {
             $imgurl = str_replace(home_url(), $cdnproxy, $url);
-            return "
-            $imgurl?width=600 800w,
-            $imgurl?width=800 1600w,
-            $imgurl?width=1600 1900w,
-            $imgurl 2050w
-            ";
+            $homeUrl = home_url();
+            return "$cdnproxy/cdn-cgi/image/width=400,quality=100,format=auto/$imgurl 400w,
+            $cdnproxy/cdn-cgi/image/width=600,quality=100,format=auto/$imgurl 600w,
+            $cdnproxy/cdn-cgi/image/width=800,quality=100,format=auto/$imgurl 800w,
+            $cdnproxy/cdn-cgi/image/width=1600,quality=100,format=auto/$imgurl 1600w,
+            $cdnproxy/cdn-cgi/image/width=1920,quality=100,format=auto/$imgurl 1920w,
+            $cdnproxy/cdn-cgi/image/width=2050,quality=100,format=auto/$imgurl 2050w";
         }
         return $url;
     }

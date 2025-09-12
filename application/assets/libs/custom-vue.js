@@ -122,13 +122,7 @@ Vue.directive('autocolor', function(el, binding) {
 
 Vue.directive('img', function(el, binding) {
     var imagecdnproxy = binding.value.replace(inventoryJSVars.baseURLnoSlash, inventoryJSVars.imageproxycdn);
-    var srcset = `
-        ${imagecdnproxy}?width=600 800w,
-        ${imagecdnproxy}?width=800 1600w,
-        ${imagecdnproxy}?width=1600 1900w,
-        ${imagecdnproxy} 2050w
-    `; 
-
+    const srcset = window.AA_JS_OBJ.SRCSET(imagecdnproxy);
     if( !inventoryJSVars.imageproxycdn ) {
         srcset = binding.value;
     }
@@ -182,13 +176,7 @@ Vue.component('v-img', {
         srcset() {
             if( !inventoryJSVars.imageproxycdn ) { return this.img; }
             var imagecdnproxy = this.img.replace(inventoryJSVars.baseURLnoSlash, inventoryJSVars.imageproxycdn);
-            var srcset = `
-                ${imagecdnproxy}?width=600 800w,
-                ${imagecdnproxy}?width=800 1600w,
-                ${imagecdnproxy}?width=1600 1900w,
-                ${imagecdnproxy} 2050w
-            `;
-            return srcset;
+            return window.AA_JS_OBJ.SRCSET(imagecdnproxy);
         },
         thesrc() {
             if( !inventoryJSVars.imageproxycdn ) { return this.img; }
