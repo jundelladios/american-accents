@@ -3,7 +3,7 @@
  * Plugin Name: American Accents Plugin
  * Plugin URI: mailto:jundell@ad-ios.com
  * Description: American Accents Inventory System
- * Version: 1.0.1
+ * Version: 2.0.1
  * Author: Jun Dell
  * Author URI: mailto:jundell@ad-ios.com
  */
