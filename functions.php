@@ -3,7 +3,7 @@
  * Plugin Name: American Accents Plugin
  * Plugin URI: mailto:jundell@ad-ios.com
  * Description: American Accents Inventory System
- * Version: 2.0.3
+ * Version: 2.0.4
  * Author: Jun Dell
  * Author URI: mailto:jundell@ad-ios.com
  */
@@ -294,3 +294,127 @@ add_action( 'admin_init', function() {
         wp_mkdir_p( $uploads_dir );
     }
 });
+
+
+/**
+ * Custom template tags for this theme
+ *
+ * Eventually, some of the functionality here could be replaced by core features.
+ *
+ * @package AA_Project
+ */
+
+// adding custom attribute for wp images
+add_filter( 'wp_get_attachment_image_attributes', 'aa_change_attachment_image_markup' );
+function aa_change_attachment_image_markup($attributes) {
+	if( $attributes['src'] && !is_admin() ) {
+
+		$isExcludeLazyload = \Api\Media::isExcludeLazyload($attributes['src']);
+
+		$srcset = \Api\Media::imageproxy($attributes['src']);
+		$imgurl = \Api\Media::imageURLCDN($attributes['src']);
+
+		if( carbon_get_theme_option('aa_admin_settings_cdnproxy') ) {
+			$attributes['srcset'] = $srcset;
+		} else {
+
+			$imgdetails = wpdb_image_attachment_details($attributes['src']);
+			if($imgdetails) {
+				$attributes['width'] = $imgdetails['width'];
+				$attributes['height'] = $imgdetails['height'];
+				$attributes['alt'] = $imgdetails['alt'];
+			}
+		}
+
+		$attributes['src'] = $imgurl;
+
+		if(!$attributes['loading'] && !$isExcludeLazyload) {
+			$attributes['loading'] = "lazy";
+		}
+
+		if( $isExcludeLazyload ) {
+			$attributes['loading'] = "eager";
+			$attributes['decoding'] = "async";
+		}
+
+	}
+
+	return $attributes;
+}
+
+// wp images with srcset
+add_filter('the_content','aa_wp_make_response_image_srcsets');
+function aa_wp_make_response_image_srcsets($the_content) {
+	if(!$the_content) { return; }
+	// Use preg_replace_callback to process <img> tags in $the_content
+	$the_content = preg_replace_callback(
+		'/<img\s+[^>]*src=["\']([^"\']+)["\'][^>]*>/i',
+		function($matches) {
+			$img_tag = $matches[0];
+			$src = $matches[1];
+
+			$isExcludeLazyload = \Api\Media::isExcludeLazyload($src);
+			$srcset = \Api\Media::imageproxy($src);
+			$imgurl = \Api\Media::imageURLCDN($src);
+
+			// Replace src attribute with CDN url
+			$img_tag = preg_replace('/src=["\'][^"\']*["\']/', 'src="' . esc_attr($imgurl) . '"', $img_tag);
+
+			if (carbon_get_theme_option('aa_admin_settings_cdnproxy')) {
+				// Add or replace srcset attribute
+				if (preg_match('/srcset=["\'][^"\']*["\']/', $img_tag)) {
+					$img_tag = preg_replace('/srcset=["\'][^"\']*["\']/', 'srcset="' . esc_attr($srcset) . '"', $img_tag);
+				} else {
+					$img_tag = preg_replace('/<img\s+/i', '<img srcset="' . esc_attr($srcset) . '" ', $img_tag, 1);
+				}
+			} else {
+				$imgdetails = wpdb_image_attachment_details($src);
+				if ($imgdetails) {
+					// width
+					if (preg_match('/width=["\'][^"\']*["\']/', $img_tag)) {
+						$img_tag = preg_replace('/width=["\'][^"\']*["\']/', 'width="' . esc_attr($imgdetails['width']) . '"', $img_tag);
+					} else {
+						$img_tag = preg_replace('/<img\s+/i', '<img width="' . esc_attr($imgdetails['width']) . '" ', $img_tag, 1);
+					}
+					// height
+					if (preg_match('/height=["\'][^"\']*["\']/', $img_tag)) {
+						$img_tag = preg_replace('/height=["\'][^"\']*["\']/', 'height="' . esc_attr($imgdetails['height']) . '"', $img_tag);
+					} else {
+						$img_tag = preg_replace('/<img\s+/i', '<img height="' . esc_attr($imgdetails['height']) . '" ', $img_tag, 1);
+					}
+					// alt
+					if (preg_match('/alt=["\'][^"\']*["\']/', $img_tag)) {
+						$img_tag = preg_replace('/alt=["\'][^"\']*["\']/', 'alt="' . esc_attr($imgdetails['alt']) . '"', $img_tag);
+					} else {
+						$img_tag = preg_replace('/<img\s+/i', '<img alt="' . esc_attr($imgdetails['alt']) . '" ', $img_tag, 1);
+					}
+				}
+			}
+
+			// loading attribute
+			if (!preg_match('/loading=["\'][^"\']*["\']/', $img_tag) && !$isExcludeLazyload) {
+				$img_tag = preg_replace('/<img\s+/i', '<img loading="lazy" ', $img_tag, 1);
+			}
+
+			// eager/async if excluded from lazyload
+			if ($isExcludeLazyload) {
+				// loading="eager"
+				if (preg_match('/loading=["\'][^"\']*["\']/', $img_tag)) {
+					$img_tag = preg_replace('/loading=["\'][^"\']*["\']/', 'loading="eager"', $img_tag);
+				} else {
+					$img_tag = preg_replace('/<img\s+/i', '<img loading="eager" ', $img_tag, 1);
+				}
+				// decoding="async"
+				if (preg_match('/decoding=["\'][^"\']*["\']/', $img_tag)) {
+					$img_tag = preg_replace('/decoding=["\'][^"\']*["\']/', 'decoding="async"', $img_tag);
+				} else {
+					$img_tag = preg_replace('/<img\s+/i', '<img decoding="async" ', $img_tag, 1);
+				}
+			}
+
+			return $img_tag;
+		},
+		$the_content
+	);
+	return $the_content;
+}
