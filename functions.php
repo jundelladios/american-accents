@@ -3,7 +3,7 @@
  * Plugin Name: American Accents Plugin
  * Plugin URI: mailto:jundell@ad-ios.com
  * Description: American Accents Inventory System
- * Version: 2.0.1
+ * Version: 2.0.2
  * Author: Jun Dell
  * Author URI: mailto:jundell@ad-ios.com
  */
@@ -153,8 +153,7 @@ function aa_lazyimg( $attrs = [] ) {
         }
     }
 
-    $excludesLazyload = explode(',', preg_replace("/\r|\n/", "", carbon_get_theme_option('aa_admin_settings_nolazyloadlists')));
-    $isExcludeLazyload = array_search($attrs['src'], $excludesLazyload);
+    $isExcludeLazyload = \Api\Media::isExcludeLazyload($attrs['src']);
 
     ?>
     <img 
@@ -176,11 +175,11 @@ function aa_lazyimg( $attrs = [] ) {
         <?php endif; ?>
 
 
-        <?php if( !$attrs['loading'] ): ?>
+        <?php if( !isset( $attrs['loading'] ) && !$isExcludeLazyload ): ?>
             loading="lazy"
         <?php endif; ?>
 
-        <?php if( is_int($isExcludeLazyload) ): ?>
+        <?php if( $isExcludeLazyload ): ?>
             loading="eager"
             decoding="async"
         <?php endif; ?>

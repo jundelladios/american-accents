@@ -50,6 +50,38 @@ class Media {
     }
 
 
+    /**
+     * Check if an image should be excluded from lazyload.
+     * Example: to exclude "American-Accents-Logo-1.png", add "American-Accents-Logo-1.png" (filename) or a substring or a regex pattern to the exclude list.
+     */
+    public static function isExcludeLazyload( $src ) {
+        $excludesLazyloadRaw = carbon_get_theme_option('aa_admin_settings_nolazyloadlists');
+        // Normalize line endings to \n, then split
+        $excludesLazyloadRaw = str_replace(["\r\n", "\r"], "\n", $excludesLazyloadRaw);
+        $excludesLazyload = array_filter(array_map('trim', explode("\n", $excludesLazyloadRaw)));
+
+        foreach ($excludesLazyload as $pattern) {
+            if ($pattern === '') continue;
+            // If pattern starts and ends with /, treat as regex
+            if (preg_match('/^\/.*\/[a-zA-Z]*$/', $pattern)) {
+                $delim = $pattern[0];
+                $lastDelimPos = strrpos($pattern, $delim);
+                $regex = substr($pattern, 0, $lastDelimPos + 1);
+                $modifiers = substr($pattern, $lastDelimPos + 1);
+                if (@preg_match($regex . $modifiers, $src)) {
+                    return true;
+                }
+            } else {
+                // Otherwise, treat as filename or substring match
+                // Example: to exclude "American-Accents-Logo-1.png", add "American-Accents-Logo-1.png" to the list
+                if (basename($src) === $pattern || strpos($src, $pattern) !== false) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     public static function imageproxy($url) {
         $cdnproxy = carbon_get_theme_option('aa_admin_settings_cdnproxy');
